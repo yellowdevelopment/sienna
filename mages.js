@@ -1,0 +1,2112 @@
+window.MAGES_GAMES = [
+  {
+    "name": "gn-math",
+    "image": "icons/gnmath.webp",
+    "url": "gnmath/index.html"
+  },
+  {
+    "name": "BuildNow.gg",
+    "image": "icons/buildnowgg.webp",
+    "url": "buildnowgg/index.html"
+  },
+  {
+    "name": "Hollow Knight",
+    "image": "icons/hollowknight.webp",
+    "url": "hollowknight/index.html"
+  },
+  {
+    "name": "Hollow Knight: Silksong",
+    "image": "icons/hollowknightsilksong.webp",
+    "url": "hollowknightsilksong/index.html"
+  },
+  {
+    "name": "Hollow Knight: Fool's Song",
+    "image": "icons/hollowknightfs.webp",
+    "url": "hollowknightfs/index.html"
+  },
+  {
+    "name": "Hollow Knight: Silksong Beta Demake",
+    "image": "icons/hollowknightssbd.webp",
+    "url": "hollowknightssbd/index.html"
+  },
+  {
+    "name": "Hungry knight",
+    "image": "icons/hungryknight.webp",
+    "url": "hungryknight/index.html"
+  },
+  {
+    "name": "Celeste Classic",
+    "image": "icons/celesteclassic.webp",
+    "url": "celesteclassic/index.html"
+  },
+  {
+    "name": "Celeste Classic 2",
+    "image": "icons/celesteclassic2.webp",
+    "url": "celesteclassic2/index.html"
+  },
+  {
+    "name": "Celeste",
+    "image": "icons/celeste.webp",
+    "url": "celeste/index.html"
+  },
+  {
+    "name": "Cuphead",
+    "image": "icons/cuphead.webp",
+    "url": "cuphead/index.html"
+  },
+  {
+    "name": "Bendy and the Ink Machine",
+    "image": "icons/bendyink.webp",
+    "url": "bendyink/index.html"
+  },
+  {
+    "name": "1",
+    "image": "icons/1.webp",
+    "url": "1/index.html"
+  },
+  {
+    "name": "Backrooms",
+    "image": "icons/backrooms.webp",
+    "url": "backrooms/index.html"
+  },
+  {
+    "name": "Appel",
+    "image": "icons/appel.webp",
+    "url": "appel/index.html"
+  },
+  {
+    "name": "13 Days in Hell",
+    "image": "icons/13daysinhell.webp",
+    "url": "13daysinhell/index.html"
+  },
+  {
+    "name": "1 on 1 Soccer",
+    "image": "icons/1on1soccer.webp",
+    "url": "1on1soccer/index.html"
+  },
+  {
+    "name": "2048",
+    "image": "icons/2048.webp",
+    "url": "2048/index.html"
+  },
+  {
+    "name": "3 Lines",
+    "image": "icons/3lines.webp",
+    "url": "3lines/index.html"
+  },
+  {
+    "name": "3 Nights Lobotomized",
+    "image": "icons/3nl.webp",
+    "url": "3nl/index.html"
+  },
+  {
+    "name": "60s Burger Run",
+    "image": "icons/60sburgerrun.webp",
+    "url": "60sburgerrun/index.html"
+  },
+  {
+    "name": "60s Santa Run",
+    "image": "icons/60ssantarun.webp",
+    "url": "60ssantarun/index.html"
+  },
+  {
+    "name": "9007199254740992",
+    "image": "icons/9007199254740992.webp",
+    "url": "9007199254740992/index.html"
+  },
+  {
+    "name": "99 Nights in the Forest",
+    "image": "icons/99nightsintheforest.webp",
+    "url": "99nightsintheforest/index.html"
+  },
+  {
+    "name": "Achievement Unlocked",
+    "image": "icons/achievementunlocked.webp",
+    "url": "achievementunlocked/index.html"
+  },
+  {
+    "name": "Achievement Unlocked 2",
+    "image": "icons/achievementunlocked2.webp",
+    "url": "achievementunlocked2/index.html"
+  },
+  {
+    "name": "A Dance of Fire and Ice",
+    "image": "icons/adanceoffireandice.webp",
+    "url": "adanceoffireandice/index.html"
+  },
+  {
+    "name": "A Dark Room",
+    "image": "icons/adarkroom.webp",
+    "url": "adarkroom/index.html"
+  },
+  {
+    "name": "Age of War",
+    "image": "icons/ageofwar.webp",
+    "url": "ageofwar/index.html"
+  },
+  {
+    "name": "Age of War 2",
+    "image": "icons/ageofwar2.webp",
+    "url": "ageofwar2/index.html"
+  },
+  {
+    "name": "Alien Hominid",
+    "image": "icons/alienhominid.webp",
+    "url": "alienhominid/index.html"
+  },
+  {
+    "name": "Amidst the Sky",
+    "image": "icons/amidstthesky.webp",
+    "url": "amidstthesky/index.html"
+  },
+  {
+    "name": "Among Us",
+    "image": "icons/amongus.webp",
+    "url": "amongus/index.html"
+  },
+  {
+    "name": "Avalanche",
+    "image": "icons/avalanche.webp",
+    "url": "avalanche/index.html"
+  },
+  {
+    "name": "Awesome Tanks",
+    "image": "icons/awesometanks.webp",
+    "url": "awesometanks/index.html"
+  },
+  {
+    "name": "Bacon May Die",
+    "image": "icons/baconmaydie.webp",
+    "url": "baconmaydie/index.html"
+  },
+  {
+    "name": "Bad Ice Cream",
+    "image": "icons/badicecream.webp",
+    "url": "badicecream/index.html"
+  },
+  {
+    "name": "Bad Ice Cream 2",
+    "image": "icons/badicecream2.webp",
+    "url": "badicecream2/index.html"
+  },
+  {
+    "name": "Bad Ice Cream 3",
+    "image": "icons/badicecream3.webp",
+    "url": "badicecream3/index.html"
+  },
+  {
+    "name": "Undertale Yellow",
+    "image": "icons/undertaleyellow.webp",
+    "url": "undertaleyellow/index.html"
+  },
+  {
+    "name": "Undertale 10th anniversary",
+    "image": "icons/undertale10thanniversary.webp",
+    "url": "undertale10thanniversary/index.html"
+  },
+  {
+    "name": "Deltatraveler",
+    "image": "icons/deltatraveler.webp",
+    "url": "deltatraveler/index.html"
+  },
+  {
+    "name": "Bad Time Simulator",
+    "image": "icons/badtimesimulator.webp",
+    "url": "badtimesimulator/index.html"
+  },
+  {
+    "name": "Bad Monday Simulator",
+    "image": "icons/badmondaysim.webp",
+    "url": "badmondaysim/index.html"
+  },
+  {
+    "name": "Unfair Dyne",
+    "image": "icons/unfairdyne.webp",
+    "url": "unfairdyne/index.html"
+  },
+  {
+    "name": "Bad Piggies",
+    "image": "icons/badpiggies.webp",
+    "url": "badpiggies/index.html"
+  },
+  {
+    "name": "Ballistic Chickens",
+    "image": "icons/ballisticchickens.webp",
+    "url": "ballisticchickens/index.html"
+  },
+  {
+    "name": "Basketball Stars",
+    "image": "icons/basketballstars.webp",
+    "url": "basketballstars/index.html"
+  },
+  {
+    "name": "Basket Bros",
+    "image": "icons/basketbros.webp",
+    "url": "basketbros/index.html"
+  },
+  {
+    "name": "Basket Random",
+    "image": "icons/basketrandom.webp",
+    "url": "basketrandom/index.html"
+  },
+  {
+    "name": "Boxing Random",
+    "image": "icons/boxingrandom.webp",
+    "url": "boxingrandom/index.html"
+  },
+  {
+    "name": "Soccer random",
+    "image": "icons/soccerrandom.webp",
+    "url": "soccerrandom/index.html"
+  },
+  {
+    "name": "Volley random",
+    "image": "icons/volleyrandom.webp",
+    "url": "volleyrandom/index.html"
+  },
+  {
+    "name": "Big Red Button",
+    "image": "icons/bigredbutton.webp",
+    "url": "bigredbutton/index.html"
+  },
+  {
+    "name": "Bikechamp 2",
+    "image": "icons/bikechamp2.webp",
+    "url": "bikechamp2/index.html"
+  },
+  {
+    "name": "Bitcoin Clicker",
+    "image": "icons/bitcoinclicker.webp",
+    "url": "bitcoinclicker/index.html"
+  },
+  {
+    "name": "Bit Life",
+    "image": "icons/bitlife.webp",
+    "url": "bitlife/index.html"
+  },
+  {
+    "name": "Bit Planes",
+    "image": "icons/bitplanes.webp",
+    "url": "bitplanes/index.html"
+  },
+  {
+    "name": "Block Blast",
+    "image": "icons/blockblast.webp",
+    "url": "blockblast/index.html"
+  },
+  {
+    "name": "Block Zappers",
+    "image": "icons/blockzappers.webp",
+    "url": "blockzappers/index.html"
+  },
+  {
+    "name": "Blood Tournament",
+    "image": "icons/bloodtournament.webp",
+    "url": "bloodtournament/index.html"
+  },
+  {
+    "name": "Bloon's Tower Defense",
+    "image": "icons/bloonstowerdefense.webp",
+    "url": "bloonstowerdefense/index.html"
+  },
+  {
+    "name": "Bloon's Tower Defense 2",
+    "image": "icons/bloonstowerdefense2.webp",
+    "url": "bloonstowerdefense2/index.html"
+  },
+  {
+    "name": "Bloon's Tower Defense 3",
+    "image": "icons/bloonstowerdefense3.webp",
+    "url": "bloonstowerdefense3/index.html"
+  },
+  {
+    "name": "Bloon's Tower Defense 4",
+    "image": "icons/bloonstowerdefense4.webp",
+    "url": "bloonstowerdefense4/index.html"
+  },
+  {
+    "name": "Bloon's Tower Defense 5",
+    "image": "icons/bloonstowerdefense5.webp",
+    "url": "bloonstowerdefense5/index.html"
+  },
+  {
+    "name": "Bloxors",
+    "image": "icons/bloxors.webp",
+    "url": "bloxors/index.html"
+  },
+  {
+    "name": "Bongo Cat",
+    "image": "icons/bongocat.webp",
+    "url": "bongocat/index.html"
+  },
+  {
+    "name": "Breaking the Bank",
+    "image": "icons/breakingthebank.webp",
+    "url": "breakingthebank/index.html"
+  },
+  {
+    "name": "Bubble Shooter",
+    "image": "icons/bubbleshooter.webp",
+    "url": "bubbleshooter/index.html"
+  },
+  {
+    "name": "Capybara Village",
+    "image": "icons/capybaravillage.webp",
+    "url": "capybaravillage/index.html"
+  },
+  {
+    "name": "Cat 2048",
+    "image": "icons/cat2048.webp",
+    "url": "cat2048/index.html"
+  },
+  {
+    "name": "Cell Machine",
+    "image": "icons/cellmachine.webp",
+    "url": "cellmachine/index.html"
+  },
+  {
+    "name": "Checkout Frenzy",
+    "image": "icons/checkoutfrenzy.webp",
+    "url": "checkoutfrenzy/index.html"
+  },
+  {
+    "name": "Chess",
+    "image": "icons/chess.webp",
+    "url": "chess/index.html"
+  },
+  {
+    "name": "Chibi Knight",
+    "image": "icons/chibiknight.webp",
+    "url": "chibiknight/index.html"
+  },
+  {
+    "name": "Circloo",
+    "image": "icons/circloo.webp",
+    "url": "circloo/index.html"
+  },
+  {
+    "name": "Class of '09",
+    "image": "icons/classof09.webp",
+    "url": "classof09/index.html"
+  },
+  {
+    "name": "Color Switch",
+    "image": "icons/colorswitch.webp",
+    "url": "colorswitch/index.html"
+  },
+  {
+    "name": "Commodore Clicker",
+    "image": "icons/commodoreclicker.webp",
+    "url": "commodoreclicker/index.html"
+  },
+  {
+    "name": "Connect 4",
+    "image": "icons/connect4.webp",
+    "url": "connect4/index.html"
+  },
+  {
+    "name": "Cookie Clicker",
+    "image": "icons/cookieclicker.webp",
+    "url": "cookieclicker/index.html"
+  },
+  {
+    "name": "Cool Brainrot Clicker",
+    "image": "icons/coolbrainrotclicker.webp",
+    "url": "coolbrainrotclicker/index.html"
+  },
+  {
+    "name": "Corporation Inc",
+    "image": "icons/corporationinc.webp",
+    "url": "corporationinc/index.html"
+  },
+  {
+    "name": "Craftmine",
+    "image": "icons/craftmine.webp",
+    "url": "craftmine/index.html"
+  },
+  {
+    "name": "Crazy Flasher 2",
+    "image": "icons/crazyflasher2.webp",
+    "url": "crazyflasher2/index.html"
+  },
+  {
+    "name": "Crazy Flasher 3",
+    "image": "icons/crazyflasher3.webp",
+    "url": "crazyflasher3/index.html"
+  },
+  {
+    "name": "Crazy Flasher 4",
+    "image": "icons/crazyflasher4.webp",
+    "url": "crazyflasher4/index.html"
+  },
+  {
+    "name": "Crazy Flasher 5",
+    "image": "icons/crazyflasher5.webp",
+    "url": "crazyflasher5/index.html"
+  },
+  {
+    "name": "Crazy Flasher 6",
+    "image": "icons/crazyflasher6.webp",
+    "url": "crazyflasher6/index.html"
+  },
+  {
+    "name": "Creep Craft 2",
+    "image": "icons/creepcraft2.webp",
+    "url": "creepcraft2/index.html"
+  },
+  {
+    "name": "Crossy Road",
+    "image": "icons/crossyroad.webp",
+    "url": "crossyroad/index.html"
+  },
+  {
+    "name": "CSGO Clicker",
+    "image": "icons/csgoclicker.webp",
+    "url": "csgoclicker/index.html"
+  },
+  {
+    "name": "Cube Field",
+    "image": "icons/cubefield.webp",
+    "url": "cubefield/index.html"
+  },
+  {
+    "name": "Cupcake 2048",
+    "image": "icons/cupcake2048.webp",
+    "url": "cupcake2048/index.html"
+  },
+  {
+    "name": "Cut the Rope Holiday",
+    "image": "icons/cuttheropeholiday.webp",
+    "url": "cuttheropeholiday/index.html"
+  },
+  {
+    "name": "Dadish",
+    "image": "icons/dadish.webp",
+    "url": "dadish/index.html"
+  },
+  {
+    "name": "Dadish 2",
+    "image": "icons/dadish2.webp",
+    "url": "dadish2/index.html"
+  },
+  {
+    "name": "Dante",
+    "image": "icons/dante.webp",
+    "url": "dante/index.html"
+  },
+  {
+    "name": "Deal Or No Deal",
+    "image": "icons/dealornodeal.webp",
+    "url": "dealornodeal/index.html"
+  },
+  {
+    "name": "Death Run 3d",
+    "image": "icons/deathrun3d.webp",
+    "url": "deathrun3d/index.html"
+  },
+  {
+    "name": "Defend the Tank",
+    "image": "icons/defendthetank.webp",
+    "url": "defendthetank/index.html"
+  },
+  {
+    "name": "Dino",
+    "image": "icons/dino.webp",
+    "url": "dino/index.html"
+  },
+  {
+    "name": "Doge 2048",
+    "image": "icons/doge2048.webp",
+    "url": "doge2048/index.html"
+  },
+  {
+    "name": "Dogeminer",
+    "image": "icons/dogeminer.webp",
+    "url": "dogeminer/index.html"
+  },
+  {
+    "name": "Doki Doki Literature Club",
+    "image": "icons/ddlc.webp",
+    "url": "dokidokiliteratureclub/index.html"
+  },
+  {
+    "name": "Donkey Kong",
+    "image": "icons/donkeykong.webp",
+    "url": "donkeykong/index.html"
+  },
+  {
+    "name": "Doodle Jump",
+    "image": "icons/doodlejump.webp",
+    "url": "doodlejump/index.html"
+  },
+  {
+    "name": "Doom",
+    "image": "icons/doom.webp",
+    "url": "doom/index.html"
+  },
+  {
+    "name": "Doom 64",
+    "image": "icons/doom64.webp",
+    "url": "doom64/index.html"
+  },
+  {
+    "name": "Doom WASM",
+    "image": "icons/doomwasm.webp",
+    "url": "doomwasm/index.html"
+  },
+  {
+    "name": "Drift Boss",
+    "image": "icons/driftboss.webp",
+    "url": "driftboss/index.html"
+  },
+  {
+    "name": "Drift Bus",
+    "image": "icons/driftbus.webp",
+    "url": "driftbus/index.html"
+  },
+  {
+    "name": "Drift Mania",
+    "image": "icons/driftmania.webp",
+    "url": "driftmania/index.html"
+  },
+  {
+    "name": "Drive mad",
+    "image": "icons/drivemad.webp",
+    "url": "drivemad/index.html"
+  },
+  {
+    "name": "Driving force 4",
+    "image": "icons/drivingforce4.webp",
+    "url": "drivingforce4/index.html"
+  },
+  {
+    "name": "Duckhunt JS",
+    "image": "icons/duckhunt.webp",
+    "url": "duckhunt/index.html"
+  },
+  {
+    "name": "Duck life 1",
+    "image": "icons/ducklife1.webp",
+    "url": "ducklife1/index.html"
+  },
+  {
+    "name": "Duck life 2",
+    "image": "icons/ducklife2.webp",
+    "url": "ducklife2/index.html"
+  },
+  {
+    "name": "Duck life 4",
+    "image": "icons/ducklife4.webp",
+    "url": "ducklife4/index.html"
+  },
+  {
+    "name": "Duck life 5",
+    "image": "icons/ducklife5.webp",
+    "url": "ducklife5/index.html"
+  },
+  {
+    "name": "Duke nukem 2",
+    "image": "icons/dukenukem2.webp",
+    "url": "dukenukem2/index.html"
+  },
+  {
+    "name": "Earn to die",
+    "image": "icons/earntodie.webp",
+    "url": "earntodie/index.html"
+  },
+  {
+    "name": "Eggy car",
+    "image": "icons/eggycar.webp",
+    "url": "eggycar/index.html"
+  },
+  {
+    "name": "Elden Ring GB",
+    "image": "icons/eldenringgb.webp",
+    "url": "eldenringgb/index.html"
+  },
+  {
+    "name": "Escaping the prison",
+    "image": "icons/escapingtheprison.webp",
+    "url": "escapingtheprison/index.html"
+  },
+  {
+    "name": "Evil Glitch",
+    "image": "icons/evilglitch.webp",
+    "url": "evilglitch/index.html"
+  },
+  {
+    "name": "Exo",
+    "image": "icons/exo.webp",
+    "url": "exo/index.html"
+  },
+  {
+    "name": "Factory balls",
+    "image": "icons/factoryballs.webp",
+    "url": "factoryballs/index.html"
+  },
+  {
+    "name": "Factory balls forever",
+    "image": "icons/factoryballsforever.webp",
+    "url": "factoryballsforever/index.html"
+  },
+  {
+    "name": "Fall heroes knockout",
+    "image": "icons/fallheroesknockout.webp",
+    "url": "fallheroesknockout/index.html"
+  },
+  {
+    "name": "Fancy pants adventures",
+    "image": "icons/fancypantsadventures.webp",
+    "url": "fancypantsadventures/index.html"
+  },
+  {
+    "name": "Fancy pants adventures 2",
+    "image": "icons/fancypantsadventures2.webp",
+    "url": "fancypantsadventures2/index.html"
+  },
+  {
+    "name": "Farmer craft",
+    "image": "icons/farmercraft.webp",
+    "url": "farmercraft/index.html"
+  },
+  {
+    "name": "Fast Food Rush",
+    "image": "icons/fastfoodrush.webp",
+    "url": "fastfoodrush/index.html"
+  },
+  {
+    "name": "Final Ninja",
+    "image": "icons/finalninja.webp",
+    "url": "finalninja/index.html"
+  },
+  {
+    "name": "Find me",
+    "image": "icons/findme.webp",
+    "url": "findme/index.html"
+  },
+  {
+    "name": "Fireboy and Watergirl",
+    "image": "icons/fireboywatergirl.webp",
+    "url": "fireboywatergirl/index.html"
+  },
+  {
+    "name": "Fireboy and Watergirl 2",
+    "image": "icons/fireboywatergirl2.webp",
+    "url": "fireboywatergirl2/index.html"
+  },
+  {
+    "name": "Fireboy and Watergirl 3",
+    "image": "icons/fireboywatergirl3.webp",
+    "url": "fireboywatergirl3/index.html"
+  },
+  {
+    "name": "Fireboy and Watergirl 4",
+    "image": "icons/fireboywatergirl4.webp",
+    "url": "fireboywatergirl4/index.html"
+  },
+  {
+    "name": "Five Nights at Winstons",
+    "image": "icons/fivenightsatwinstons.webp",
+    "url": "fivenightsatwinstons/index.html"
+  },
+  {
+    "name": "Five Nights at Epsteins",
+    "image": "icons/fnae.webp",
+    "url": "fnae/index.html"
+  },
+  {
+    "name": "A Bite at Freddys",
+    "image": "icons/abiteatfreddys.webp",
+    "url": "abiteatfreddys/index.html"
+  },
+  {
+    "name": "Flappy 2048",
+    "image": "icons/flappy2048.webp",
+    "url": "flappy2048/index.html"
+  },
+  {
+    "name": "Flappy bird",
+    "image": "icons/flappybird.webp",
+    "url": "flappybird/index.html"
+  },
+  {
+    "name": "Flappy bird bounce",
+    "image": "icons/flappybirdbounce.webp",
+    "url": "flappybirdbounce/index.html"
+  },
+  {
+    "name": "Flappy copter",
+    "image": "icons/flappycopter.webp",
+    "url": "flappycopter/index.html"
+  },
+  {
+    "name": "Flappy dino",
+    "image": "icons/flappydino.webp",
+    "url": "flappydino/index.html"
+  },
+  {
+    "name": "Flappy duck",
+    "image": "icons/flappyduck.webp",
+    "url": "flappyduck/index.html"
+  },
+  {
+    "name": "Flash flappy",
+    "image": "icons/flashflappy.webp",
+    "url": "flashflappy/index.html"
+  },
+  {
+    "name": "FNAF GB",
+    "image": "icons/fnafgb.webp",
+    "url": "fnafgb/index.html"
+  },
+  {
+    "name": "Frogger",
+    "image": "icons/frogger.webp",
+    "url": "frogger/index.html"
+  },
+  {
+    "name": "Fruit ninja",
+    "image": "icons/fruitninja.webp",
+    "url": "fruitninja/index.html"
+  },
+  {
+    "name": "Frying nemo",
+    "image": "icons/fryingnemo.webp",
+    "url": "fryingnemo/index.html"
+  },
+  {
+    "name": "Funny ball game",
+    "image": "icons/funnyballgame.webp",
+    "url": "funnyballgame/index.html"
+  },
+  {
+    "name": "Funny shooter",
+    "image": "icons/funnyshooter.webp",
+    "url": "funnyshooter/index.html"
+  },
+  {
+    "name": "Geometry dash",
+    "image": "icons/geometrydash.webp",
+    "url": "geometrydash/index.html"
+  },
+  {
+    "name": "Geometry rash",
+    "image": "icons/geometryrash.webp",
+    "url": "geometryrash/index.html"
+  },
+  {
+    "name": "Geometry Vibes",
+    "image": "icons/geometryvibes.webp",
+    "url": "geometryvibes/index.html"
+  },
+  {
+    "name": "Gimme the airpod",
+    "image": "icons/gimmetheairpod.webp",
+    "url": "gimmetheairpod/index.html"
+  },
+  {
+    "name": "Glass bridge obby",
+    "image": "icons/glassbridgeobby.webp",
+    "url": "glassbridgeobby/index.html"
+  },
+  {
+    "name": "Glasscity",
+    "image": "icons/glasscity.webp",
+    "url": "glasscity/index.html"
+  },
+  {
+    "name": "Glassworks",
+    "image": "icons/glassworks.webp",
+    "url": "glassworks/index.html"
+  },
+  {
+    "name": "Goldeneye",
+    "image": "icons/goldeneye.webp",
+    "url": "goldeneye/index.html"
+  },
+  {
+    "name": "Google feud",
+    "image": "icons/googlefeud.webp",
+    "url": "googlefeud/index.html"
+  },
+  {
+    "name": "Google snake",
+    "image": "icons/googlesnake.webp",
+    "url": "googlesnake/index.html"
+  },
+  {
+    "name": "Grand theft auto",
+    "image": "icons/grandtheftauto.webp",
+    "url": "grandtheftauto/index.html"
+  },
+  {
+    "name": "Grand theft auto 2",
+    "image": "icons/grandtheftauto2.webp",
+    "url": "grandtheftauto2/index.html"
+  },
+  {
+    "name": "Grand theft auto 3",
+    "image": "icons/grandtheftauto3.webp",
+    "url": "grandtheftauto3/index.html"
+  },
+  {
+    "name": "Grand theft grotto",
+    "image": "icons/grandtheftgrotto.webp",
+    "url": "grandtheftgrotto/index.html"
+  },
+  {
+    "name": "Driver",
+    "image": "icons/driver.webp",
+    "url": "driver/index.html"
+  },
+  {
+    "name": "Grand truckismo",
+    "image": "icons/grandtruckismo.webp",
+    "url": "grandtruckismo/index.html"
+  },
+  {
+    "name": "Grimaces Birthday",
+    "image": "icons/grimacebirthday.webp",
+    "url": "grimacebirthday/index.html"
+  },
+  {
+    "name": "Grind craft",
+    "image": "icons/grindcraft.webp",
+    "url": "grindcraft/index.html"
+  },
+  {
+    "name": "Guilty GearX",
+    "image": "icons/guiltygearx.webp",
+    "url": "guiltygearx/index.html"
+  },
+  {
+    "name": "Gummibar",
+    "image": "icons/gummibar.webp",
+    "url": "gummibar/index.html"
+  },
+  {
+    "name": "Gun brick",
+    "image": "icons/gunbrick.webp",
+    "url": "gunbrick/index.html"
+  },
+  {
+    "name": "Gun knight",
+    "image": "icons/gunknight.webp",
+    "url": "gunknight/index.html"
+  },
+  {
+    "name": "Gun mayhem",
+    "image": "icons/gunmayhem.webp",
+    "url": "gunmayhem/index.html"
+  },
+  {
+    "name": "Gun mayhem 2",
+    "image": "icons/gunmayhem2.webp",
+    "url": "gunmayhem2/index.html"
+  },
+  {
+    "name": "Gun mayhem redux",
+    "image": "icons/gunmayhemredux.webp",
+    "url": "gunmayhemredux/index.html"
+  },
+  {
+    "name": "Hackertype",
+    "image": "icons/hackertype.webp",
+    "url": "hackertype/index.html"
+  },
+  {
+    "name": "Half life 2",
+    "image": "icons/halflife2.webp",
+    "url": "halflife2/index.html"
+  },
+  {
+    "name": "Halloween 2016",
+    "image": "icons/halloween2016.webp",
+    "url": "halloween2016/index.html"
+  },
+  {
+    "name": "Halloween knife",
+    "image": "icons/halloweenknife.webp",
+    "url": "halloweenknife/index.html"
+  },
+  {
+    "name": "Happyhop",
+    "image": "icons/happyhop.webp",
+    "url": "happyhop/index.html"
+  },
+  {
+    "name": "Happy wheels",
+    "image": "icons/happywheels.webp",
+    "url": "happywheels/index.html"
+  },
+  {
+    "name": "Head case",
+    "image": "icons/headcase.webp",
+    "url": "headcase/index.html"
+  },
+  {
+    "name": "Heist",
+    "image": "icons/heist.webp",
+    "url": "heist/index.html"
+  },
+  {
+    "name": "Helix jump",
+    "image": "icons/helixjump.webp",
+    "url": "helixjump/index.html"
+  },
+  {
+    "name": "HexGL",
+    "image": "icons/hexgl.webp",
+    "url": "hexgl/index.html"
+  },
+  {
+    "name": "Hextris",
+    "image": "icons/hextris.webp",
+    "url": "hextris/index.html"
+  },
+  {
+    "name": "Hill Climb Racing",
+    "image": "icons/hillclimbracing.webp",
+    "url": "hillclimbracing/index.html"
+  },
+  {
+    "name": "Hobo",
+    "image": "icons/hobo.webp",
+    "url": "hobo/index.html"
+  },
+  {
+    "name": "Hobo 2",
+    "image": "icons/hobo2.webp",
+    "url": "hobo2/index.html"
+  },
+  {
+    "name": "Hobo 3",
+    "image": "icons/hobo3.webp",
+    "url": "hobo3/index.html"
+  },
+  {
+    "name": "Hobo 4",
+    "image": "icons/hobo4.webp",
+    "url": "hobo4/index.html"
+  },
+  {
+    "name": "Hobo 5",
+    "image": "icons/hobo5.webp",
+    "url": "hobo5/index.html"
+  },
+  {
+    "name": "Hobo 6",
+    "image": "icons/hobo6.webp",
+    "url": "hobo6/index.html"
+  },
+  {
+    "name": "Hobo 7",
+    "image": "icons/hobo7.webp",
+    "url": "hobo7/index.html"
+  },
+  {
+    "name": "Hole.io",
+    "image": "icons/holeio.webp",
+    "url": "holeio/index.html"
+  },
+  {
+    "name": "Idle breakout",
+    "image": "icons/idlebreakout.webp",
+    "url": "idlebreakout/index.html"
+  },
+  {
+    "name": "Minecraft In-Dev",
+    "image": "icons/minecraftindev.webp",
+    "url": "minecraftindev/index.html"
+  },
+  {
+    "name": "Minecraft Classic",
+    "image": "icons/minecraftclassic.webp",
+    "url": "minecraftclassic/index.html"
+  },
+  {
+    "name": "Minecraft 1.5.2",
+    "image": "icons/eaglercraft152.webp",
+    "url": "eaglercraft152/index.html"
+  },
+  {
+    "name": "Minecraft 0.30 Classic",
+    "image": "icons/minecraft030.webp",
+    "url": "minecraft030/index.html"
+  },
+  {
+    "name": "Minecraft 1.8.8",
+    "image": "icons/eaglercraftx18.webp",
+    "url": "eaglercraftx18/index.html"
+  },
+  {
+    "name": "Minecraft 1.8.8 WASM",
+    "image": "icons/eaglercraft188wasm.webp",
+    "url": "eaglercraft188wasm/index.html"
+  },
+  {
+    "name": "Minecraft 1.12.2",
+    "image": "icons/eaglercraft1122.webp",
+    "url": "eaglercraft1122/index.html"
+  },
+  {
+    "name": "Minecraft 1.12.2 WASM",
+    "image": "icons/eaglercraft1122wasm.webp",
+    "url": "eaglercraft1122wasm/index.html"
+  },
+  {
+    "name": "Tuff Client 1.0.0",
+    "image": "icons/tuffclient.webp",
+    "url": "tuffclient/index.html"
+  },
+  {
+    "name": "Infinite Craft",
+    "image": "icons/infinitecraft.webp",
+    "url": "infi/index.html"
+  },
+  {
+    "name": "Jetpack Joyride",
+    "image": "icons/jetpackjoyride.webp",
+    "url": "jetpackjoyride/index.html"
+  },
+  {
+    "name": "Justfall.lol",
+    "image": "icons/justfalllol.webp",
+    "url": "justfalllol/index.html"
+  },
+  {
+    "name": "Just One Boss",
+    "image": "icons/justoneboss.webp",
+    "url": "justoneboss/index.html"
+  },
+  {
+    "name": "Kick that buddy",
+    "image": "icons/kickthatbuddy.webp",
+    "url": "kickthatbuddy/index.html"
+  },
+  {
+    "name": "Kitten cannon",
+    "image": "icons/kittencannon.webp",
+    "url": "kittencannon/index.html"
+  },
+  {
+    "name": "Knife hit",
+    "image": "icons/knifehit.webp",
+    "url": "knifehit/index.html"
+  },
+  {
+    "name": "Last train home",
+    "image": "icons/lasttrainhome.webp",
+    "url": "lasttrainhome/index.html"
+  },
+  {
+    "name": "Lazyjump 3D",
+    "image": "icons/lazyjump3d.webp",
+    "url": "lazyjump3d/index.html"
+  },
+  {
+    "name": "Learn to fly",
+    "image": "icons/learntofly.webp",
+    "url": "learntofly/index.html"
+  },
+  {
+    "name": "Learn  to fly 2",
+    "image": "icons/learntofly2.webp",
+    "url": "learntofly2/index.html"
+  },
+  {
+    "name": "Learn  to fly 3",
+    "image": "icons/learntofly3.webp",
+    "url": "learntofly3/index.html"
+  },
+  {
+    "name": "Learn to fly idle",
+    "image": "icons/learntoflyidle.webp",
+    "url": "learntoflyidle/index.html"
+  },
+  {
+    "name": "Linerider",
+    "image": "icons/linerider.webp",
+    "url": "linerider/index.html"
+  },
+  {
+    "name": "Little alchemy",
+    "image": "icons/littlealchemy.webp",
+    "url": "littlealchemy/index.html"
+  },
+  {
+    "name": "Little alchemy 2",
+    "image": "icons/littlealchemy2.webp",
+    "url": "littlealchemy2/index.html"
+  },
+  {
+    "name": "Love tester",
+    "image": "icons/lovetester.webp",
+    "url": "lovetester/index.html"
+  },
+  {
+    "name": "Lows adventures",
+    "image": "icons/lowsadventures.webp",
+    "url": "lowsadventures/index.html"
+  },
+  {
+    "name": "Lows adventures 2",
+    "image": "icons/lowsadventures2.webp",
+    "url": "lowsadventures2/index.html"
+  },
+  {
+    "name": "Lows adventures 3",
+    "image": "icons/lowsadventures3.webp",
+    "url": "lowsadventures3/index.html"
+  },
+  {
+    "name": "Make sure it's closed",
+    "image": "icons/makesureitsclosed.webp",
+    "url": "makesureitsclosed/index.html"
+  },
+  {
+    "name": "Mario",
+    "image": "icons/mario.webp",
+    "url": "mario/index.html"
+  },
+  {
+    "name": "Mario 63",
+    "image": "icons/mario63.webp",
+    "url": "mario63/index.html"
+  },
+  {
+    "name": "Mario Paint",
+    "image": "icons/mariopaint.webp",
+    "url": "mariopaint/index.html"
+  },
+  {
+    "name": "Mcdonalds",
+    "image": "icons/mcdonalds.webp",
+    "url": "mcdonalds/index.html"
+  },
+  {
+    "name": "Meme 2048",
+    "image": "icons/meme2048.webp",
+    "url": "meme2048/index.html"
+  },
+  {
+    "name": "Meteor run",
+    "image": "icons/meteorrun.webp",
+    "url": "meteorrun/index.html"
+  },
+  {
+    "name": "Metroid Zero Mission",
+    "image": "icons/metroidzeromission.webp",
+    "url": "metroidzeromission/index.html"
+  },
+  {
+    "name": "Miss Inconspicuous Maid",
+    "image": "icons/mimco.webp",
+    "url": "mimco/index.html"
+  },
+  {
+    "name": "Mindustry",
+    "image": "icons/mindustry.webp",
+    "url": "mindustry/index.html"
+  },
+  {
+    "name": "Monkey mart",
+    "image": "icons/monkeymart.webp",
+    "url": "monkeymart/index.html"
+  },
+  {
+    "name": "Monster tracks",
+    "image": "icons/monstertracks.webp",
+    "url": "monstertracks/index.html"
+  },
+  {
+    "name": "Moto X3M",
+    "image": "icons/motox3m.webp",
+    "url": "motox3m/index.html"
+  },
+  {
+    "name": "Moto X3M Pool",
+    "image": "icons/motox3mpool.webp",
+    "url": "motox3mpool/index.html"
+  },
+  {
+    "name": "Moto X3M Spooky",
+    "image": "icons/motox3mspooky.webp",
+    "url": "motox3mspooky/index.html"
+  },
+  {
+    "name": "Moto X3M Winter",
+    "image": "icons/motox3mwinter.webp",
+    "url": "motox3mwinter/index.html"
+  },
+  {
+    "name": "Mutiny",
+    "image": "icons/mutiny.webp",
+    "url": "mutiny/index.html"
+  },
+  {
+    "name": "Nitrome must die!",
+    "image": "icons/nitromemustdie.webp",
+    "url": "nitromemustdie/index.html"
+  },
+  {
+    "name": "Novacraft",
+    "image": "icons/novacraft.webp",
+    "url": "novacraft/index.html"
+  },
+  {
+    "name": "Nut simulator",
+    "image": "icons/nutsimulator.webp",
+    "url": "nutsimulator/index.html"
+  },
+  {
+    "name": "Offline paradise",
+    "image": "icons/offlineparadise.webp",
+    "url": "offlineparadise/index.html"
+  },
+  {
+    "name": "Online omnichord",
+    "image": "icons/onlineomnichord.webp",
+    "url": "onlineomnichord/index.html"
+  },
+  {
+    "name": "Organ trail",
+    "image": "icons/oregontrail.webp",
+    "url": "oregontrail/index.html"
+  },
+  {
+    "name": "OvO",
+    "image": "icons/ovo.webp",
+    "url": "ovo/index.html"
+  },
+  {
+    "name": "Pacman",
+    "image": "icons/pacman.webp",
+    "url": "pacman/index.html"
+  },
+  {
+    "name": "Pandemic",
+    "image": "icons/pandemic.webp",
+    "url": "pandemic/index.html"
+  },
+  {
+    "name": "Pandemic 2",
+    "image": "icons/pandemic2.webp",
+    "url": "pandemic2/index.html"
+  },
+  {
+    "name": "Papa louie",
+    "image": "icons/papalouie.webp",
+    "url": "papalouie/index.html"
+  },
+  {
+    "name": "Papa louie 2",
+    "image": "icons/papalouie2.webp",
+    "url": "papalouie2/index.html"
+  },
+  {
+    "name": "Papa  louie 3",
+    "image": "icons/papalouie3.webp",
+    "url": "papalouie3/index.html"
+  },
+  {
+    "name": "Papas bakeria",
+    "image": "icons/papasbakeria.webp",
+    "url": "papasbakeria/index.html"
+  },
+  {
+    "name": "Papas burgeria",
+    "image": "icons/papasburgeria.webp",
+    "url": "papasburgeria/index.html"
+  },
+  {
+    "name": "Papas cheeseria",
+    "image": "icons/papascheeseria.webp",
+    "url": "papascheeseria/index.html"
+  },
+  {
+    "name": "Papas donuteria",
+    "image": "icons/papasdonuteria.webp",
+    "url": "papasdonuteria/index.html"
+  },
+  {
+    "name": "Papas freezeria",
+    "image": "icons/papasfreezeria.webp",
+    "url": "papasfreezeria/index.html"
+  },
+  {
+    "name": "Papas pancakeria",
+    "image": "icons/papaspancakeria.webp",
+    "url": "papaspancakeria/index.html"
+  },
+  {
+    "name": "Papas pastaria",
+    "image": "icons/papaspastaria.webp",
+    "url": "papaspastaria/index.html"
+  },
+  {
+    "name": "Papas pizzeria",
+    "image": "icons/papaspizzeria.webp",
+    "url": "papaspizzeria/index.html"
+  },
+  {
+    "name": "Papas sushiria",
+    "image": "icons/papassushiria.webp",
+    "url": "papassushiria/index.html"
+  },
+  {
+    "name": "Papas tacomia",
+    "image": "icons/papastacomia.webp",
+    "url": "papastacomia/index.html"
+  },
+  {
+    "name": "Papas wingeria",
+    "image": "icons/papaswingeria.webp",
+    "url": "papaswingeria/index.html"
+  },
+  {
+    "name": "Paper.io",
+    "image": "icons/paperio.webp",
+    "url": "paperio/index.html"
+  },
+  {
+    "name": "Phasma",
+    "image": "icons/phasma.webp",
+    "url": "phasma/index.html"
+  },
+  {
+    "name": "Pickcrafter",
+    "image": "icons/pickcrafter.webp",
+    "url": "pickcrafter/index.html"
+  },
+  {
+    "name": "Pinball",
+    "image": "icons/pinball.webp",
+    "url": "pinball/index.html"
+  },
+  {
+    "name": "Plants vs Brainrots",
+    "image": "icons/plantsvsbrainrots.webp",
+    "url": "plantsvsbrainrots/index.html"
+  },
+  {
+    "name": "Plants vs Zombies",
+    "image": "icons/plantsvszombies.webp",
+    "url": "plantsvszombies/index.html"
+  },
+  {
+    "name": "Please dont feed me",
+    "image": "icons/pleasedontfeedme.webp",
+    "url": "pleasedontfeedme/index.html"
+  },
+  {
+    "name": "Plinko",
+    "image": "icons/plinko.webp",
+    "url": "plinko/index.html"
+  },
+  {
+    "name": "Plunger",
+    "image": "icons/plunger.webp",
+    "url": "plunger/index.html"
+  },
+  {
+    "name": "Polytrack",
+    "image": "icons/polytrack.webp",
+    "url": "polytrack/index.html"
+  },
+  {
+    "name": "Pool",
+    "image": "icons/pool.webp",
+    "url": "pool/index.html"
+  },
+  {
+    "name": "Poom",
+    "image": "icons/poom.webp",
+    "url": "poom/index.html"
+  },
+  {
+    "name": "President simulator",
+    "image": "icons/presidentsimulator.webp",
+    "url": "presidentsimulator/index.html"
+  },
+  {
+    "name": "Putin on ritz",
+    "image": "icons/putinonritz.webp",
+    "url": "putinonritz/index.html"
+  },
+  {
+    "name": "Pyongyang racer",
+    "image": "icons/pyongyangracer.webp",
+    "url": "pyongyangracer/index.html"
+  },
+  {
+    "name": "Racer",
+    "image": "icons/racer.webp",
+    "url": "racer/index.html"
+  },
+  {
+    "name": "Raftwars",
+    "image": "icons/raftwars.webp",
+    "url": "raftwars/index.html"
+  },
+  {
+    "name": "Raftwars 2",
+    "image": "icons/raftwars2.webp",
+    "url": "raftwars2/index.html"
+  },
+  {
+    "name": "Rainbow friends return",
+    "image": "icons/rainbowfriendsreturn.webp",
+    "url": "rainbowfriendsreturn/index.html"
+  },
+  {
+    "name": "Recoil",
+    "image": "icons/recoil.webp",
+    "url": "recoil/index.html"
+  },
+  {
+    "name": "Redball",
+    "image": "icons/redball.webp",
+    "url": "redball/index.html"
+  },
+  {
+    "name": "Redball 3",
+    "image": "icons/redball3.webp",
+    "url": "redball3/index.html"
+  },
+  {
+    "name": "Redball 4",
+    "image": "icons/redball4.webp",
+    "url": "redball4/index.html"
+  },
+  {
+    "name": "Redball 4 Volume 2",
+    "image": "icons/redball4v2.webp",
+    "url": "redball4v2/index.html"
+  },
+  {
+    "name": "Redball 4 Volume 3",
+    "image": "icons/redball4v3.webp",
+    "url": "redball4v3/index.html"
+  },
+  {
+    "name": "Retrobowl",
+    "image": "icons/retrobowl.webp",
+    "url": "retrobowl/index.html"
+  },
+  {
+    "name": "Riddle school",
+    "image": "icons/riddleschool.webp",
+    "url": "riddleschool/index.html"
+  },
+  {
+    "name": "Riddle school 2",
+    "image": "icons/riddleschool2.webp",
+    "url": "riddleschool2/index.html"
+  },
+  {
+    "name": "Riddle school 3",
+    "image": "icons/riddleschool3.webp",
+    "url": "riddleschool3/index.html"
+  },
+  {
+    "name": "Riddle   school 4",
+    "image": "icons/riddleschool4.webp",
+    "url": "riddleschool4/index.html"
+  },
+  {
+    "name": "Riddle school 5",
+    "image": "icons/riddleschool5.webp",
+    "url": "riddleschool5/index.html"
+  },
+  {
+    "name": "Riddle school transfer",
+    "image": "icons/riddleschooltransfer.webp",
+    "url": "riddleschooltransfer/index.html"
+  },
+  {
+    "name": "Riddle school transfer 2",
+    "image": "icons/riddleschooltransfer2.webp",
+    "url": "riddleschooltransfer2/index.html"
+  },
+  {
+    "name": "Rise higher",
+    "image": "icons/risehigher.webp",
+    "url": "risehigher/index.html"
+  },
+  {
+    "name": "Rocket league 2D",
+    "image": "icons/rocketleague2d.webp",
+    "url": "rocketleague2d/index.html"
+  },
+  {
+    "name": "Rooftop snipers",
+    "image": "icons/rooftopsnipers.webp",
+    "url": "rooftopsnipers/index.html"
+  },
+  {
+    "name": "Run",
+    "image": "icons/run.webp",
+    "url": "run/index.html"
+  },
+  {
+    "name": "Run 2",
+    "image": "icons/run2.webp",
+    "url": "run2/index.html"
+  },
+  {
+    "name": "Run 3",
+    "image": "icons/run3.webp",
+    "url": "run3/index.html"
+  },
+  {
+    "name": "Sandboxels",
+    "image": "icons/sandboxels.webp",
+    "url": "sandboxels/index.html"
+  },
+  {
+    "name": "Sandgame",
+    "image": "icons/sandgame.webp",
+    "url": "sandgame/index.html"
+  },
+  {
+    "name": "Sandtrix",
+    "image": "icons/sandtrix.webp",
+    "url": "sandtrix/index.html"
+  },
+  {
+    "name": "Serenitrove",
+    "image": "icons/serenitrove.webp",
+    "url": "serenitrove/index.html"
+  },
+  {
+    "name": "Shape shipper",
+    "image": "icons/shapeshipper.webp",
+    "url": "shapeshipper/index.html"
+  },
+  {
+    "name": "Shark game",
+    "image": "icons/sharkgame.webp",
+    "url": "sharkgame/index.html"
+  },
+  {
+    "name": "Simcity",
+    "image": "icons/simcity.webp",
+    "url": "simcity/index.html"
+  },
+  {
+    "name": "Simcity 2000",
+    "image": "icons/simcity2000.webp",
+    "url": "simcity2000/index.html"
+  },
+  {
+    "name": "Simon",
+    "image": "icons/simon.webp",
+    "url": "simon/index.html"
+  },
+  {
+    "name": "Skibidi toilet attack",
+    "image": "icons/skibiditoiletattack.webp",
+    "url": "skibiditoiletattack/index.html"
+  },
+  {
+    "name": "Skywire vip",
+    "image": "icons/skywirevip.webp",
+    "url": "skywirevip/index.html"
+  },
+  {
+    "name": "Slope",
+    "image": "icons/slope.webp",
+    "url": "slope/index.html"
+  },
+  {
+    "name": "Slope 2",
+    "image": "icons/slope2.webp",
+    "url": "slope2/index.html"
+  },
+  {
+    "name": "Snake",
+    "image": "icons/snake.webp",
+    "url": "snake/index.html"
+  },
+  {
+    "name": "Snotout",
+    "image": "icons/snotout.webp",
+    "url": "snotout/index.html"
+  },
+  {
+    "name": "Snowbattle io",
+    "image": "icons/snowbattleio.webp",
+    "url": "snowbattleio/index.html"
+  },
+  {
+    "name": "Snowrider 3D",
+    "image": "icons/snowrider3d.webp",
+    "url": "snowrider3d/index.html"
+  },
+  {
+    "name": "Snowrush 3D",
+    "image": "icons/snowrush3d.webp",
+    "url": "snowrush3d/index.html"
+  },
+  {
+    "name": "Sonic 3",
+    "image": "icons/sonic3.webp",
+    "url": "sonic3/index.html"
+  },
+  {
+    "name": "Sonic and Knuckles",
+    "image": "icons/sonicandknuckles.webp",
+    "url": "sonicandknuckles/index.html"
+  },
+  {
+    "name": "Sonicblox",
+    "image": "icons/sonicblox.webp",
+    "url": "sonicblox/index.html"
+  },
+  {
+    "name": "Spacebarclicker",
+    "image": "icons/spacebarclicker.webp",
+    "url": "spacebarclicker/index.html"
+  },
+  {
+    "name": "Spank the monkey",
+    "image": "icons/spankthemonkey.webp",
+    "url": "spankthemonkey/index.html"
+  },
+  {
+    "name": "Speed each click",
+    "image": "icons/speedeachclick.webp",
+    "url": "speedeachclick/index.html"
+  },
+  {
+    "name": "Speedle",
+    "image": "icons/speedle.webp",
+    "url": "speedle/index.html"
+  },
+  {
+    "name": "Splash and dash",
+    "image": "icons/splashanddash.webp",
+    "url": "splashanddash/index.html"
+  },
+  {
+    "name": "Spongebob snowpants",
+    "image": "icons/spongebobsnowpants.webp",
+    "url": "spongebobsnowpants/index.html"
+  },
+  {
+    "name": "Sprinter",
+    "image": "icons/sprinter.webp",
+    "url": "sprinter/index.html"
+  },
+  {
+    "name": "Squidgame 2 Minigames",
+    "image": "icons/squidgame2minigames.webp",
+    "url": "squidgame2minigames/index.html"
+  },
+  {
+    "name": "Squid race sim",
+    "image": "icons/squidracesim.webp",
+    "url": "squidracesim/index.html"
+  },
+  {
+    "name": "Stack bounce",
+    "image": "icons/stackbounce.webp",
+    "url": "stackbounce/index.html"
+  },
+  {
+    "name": "Stacker",
+    "image": "icons/stacker.webp",
+    "url": "stacker/index.html"
+  },
+  {
+    "name": "Staggering beauty",
+    "image": "icons/staggeringbeauty.webp",
+    "url": "staggeringbeauty/index.html"
+  },
+  {
+    "name": "Star clicker",
+    "image": "icons/starclicker.webp",
+    "url": "starclicker/index.html"
+  },
+  {
+    "name": "Starfox 64",
+    "image": "icons/starfox64.webp",
+    "url": "starfox64/index.html"
+  },
+  {
+    "name": "State.io",
+    "image": "icons/stateio.webp",
+    "url": "stateio/index.html"
+  },
+  {
+    "name": "Stealing the diamond",
+    "image": "icons/stealingthediamond.webp",
+    "url": "stealingthediamond/index.html"
+  },
+  {
+    "name": "Stickman boost",
+    "image": "icons/stickmanboost.webp",
+    "url": "stickmanboost/index.html"
+  },
+  {
+    "name": "Stickman climb",
+    "image": "icons/stickmanclimb.webp",
+    "url": "stickmanclimb/index.html"
+  },
+  {
+    "name": "Stickman golf",
+    "image": "icons/stickmangolf.webp",
+    "url": "stickmangolf/index.html"
+  },
+  {
+    "name": "Stickman hook",
+    "image": "icons/stickmanhook.webp",
+    "url": "stickmanhook/index.html"
+  },
+  {
+    "name": "Subway surfers NY",
+    "image": "icons/subwaysurfersny.webp",
+    "url": "subwaysurfersny/index.html"
+  },
+  {
+    "name": "Sudoku",
+    "image": "icons/sudoku.webp",
+    "url": "sudoku/index.html"
+  },
+  {
+    "name": "Suika",
+    "image": "icons/suika.webp",
+    "url": "suika/index.html"
+  },
+  {
+    "name": "Suika demake",
+    "image": "icons/suikademake.webp",
+    "url": "suikademake/index.html"
+  },
+  {
+    "name": "Super Mario 64 DS",
+    "image": "icons/supermario64ds.webp",
+    "url": "supermario64ds/index.html"
+  },
+  {
+    "name": "Tomodachi Collection",
+    "image": "icons/tomodachicollection.webp",
+    "url": "tomodachicollection/index.html"
+  },
+  {
+    "name": "Super meat boy",
+    "image": "icons/supermeatboy.webp",
+    "url": "supermeatboy/index.html"
+  },
+  {
+    "name": "Super smash Bros",
+    "image": "icons/supersmashbros.webp",
+    "url": "supersmashbros/index.html"
+  },
+  {
+    "name": "Super smash flash",
+    "image": "icons/supersmashflash.webp",
+    "url": "supersmashflash/index.html"
+  },
+  {
+    "name": "Survival race",
+    "image": "icons/survivalrace.webp",
+    "url": "survivalrace/index.html"
+  },
+  {
+    "name": "Surviv.io",
+    "image": "icons/survivio.webp",
+    "url": "survivio/index.html"
+  },
+  {
+    "name": "Swerve",
+    "image": "icons/swerve.webp",
+    "url": "swerve/index.html"
+  },
+  {
+    "name": "Swing monkey",
+    "image": "icons/swingmonkey.webp",
+    "url": "swingmonkey/index.html"
+  },
+  {
+    "name": "Tabs",
+    "image": "icons/tabs.webp",
+    "url": "tabs/index.html"
+  },
+  {
+    "name": "Talking tom 2",
+    "image": "icons/talkingtom2.webp",
+    "url": "talkingtom2/index.html"
+  },
+  {
+    "name": "Temple of boom",
+    "image": "icons/templeofboom.webp",
+    "url": "templeofboom/index.html"
+  },
+  {
+    "name": "Terra",
+    "image": "icons/terra.webp",
+    "url": "terra/index.html"
+  },
+  {
+    "name": "Territorial.io",
+    "image": "icons/territorialio.webp",
+    "url": "territorialio/index.html"
+  },
+  {
+    "name": "The battle",
+    "image": "icons/thebattle.webp",
+    "url": "thebattle/index.html"
+  },
+  {
+    "name": "The binding of isaac",
+    "image": "icons/thebindingofisaac.webp",
+    "url": "thebindingofisaac/index.html"
+  },
+  {
+    "name": "The enchanted cave",
+    "image": "icons/theenchantedcave.webp",
+    "url": "theenchantedcave/index.html"
+  },
+  {
+    "name": "The enchanted cave 2",
+    "image": "icons/theenchantedcave2.webp",
+    "url": "theenchantedcave2/index.html"
+  },
+  {
+    "name": "The final earth 2",
+    "image": "icons/thefinalearth2.webp",
+    "url": "thefinalearth2/index.html"
+  },
+  {
+    "name": "The heist",
+    "image": "icons/theheist.webp",
+    "url": "theheist/index.html"
+  },
+  {
+    "name": "The hotel",
+    "image": "icons/thehotel.webp",
+    "url": "thehotel/index.html"
+  },
+  {
+    "name": "The impossible game",
+    "image": "icons/theimpossiblegame.webp",
+    "url": "theimpossiblegame/index.html"
+  },
+  {
+    "name": "The impossible quiz",
+    "image": "icons/theimpossiblequiz.webp",
+    "url": "theimpossiblequiz/index.html"
+  },
+  {
+    "name": "Theme hotel",
+    "image": "icons/themehotel.webp",
+    "url": "themehotel/index.html"
+  },
+  {
+    "name": "There is no game",
+    "image": "icons/thereisnogame.webp",
+    "url": "thereisnogame/index.html"
+  },
+  {
+    "name": "This is the only level",
+    "image": "icons/thisistheonlylevel.webp",
+    "url": "thisistheonlylevel/index.html"
+  },
+  {
+    "name": "This is the only level 2",
+    "image": "icons/thisistheonlylevel2.webp",
+    "url": "thisistheonlylevel2/index.html"
+  },
+  {
+    "name": "Throw rocks",
+    "image": "icons/throwrocks.webp",
+    "url": "throwrocks/index.html"
+  },
+  {
+    "name": "Thumb fighter",
+    "image": "icons/thumbfighter.webp",
+    "url": "thumbfighter/index.html"
+  },
+  {
+    "name": "Timeshooter 2",
+    "image": "icons/timeshooter2.webp",
+    "url": "timeshooter2/index.html"
+  },
+  {
+    "name": "Timeshooter 3",
+    "image": "icons/timeshooter3.webp",
+    "url": "timeshooter3/index.html"
+  },
+  {
+    "name": "Tiny fishing",
+    "image": "icons/tinyfishing.webp",
+    "url": "tinyfishing/index.html"
+  },
+  {
+    "name": "Tomb of the mask",
+    "image": "icons/tombofthemask.webp",
+    "url": "tombofthemask/index.html"
+  },
+  {
+    "name": "Toss the turtle",
+    "image": "icons/tosstheturtle.webp",
+    "url": "tosstheturtle/index.html"
+  },
+  {
+    "name": "Tron",
+    "image": "icons/tron.webp",
+    "url": "tron/index.html"
+  },
+  {
+    "name": "Tu 46",
+    "image": "icons/tu46.webp",
+    "url": "tu46/index.html"
+  },
+  {
+    "name": "Tu 95",
+    "image": "icons/tu95.webp",
+    "url": "tu95/index.html"
+  },
+  {
+    "name": "Tubejumpers",
+    "image": "icons/tubejumpers.webp",
+    "url": "tubejumpers/index.html"
+  },
+  {
+    "name": "Tunnel rush",
+    "image": "icons/tunnelrush.webp",
+    "url": "tunnelrush/index.html"
+  },
+  {
+    "name": "Ultimate sonic flash",
+    "image": "icons/ultimatesonicflash.webp",
+    "url": "ultimatesonicflash/index.html"
+  },
+  {
+    "name": "Unfair Mario",
+    "image": "icons/unfairmario.webp",
+    "url": "unfairmario/index.html"
+  },
+  {
+    "name": "Universal paperclips",
+    "image": "icons/universalpaperclips.webp",
+    "url": "universalpaperclips/index.html"
+  },
+  {
+    "name": "Vex",
+    "image": "icons/vex.webp",
+    "url": "vex/index.html"
+  },
+  {
+    "name": "Vex 2",
+    "image": "icons/vex2.webp",
+    "url": "vex2/index.html"
+  },
+  {
+    "name": "Vex 3",
+    "image": "icons/vex3.webp",
+    "url": "vex3/index.html"
+  },
+  {
+    "name": "Vex 4",
+    "image": "icons/vex4.webp",
+    "url": "vex4/index.html"
+  },
+  {
+    "name": "Vex 5",
+    "image": "icons/vex5.webp",
+    "url": "vex5/index.html"
+  },
+  {
+    "name": "Wall smash",
+    "image": "icons/wallsmash.webp",
+    "url": "wallsmash/index.html"
+  },
+  {
+    "name": "Weave silk",
+    "image": "icons/weavesilk.webp",
+    "url": "weavesilk/index.html"
+  },
+  {
+    "name": "We become what we behold",
+    "image": "icons/webecomewhatwebehold.webp",
+    "url": "webecomewhatwebehold/index.html"
+  },
+  {
+    "name": "Webgl fluid sim",
+    "image": "icons/webglfluidsim.webp",
+    "url": "webglfluidsim/index.html"
+  },
+  {
+    "name": "Wolf 2D",
+    "image": "icons/wolf2d.webp",
+    "url": "wolf2d/index.html"
+  },
+  {
+    "name": "Wolf 3D",
+    "image": "icons/wolf3d.webp",
+    "url": "wolf3d/index.html"
+  },
+  {
+    "name": "Wop",
+    "image": "icons/wop.webp",
+    "url": "wop/index.html"
+  },
+  {
+    "name": "Wordle",
+    "image": "icons/wordle.webp",
+    "url": "wordle/index.html"
+  },
+  {
+    "name": "Wordle bot",
+    "image": "icons/wordlebot.webp",
+    "url": "wordlebot/index.html"
+  },
+  {
+    "name": "Worlds hardest game 2",
+    "image": "icons/worldhardestgame2.webp",
+    "url": "worldhardestgame2/index.html"
+  },
+  {
+    "name": "Worlds ardestgame",
+    "image": "icons/worldshardestgame.webp",
+    "url": "worldshardestgame/index.html"
+  },
+  {
+    "name": "Wubz",
+    "image": "icons/wubz.webp",
+    "url": "wubz/index.html"
+  },
+  {
+    "name": "Wigglypaint",
+    "image": "icons/wigglypaint.webp",
+    "url": "wigglypaint/index.html"
+  },
+  {
+    "name": "X Trial Racing",
+    "image": "icons/xtrialracing.webp",
+    "url": "xtrialracing/index.html"
+  },
+  {
+    "name": "Xx142B2.Exe",
+    "image": "icons/xx142b2.exe.webp",
+    "url": "xx142b2.exe/index.html"
+  },
+  {
+    "name": "Yohoho.io",
+    "image": "icons/yohohoio.webp",
+    "url": "yohohoio/index.html"
+  },
+  {
+    "name": "You are bezos",
+    "image": "icons/youarebezos.webp",
+    "url": "youarebezos/index.html"
+  },
+  {
+    "name": "Zombocalypse",
+    "image": "icons/zombocalypse.webp",
+    "url": "zombocalypse/index.html"
+  }
+];

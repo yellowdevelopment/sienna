@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sienna.</title>
+  <link rel="icon" href="https://cdn.jsdelivr.net/gh/yellowdevelopment@main/sienna/favicon.ico/" type="image/x-icon" />
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="sienna.css" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Grain texture overlay for depth -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <canvas id="particleCanvas"></canvas>
+  <div id="sidebar-container"></div>
+
+  <!-- ══ PAGE 1: LANDING ══ -->
+  <section class="page" id="page-landing">
+    <div class="title" data-text="sienna.">sienna.</div>
+
+    <button class="scroll-btn" id="scrollBtn" aria-label="Scroll to browse">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </button>
+  </section>
+
+  <!-- ══ PAGE 2: BROWSE ══ -->
+  <section class="page" id="page-browse">
+    <div class="browse-inner" id="browseInner">
+
+      <!-- Heading + dropdown -->
+      <div class="browse-heading">
+        <span class="browse-heading-static">You are currently viewing</span>
+
+        <div class="browse-dropdown" id="browseDropdown">
+          <button class="browse-dropdown-btn" id="browseDropdownBtn" aria-haspopup="listbox">
+            <span class="browse-dropdown-label" id="browseDropdownLabel">All Games</span>
+            <svg class="browse-dropdown-chevron" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+
+          <div class="browse-dropdown-menu" role="listbox" id="browseDropdownMenu">
+            <div class="browse-dropdown-item active" role="option" data-value="All Games">
+              <span class="item-dot"></span>All Games
+            </div>
+            <div class="browse-dropdown-item" role="option" data-value="All Apps">
+              <span class="item-dot"></span>All Apps
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search bar (new) -->
+      <div class="browse-search-wrap">
+        <div class="browse-search-container">
+          <svg class="browse-search-icon" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input class="browse-search" id="browseSearch"
+                 type="search" placeholder="Search…" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+
+      <!-- Featured carousel -->
+      <div class="featured" id="featured">
+        <button class="featured-arrow left" id="featuredPrev" aria-label="Previous featured">◀</button>
+        <div class="featured-inner" id="featuredInner">
+          <!-- populated by JS -->
+        </div>
+        <button class="featured-arrow right" id="featuredNext" aria-label="Next featured">▶</button>
+      </div>
+      <div class="featured-dots" id="featuredDots" aria-label="Featured navigation dots"></div>
+
+      <!-- Grid section label -->
+      <div class="grid-section-label">All titles</div>
+
+      <!-- Grid — populated by JS -->
+      <div class="browse-grid" id="browseGrid"></div>
+
+    </div>
+  </section>
+
+  <!-- ══ INFO BUTTON ══ -->
+  <button class="info-btn" id="infoBtn" aria-label="App info">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="8" x2="12" y2="8"/>
+      <line x1="12" y1="12" x2="12" y2="16"/>
+    </svg>
+  </button>
+
+  <!-- ══ INFO POPUP ══ -->
+  <div class="info-popup" id="infoPopup">
+    <div class="popup-header">
+      <div>
+        <div class="popup-name">sienna v1</div>
+        <div class="popup-version">build 002</div>
+      </div>
+      <div class="popup-badge" data-status="pre-release">pre-release</div>
+    </div>
+
+    <div class="popup-divider"></div>
+
+    <div class="popup-client">
+      <div class="popup-client-dot"></div>
+      <span class="popup-client-label">client</span>
+      <span class="popup-client-value">Night. beta v1</span>
+    </div>
+
+    <div class="popup-divider"></div>
+
+    <div class="popup-analytics-header">
+      <span class="popup-analytics-label">Analytics</span>
+      <span class="popup-analytics-tag">in development</span>
+    </div>
+
+    <div class="popup-graph">
+      <canvas id="graphCanvas"></canvas>
+      <div class="popup-graph-overlay">
+        <div class="popup-graph-label">In Development</div>
+        <div class="popup-graph-sublabel">site visit module</div>
+      </div>
+    </div>
+    <div class="popup-footer">made with ❤️ by yellowdevelopmnt</div>
+  </div>
+
+  <!-- ══ GAME VIEWER WINDOW ── TO BOTTOM SO FIXED/OVERLAY AREN'T NESTED INSIDE INFO PANEL -->
+  <div id="gameVisorOverlay" class="game-visor-overlay" aria-hidden="true"></div>
+  <div id="gameVisor" class="game-visor" role="dialog" aria-modal="true" aria-label="Game window">
+    <div class="game-visor-titlebar" id="gameVisorTitlebar">
+      <div class="mac-controls">
+        <button class="mac-btn red" id="gameVisorClose" type="button" aria-label="Close game window"></button>
+        <button class="mac-btn yellow" id="gameVisorMinimize" type="button" aria-label="Minimize or restore game window"></button>
+        <button class="mac-btn green" id="gameVisorFullscreen" type="button" aria-label="Toggle fullscreen"></button>
+      </div>
+      <div class="game-visor-title" id="gameVisorTitle">Game</div>
+      <div class="game-visor-actions">
+        <button id="gameVisorRefresh" class="game-visor-action-btn" type="button" aria-label="Refresh game">⟳</button>
+        <button id="gameVisorOpenBlank" class="game-visor-action-btn" type="button" aria-label="Open game in new about:blank tab">⧉</button>
+      </div>
+    </div>
+    <div id="gameVisorLoader" class="game-visor-loader hidden" aria-hidden="true">
+      <div class="game-visor-progress" aria-label="Loading progress bar">
+        <div id="gameVisorProgressBar" class="game-visor-progress-bar"></div>
+      </div>
+      <img src="loading.gif" alt="Loading" class="game-visor-loader-img" />
+    </div>
+    <iframe id="gameVisorIframe" class="game-visor-iframe" src="" frameborder="0" allowfullscreen allow="autoplay; picture-in-picture; fullscreen; clipboard-write"></iframe>
+  </div>
+
+  <div id="gameVisorDock" class="game-visor-dock hidden" aria-label="Game tabs">
+    <button id="gameVisorDockToggle" class="game-visor-dock-toggle" aria-label="Toggle game tabs">«</button>
+    <div id="gameVisorDockTabs" class="game-visor-dock-tabs"></div>
+  </div>
+
+  <!-- ══ INLINE ENHANCEMENT SCRIPT ─═ -->
+  <script>
+    /* ── Scroll button ── */
+    document.getElementById('scrollBtn')?.addEventListener('click', () => {
+      document.getElementById('page-browse')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    /* ── Browse reveal on scroll ── */
+    const browseInner = document.getElementById('browseInner');
+    if (browseInner) {
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          browseInner.classList.add('revealed');
+          obs.disconnect();
+        }
+      }, { threshold: 0.05 });
+      obs.observe(browseInner);
+    }
+
+    /* ── Search filter ──
+       night.js wraps each entry as:
+         <div class="browse-tile">
+           <a class="browse-card" href="…"><img …></a>
+           <div class="browse-card-name">Name</div>
+         </div>
+       We show/hide the whole tile so the card image always stays visible.
+    ── */
+    document.getElementById('browseSearch')?.addEventListener('input', function () {
+      const q = this.value.trim().toLowerCase();
+      document.querySelectorAll('.browse-tile').forEach(tile => {
+        const name = (tile.querySelector('.browse-card-name')?.textContent || '').toLowerCase();
+        tile.style.display = (!q || name.includes(q)) ? '' : 'none';
+      });
+    });
+
+    /* Re-apply search when night.js replaces grid content */
+    const browseGrid = document.getElementById('browseGrid');
+    if (browseGrid) {
+      new MutationObserver(() => {
+        const searchEl = document.getElementById('browseSearch');
+        if (searchEl && searchEl.value.trim()) searchEl.dispatchEvent(new Event('input'));
+      }).observe(browseGrid, { childList: true, subtree: true });
+    }
+  </script>
+
+  <script src="mages.js"></script>
+  <script src="apps.js"></script>
+  <script src="sienna.js"></script>
+  <script src="night.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html style="width:100%;height:100%;background-color:black;">
+    <head>
+        <base href="https://cdn.jsdelivr.net/gh/skibbsz/jsdelivr-cdns@main/tuffclient/">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+        <meta name="description" content="Play minecraft 1.12 in your browser" />
+        <meta name="keywords" content="eaglercraft, minecraft, 1.12, 1.12.2" />
+        <title>Sienna. | Tuff 1.12.2 WASM-GC</title>
+        <meta property="og:locale" content="en-US" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Eaglercraft 1.12 WASM" />
+        <meta property="og:description" content="Play minecraft 1.12 in your browser" />
+        <meta property="og:image" content="favicon.png" />
+        <link type="image/png" rel="shortcut icon" href="favicon.png" />
+        <script type="text/javascript" src="bootstrap.js"></script>
+        <script type="text/javascript">
+            "use strict";
+            window.addEventListener("load", function() {
+                if(window.location.href.indexOf("file:") === 0) {
+                    alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
+                }else {
+                    
+                    // %%%%%%%%% launch options %%%%%%%%%%%%
+                    
+                    var relayId = Math.floor(Math.random() * 3);
+                    window.eaglercraftXOpts = {
+                        demoMode: false,
+                        container: "game_frame",
+                        assetsURI: "assets.epw",
+                        worldsDB: "worlds",
+                        servers: [
+                            /* example: { addr: "ws://localhost:8081/", name: "Local test server" } */
+                            { addr: "https://usesienna.github.io", name: "§dSIENNA. TUFF CLIENT" },
+                            { addr: "wss://mc.ricenetwork.xyz", name: "Rice Network X BallCraft" },
+                            { addr: "wss://mc.arch.lol", name: "ArchMC" },
+                            { addr: "wss://xenamc.com", name: "XenaMC" },
+                            { addr: "wss://krypticmc.net", name: "KrypticMC" },
+                            { addr: "wss://ethereal.mov", name: "Ethereal" },
+                            { addr: "wss://eagler.skeletonmc.com", name: "SkeletonMC" }
+                        ],
+                        relays: [
+                            { addr: "wss://relay.deev.is/", comment: "lax1dude relay #1", primary: relayId == 0 },
+                            { addr: "wss://relay.lax1dude.net/", comment: "lax1dude relay #2", primary: relayId == 1 },
+                            { addr: "wss://relay.shhnowisnottheti.me/", comment: "ayunami relay #1", primary: relayId == 2 },
+                            { addr: "wss://eaglerrelay.glitch.me/ ", comment: "extra #1", primary: relayId == 3 }
+                        ]
+                    };
+                    
+                    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                    
+                    var q = window.location.search;
+                    if((typeof q === "string") && q[0] === "?" && (typeof window.URLSearchParams !== "undefined")) {
+                        q = new window.URLSearchParams(q);
+                        var s = q.get("server");
+                        if(s) window.eaglercraftXOpts.joinServer = s;
+                    }
+                    
+                    main();
+                    
+                }
+            });
+        </script>
+    </head>
+    <body style="margin:0px;width:100%;height:100%;overflow:hidden;background-color:black;" id="game_frame">
+
+        <!-- Minimap overlay -->
+        <canvas id="minimap" width="200" height="200" style="
+            position:absolute;
+            top:10px;
+            right:10px;
+            pointer-events:none;
+            z-index:9999;
+        "></canvas>
+
+        <!-- Fullscreen map (hidden by default) -->
+        <canvas id="fullmap" style="
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            display:none;
+            z-index:9998;
+        "></canvas>
+
+        <!-- Patch script to prevent AreaEffectCloud crash -->
+        <script>
+        (function () {
+          var Cloud =
+            (window.net && net.minecraft && net.minecraft.entity && net.minecraft.entity.EntityAreaEffectCloud) ||
+            (window.EntityAreaEffectCloud) ||
+            null;
+
+          if (!Cloud || !Cloud.prototype) return;
+
+          // Safe override for shouldIgnoreRadius
+          Cloud.prototype.shouldIgnoreRadius = function (r) {
+            if (typeof r !== 'number') {
+              if (typeof r === 'string') r = parseFloat(r);
+              else if (r && typeof r.floatValue === 'function') r = r.floatValue();
+              else if (r && typeof r.value === 'number') r = Number(r.value);
+              else r = Number(r) || 0;
+            }
+            if (!isFinite(r)) r = 0;
+            return r <= 0.0;
+          };
+
+          // Wrap onUpdate to sanitize radius and catch errors
+          var originalOnUpdate = Cloud.prototype.onUpdate;
+          Cloud.prototype.onUpdate = function () {
+            var rad = this.radius;
+            if (typeof rad !== 'number') {
+              if (typeof rad === 'string') this.radius = parseFloat(rad);
+              else if (rad && typeof rad.floatValue === 'function') this.radius = rad.floatValue();
+              else if (rad && typeof rad.value === 'number') this.radius = Number(rad.value);
+              else this.radius = Number(rad) || 0;
+            }
+            if (!isFinite(this.radius)) this.radius = 0;
+
+            try {
+              return originalOnUpdate.apply(this, arguments);
+            } catch (e) {
+              // Skip bad tick instead of crashing
+              return;
+            }
+          };
+        })();
+        </script>
+
+        <!-- Load minimap injection after the game code and patch script -->
+        <script type="text/javascript" src="minimap.js"></script>
+
+    </body>
+</html>
