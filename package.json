@@ -1,0 +1,16 @@
+{
+  "name": "sienna",
+  "version": "1.0.0",
+  "description": "sienna - a game and app browser",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build needed for static site'",
+    "lint": "echo 'No linter configured'"
+  },
+  "keywords": [],
+  "author": "yellowdevelopment",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^1.1.0"
+  }
+}
