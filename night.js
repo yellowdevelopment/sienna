@@ -30,9 +30,11 @@
       const slug = this.slugFromUrl(item);
       if (slug && NAME_OVERRIDES[slug]) return NAME_OVERRIDES[slug];
 
-      // Prefer authoritative name from data (mages.js / apps.js). Fall back to
-      // slug-derived formatting when a name is not provided or is empty.
+      // Prefer authoritative name from data (mages.js / apps.js). Keep exact
+      // provided value for name to preserve dashes, uppercase, and punctuation.
       const source = String(item?.name || slug || '');
+      if (item?.name && String(item.name).trim() !== '') return source;
+
       let s = source
         .replace(/\.[a-z0-9]+$/i, '')
         .replace(/[-_]+/g, ' ')

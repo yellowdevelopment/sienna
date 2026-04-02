@@ -1,5 +1,10 @@
 window.MAGES_GAMES = [
   {
+    "name": "sienna. is in BETA, if you're seeing this you got an early release but just know that: Not all features are established, games are still being mass added, no socials, will be bugs but barely, games will be worked on, etc.",
+    "image": "icons/thisisinbeta.webp",
+    "url": "https://usesienna.vercel.app"
+  },
+  {
     "name": "gn-math",
     "image": "icons/gnmath.webp",
     "url": "gnmath/index.html"
@@ -50,6 +55,16 @@ window.MAGES_GAMES = [
     "url": "celeste/index.html"
   },
   {
+    "name": "Terra",
+    "image": "icons/terra.webp",
+    "url": "terra/index.html"
+  },
+  {
+    "name": "Terraria",
+    "image": "icons/terraria.webp",
+    "url": "terraria/index.html"
+  },
+  {
     "name": "Cuphead",
     "image": "icons/cuphead.webp",
     "url": "cuphead/index.html"
@@ -58,6 +73,16 @@ window.MAGES_GAMES = [
     "name": "Bendy and the Ink Machine",
     "image": "icons/bendyink.webp",
     "url": "bendyink/index.html"
+  },
+  {
+    "name": "Bad Parenting",
+    "image": "icons/badparenting.webp",
+    "url": "badparenting/index.html"
+  },
+  {
+    "name": "Deepest Sword",
+    "image": "icons/deepestsword.webp",
+    "url": "deepestsword/index.html"
   },
   {
     "name": "1",
@@ -710,14 +735,94 @@ window.MAGES_GAMES = [
     "url": "fireboywatergirl4/index.html"
   },
   {
-    "name": "Five Nights at Winstons",
+    "name": "Baldis Basics",
+    "image": "icons/baldisbasics.webp",
+    "url": "baldisbasics/index.html"
+  },
+  {
+    "name": "Baldis Basics The Ultra Decompile",
+    "image": "icons/baldisbasicstheultradecomp.webp",
+    "url": "baldisbasicstheultradecomp/index.html"
+  },
+  {
+    "name": "Five Nights at Epstein's",
+    "image": "icons/fnae.webp",
+    "url": "fnae/index.html"
+  },
+  {
+    "name": "Five Nights at Last Breath",
+    "image": "icons/fivenightsatlastbreath.webp",
+    "url": "fivenightsatlastbreath/index.html"
+  },
+  {
+    "name": "Jeffrey Epsteins Basics in Education and Kidnapping",
+    "image": "icons/jeffreyepsteinbasicsineducationandkidnapping.webp",
+    "url": "jeffreyepsteinbasicsineducationandkidnapping/index.html"
+  },
+  {
+    "name": "Five Nights at Winston's",
     "image": "icons/fivenightsatwinstons.webp",
     "url": "fivenightsatwinstons/index.html"
   },
   {
-    "name": "Five Nights at Epsteins",
-    "image": "icons/fnae.webp",
-    "url": "fnae/index.html"
+    "name": "Five Nights at Candy's",
+    "image": "icons/fnac.webp",
+    "url": "fnac/index.html"
+  },
+  {
+    "name": "Five Nights at Candy's 2",
+    "image": "icons/fnac2.webp",
+    "url": "fnac2/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's",
+    "image": "icons/fnaf.webp",
+    "url": "fnaf/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's 2",
+    "image": "icons/fnaf2.webp",
+    "url": "fnaf2/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's 3",
+    "image": "icons/fnaf3.webp",
+    "url": "fnaf3/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's 4",
+    "image": "icons/fnaf4.webp",
+    "url": "fnaf4/index.html"
+  }, 
+  {
+    "name": "Five Nights at Freddy's 4: Halloween Edition",
+    "image": "icons/fnaf4halloween.webp",
+    "url": "fnaf4halloween/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's: Pizzeria Simulator",
+    "image": "icons/fnafps.webp",
+    "url": "fnafps/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's: Ultimate Custom Night",
+    "image": "icons/fnafucn.webp",
+    "url": "fnafucn/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's: Sister Location",
+    "image": "icons/fnafsl.webp",
+    "url": "fnafsl/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's: World",
+    "image": "icons/fnafworld.webp",
+    "url": "fnafworld/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's: World Refreshed",
+    "image": "icons/fnafworldrefreshed.webp",
+    "url": "fnafworldrefreshed/index.html"
   },
   {
     "name": "A Bite at Freddys",
@@ -1050,19 +1155,24 @@ window.MAGES_GAMES = [
     "url": "eaglercraft188wasm/index.html"
   },
   {
-    "name": "Minecraft 1.12.2",
+    "name": "Minecraft 1.12.2 u2",
     "image": "icons/eaglercraft1122.webp",
     "url": "eaglercraft1122/index.html"
   },
   {
-    "name": "Minecraft 1.12.2 WASM",
+    "name": "Minecraft 1.12.2 WASM u2",
     "image": "icons/eaglercraft1122wasm.webp",
     "url": "eaglercraft1122wasm/index.html"
   },
   {
+    "name": "Minecraft 1.12.2 WASM u3",
+    "image": "icons/eaglercraft1122wasm.webp",
+    "url": "eaglercraft1122u3wasm/index.html"
+  },
+  {
     "name": "Tuff Client 1.0.0",
     "image": "icons/tuffclient.webp",
-    "url": "tuffclient/index.html"
+    "url": "tuffclient1/index.html"
   },
   {
     "name": "Infinite Craft",
@@ -1848,11 +1958,6 @@ window.MAGES_GAMES = [
     "name": "Temple of boom",
     "image": "icons/templeofboom.webp",
     "url": "templeofboom/index.html"
-  },
-  {
-    "name": "Terra",
-    "image": "icons/terra.webp",
-    "url": "terra/index.html"
   },
   {
     "name": "Territorial.io",
