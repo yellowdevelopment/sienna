@@ -111,7 +111,9 @@
 
     init() {
       if (!('IntersectionObserver' in window) || !document.querySelectorAll) return;
-      if (this.observer) return;
+      if (this.observer) {
+        this.observer.disconnect();
+      }
 
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -133,6 +135,27 @@
       document.querySelectorAll('img.browse-card-icon[data-src]').forEach((img) => {
         if (img.dataset.src) this.observer.observe(img);
       });
+      this.loadVisible();
+    },
+
+    loadVisible() {
+      document.querySelectorAll('img.browse-card-icon[data-src]').forEach((img) => {
+        if (this.isElementInViewport(img)) {
+          this.loadImage(img);
+        }
+      });
+    },
+
+    isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+      return (
+        rect.top >= -400 && // accounting for rootMargin
+        rect.left >= -400 &&
+        rect.bottom <= windowHeight + 400 &&
+        rect.right <= windowWidth + 400
+      );
     },
 
     loadImage(img) {
