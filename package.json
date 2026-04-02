@@ -1,5 +1,5 @@
 {
-  scripts {
-    build [my-framework] build --output public
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
   }
 }
