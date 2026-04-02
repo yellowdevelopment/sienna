@@ -100,6 +100,11 @@ window.MAGES_GAMES = [
     "url": "3nl/index.html"
   },
   {
+    "name": "Baby Sniper in Vietnam",
+    "image": "icons/babysniperinvietnam.webp",
+    "url": "babysniperinvietnam/index.html"
+  },
+  {
     "name": "60s Burger Run",
     "image": "icons/60sburgerrun.webp",
     "url": "60sburgerrun/index.html"
