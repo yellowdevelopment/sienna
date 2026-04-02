@@ -306,6 +306,7 @@ body::after {
   padding-bottom: 64px;
   min-height: 100vh;
   height: auto;
+  position: relative;
 }
 
 .browse-inner {
@@ -1187,6 +1188,33 @@ body::after {
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
+/* ── FLOATING RIGHT AD ── */
+
+.floating-ad-right {
+  position: fixed;
+  top: 50%;
+  right: -320px;
+  transform: translateY(-50%);
+  width: 300px;
+  min-height: 400px;
+  background: rgba(0,0,0,0.2);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+  padding: 20px;
+  box-shadow: -8px 0 24px rgba(0,0,0,0.3);
+  transition: right 0.4s var(--ease-out);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-ad-right:hover {
+  right: -20px;
+}
+
 .ad-placeholder {
   color: rgba(255,255,255,0.4);
   font-size: 14px;
@@ -1195,6 +1223,13 @@ body::after {
   font-family: 'Syne', system-ui, sans-serif;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+/* Responsive design for floating ad */
+@media (max-width: 1400px) {
+  .floating-ad-right {
+    display: none;
+  }
 }
 
 /* ══════════════════════════════
