@@ -1,5 +1,11 @@
 {
-  scripts {
-    build [my-framework] build --output public
+  "name": "sienna",
+  "version": "1.0.0",
+  "description": "sienna game/app browser",
+  "scripts": {
+    "build": "[my-framework] build --output public"
+  },
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
   }
 }
