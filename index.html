@@ -75,7 +75,23 @@
         </div>
       </div>
 
-      <!-- Search bar (new) -->
+      <!-- Featured carousel -->
+      <div class="featured" id="featured">
+        <button class="featured-arrow left" id="featuredPrev" aria-label="Previous featured">◀</button>
+        <div class="featured-inner" id="featuredInner">
+          <!-- populated by JS -->
+        </div>
+        <button class="featured-arrow right" id="featuredNext" aria-label="Next featured">▶</button>
+      </div>
+      <div class="featured-dots" id="featuredDots" aria-label="Featured navigation dots"></div>
+
+      <!-- Ad space placeholder -->
+      <div class="ad-space-top" id="adSpaceTop">
+        <!-- Google Ad will go here -->
+        <div class="ad-placeholder">Ad Space - Top Banner</div>
+      </div>
+
+      <!-- Search bar (moved below featured) -->
       <div class="browse-search-wrap">
         <div class="browse-search-container">
           <svg class="browse-search-icon" viewBox="0 0 24 24" fill="none"
@@ -88,18 +104,14 @@
         </div>
       </div>
 
-      <!-- Featured carousel -->
-      <div class="featured" id="featured">
-        <button class="featured-arrow left" id="featuredPrev" aria-label="Previous featured">◀</button>
-        <div class="featured-inner" id="featuredInner">
-          <!-- populated by JS -->
-        </div>
-        <button class="featured-arrow right" id="featuredNext" aria-label="Next featured">▶</button>
-      </div>
-      <div class="featured-dots" id="featuredDots" aria-label="Featured navigation dots"></div>
-
       <!-- Grid section label -->
       <div class="grid-section-label">All titles</div>
+
+      <!-- Ad space placeholder -->
+      <div class="ad-space-middle" id="adSpaceMiddle">
+        <!-- Google Ad will go here -->
+        <div class="ad-placeholder">Ad Space - Middle Banner</div>
+      </div>
 
       <!-- Grid — populated by JS -->
       <div class="browse-grid" id="browseGrid"></div>
@@ -167,6 +179,12 @@
         <button id="gameVisorOpenBlank" class="game-visor-action-btn" type="button" aria-label="Open game in new about:blank tab">⧉</button>
       </div>
     </div>
+
+    <!-- Ad space in game visor -->
+    <div class="game-visor-ad-top" id="gameVisorAdTop">
+      <div class="ad-placeholder">Ad Space - Game Top Banner</div>
+    </div>
+
     <div id="gameVisorLoader" class="game-visor-loader hidden" aria-hidden="true">
       <div class="game-visor-progress" aria-label="Loading progress bar">
         <div id="gameVisorProgressBar" class="game-visor-progress-bar"></div>
@@ -174,6 +192,11 @@
       <img src="loading.gif" alt="Loading" class="game-visor-loader-img" />
     </div>
     <iframe id="gameVisorIframe" class="game-visor-iframe" src="" frameborder="0" allowfullscreen allow="autoplay; picture-in-picture; fullscreen; clipboard-write"></iframe>
+
+    <!-- Ad space in game visor -->
+    <div class="game-visor-ad-bottom" id="gameVisorAdBottom">
+      <div class="ad-placeholder">Ad Space - Game Bottom Banner</div>
+    </div>
   </div>
 
   <div id="gameVisorDock" class="game-visor-dock hidden" aria-label="Game tabs">
