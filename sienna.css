@@ -306,7 +306,6 @@ body::after {
   padding-bottom: 64px;
   min-height: 100vh;
   height: auto;
-  position: relative;
 }
 
 .browse-inner {
@@ -334,7 +333,7 @@ body::after {
   gap: 12px;
   white-space: nowrap;
   margin-top: 12px;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 }
 
 .browse-heading-static {
@@ -685,7 +684,7 @@ body::after {
 
 .game-visor-iframe {
   width: 100%;
-  height: calc(100% - 30px - 120px);
+  height: calc(100% - 30px);
   border: 0;
   display: block;
   background: #000;
@@ -693,39 +692,12 @@ body::after {
   transition: opacity 0.22s ease;
 }
 
-/* ── GAME VISOR AD SPACES ── */
-
-.game-visor-ad-top,
-.game-visor-ad-bottom {
-  height: 60px;
-  background: rgba(14, 15, 18, 0.8);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.game-visor-ad-bottom {
-  border-bottom: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.game-visor-ad-top .ad-placeholder,
-.game-visor-ad-bottom .ad-placeholder {
-  font-size: 11px;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
 .game-visor-loader {
   position: absolute;
-  top: 90px;
+  top: 30px;
   left: 0;
   right: 0;
-  bottom: 60px;
+  bottom: 0;
   background: #000;
   display: flex;
   align-items: center;
@@ -959,7 +931,7 @@ body::after {
 .featured {
   width: 100%;
   max-width: 1180px;
-  margin: 8px auto 48px;
+  margin: 8px auto 20px;
   padding: 20px 20px;
   border-radius: var(--r-xl);
   background: rgba(0,0,0,0.35);
@@ -1168,70 +1140,6 @@ body::after {
   width: 22px;
 }
 
-/* ── AD SPACES ── */
-
-.ad-space-top,
-.ad-space-middle {
-  width: 100%;
-  max-width: 1180px;
-  margin: 32px auto;
-  padding: 20px;
-  border-radius: var(--r-lg);
-  background: rgba(0,0,0,0.2);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  border: 1px solid rgba(255,255,255,0.08);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-}
-
-/* ── FLOATING RIGHT AD ── */
-
-.floating-ad-right {
-  position: fixed;
-  top: 50%;
-  right: -320px;
-  transform: translateY(-50%);
-  width: 300px;
-  min-height: 400px;
-  background: rgba(0,0,0,0.2);
-  backdrop-filter: blur(12px) saturate(120%);
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--r-lg) 0 0 var(--r-lg);
-  padding: 20px;
-  box-shadow: -8px 0 24px rgba(0,0,0,0.3);
-  transition: right 0.4s var(--ease-out);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.floating-ad-right:hover {
-  right: -20px;
-}
-
-.ad-placeholder {
-  color: rgba(255,255,255,0.4);
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  font-family: 'Syne', system-ui, sans-serif;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* Responsive design for floating ad */
-@media (max-width: 1400px) {
-  .floating-ad-right {
-    display: none;
-  }
-}
-
 /* ══════════════════════════════
    INFO BUTTON + POPUP
 ══════════════════════════════ */
@@ -1430,7 +1338,7 @@ body::after {
 .browse-search-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 
 .browse-search {
@@ -1484,7 +1392,7 @@ body::after {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(255,255,255,0.28);
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   font-family: 'Syne', system-ui, sans-serif;
   padding-left: 2px;
 }
