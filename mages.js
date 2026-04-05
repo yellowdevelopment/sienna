@@ -85,6 +85,16 @@ window.MAGES_GAMES = [
     "url": "deepestsword/index.html"
   },
   {
+    "name": "Core Ball",
+    "image": "icons/coreball.webp",
+    "url": "coreball/index.html"
+  },
+  {
+    "name": "Cheese Rolling",
+    "image": "icons/cheeserolling.webp",
+    "url": "cheeserolling/index.html"
+  },
+  {
     "name": "1",
     "image": "icons/1.webp",
     "url": "1/index.html"
