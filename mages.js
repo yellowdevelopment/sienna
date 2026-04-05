@@ -160,6 +160,11 @@ window.MAGES_GAMES = [
     "url": "achievementunlocked2/index.html"
   },
   {
+    "name": "Achievement Unlocked 3",
+    "image": "icons/achievementunlocked3.webp",
+    "url": "achievementunlocked3/index.html"
+  },
+  {
     "name": "A Dance of Fire and Ice",
     "image": "icons/adanceoffireandice.webp",
     "url": "adanceoffireandice/index.html"
@@ -235,6 +240,16 @@ window.MAGES_GAMES = [
     "url": "undertale10thanniversary/index.html"
   },
   {
+    "name": "Undertale Last Breath",
+    "image": "icons/undertalelastbreath.webp",
+    "url": "undertalelastbreath/index.html"
+  },
+  {
+    "name": "Undertale Last Breath: Phase 3",
+    "image": "icons/undertalelastbreathphase3.webp",
+    "url": "undertalelastbreathphase3/index.html"
+  },
+  {
     "name": "Deltatraveler",
     "image": "icons/deltatraveler.webp",
     "url": "deltatraveler/index.html"
@@ -243,6 +258,11 @@ window.MAGES_GAMES = [
     "name": "Bad Time Simulator",
     "image": "icons/badtimesimulator.webp",
     "url": "badtimesimulator/index.html"
+  },
+  {
+    "name": "Worst Time Simulator",
+    "image": "icons/worsttimesimulator.webp",
+    "url": "worsttimesimulator/index.html"
   },
   {
     "name": "Bad Monday Simulator",
@@ -448,11 +468,6 @@ window.MAGES_GAMES = [
     "name": "Corporation Inc",
     "image": "icons/corporationinc.webp",
     "url": "corporationinc/index.html"
-  },
-  {
-    "name": "Craftmine",
-    "image": "icons/craftmine.webp",
-    "url": "craftmine/index.html"
   },
   {
     "name": "Crazy Flasher 2",
@@ -745,6 +760,16 @@ window.MAGES_GAMES = [
     "url": "baldisbasicstheultradecomp/index.html"
   },
   {
+    "name": "CaseOh's Basics in Eating and Fast Food",
+    "image": "icons/caseohsbasicsineatingandfastfood.webp",
+    "url": "caseohsbasicsineatingandfastfood/index.html"
+  },
+  {
+    "name": "Jeffrey Epsteins Basics in Education and Kidnapping",
+    "image": "icons/jeffreyepsteinbasicsineducationandkidnapping.webp",
+    "url": "jeffreyepsteinbasicsineducationandkidnapping/index.html"
+  },
+  {
     "name": "Five Nights at Epstein's",
     "image": "icons/fnae.webp",
     "url": "fnae/index.html"
@@ -753,11 +778,6 @@ window.MAGES_GAMES = [
     "name": "Five Nights at Last Breath",
     "image": "icons/fivenightsatlastbreath.webp",
     "url": "fivenightsatlastbreath/index.html"
-  },
-  {
-    "name": "Jeffrey Epsteins Basics in Education and Kidnapping",
-    "image": "icons/jeffreyepsteinbasicsineducationandkidnapping.webp",
-    "url": "jeffreyepsteinbasicsineducationandkidnapping/index.html"
   },
   {
     "name": "Five Nights at Winston's",
@@ -830,6 +850,11 @@ window.MAGES_GAMES = [
     "url": "abiteatfreddys/index.html"
   },
   {
+    "name": "FNAF GB",
+    "image": "icons/fnafgb.webp",
+    "url": "fnafgb/index.html"
+  },
+  {
     "name": "Flappy 2048",
     "image": "icons/flappy2048.webp",
     "url": "flappy2048/index.html"
@@ -865,11 +890,6 @@ window.MAGES_GAMES = [
     "url": "flashflappy/index.html"
   },
   {
-    "name": "FNAF GB",
-    "image": "icons/fnafgb.webp",
-    "url": "fnafgb/index.html"
-  },
-  {
     "name": "Frogger",
     "image": "icons/frogger.webp",
     "url": "frogger/index.html"
@@ -895,12 +915,12 @@ window.MAGES_GAMES = [
     "url": "funnyshooter/index.html"
   },
   {
-    "name": "Geometry dash",
+    "name": "Geometry Dash Scratch",
     "image": "icons/geometrydash.webp",
     "url": "geometrydash/index.html"
   },
   {
-    "name": "Geometry rash",
+    "name": "Geometry Rash",
     "image": "icons/geometryrash.webp",
     "url": "geometryrash/index.html"
   },
@@ -1125,6 +1145,11 @@ window.MAGES_GAMES = [
     "url": "idlebreakout/index.html"
   },
   {
+    "name": "Minecraft Pocket Edition",
+    "image": "icons/minecraftpocketedition.webp",
+    "url": "minecraftpocketedition/index.html"
+  },
+  {
     "name": "Minecraft In-Dev",
     "image": "icons/minecraftindev.webp",
     "url": "minecraftindev/index.html"
@@ -1175,9 +1200,9 @@ window.MAGES_GAMES = [
     "url": "tuffclient1/index.html"
   },
   {
-    "name": "Infinite Craft",
-    "image": "icons/infinitecraft.webp",
-    "url": "infi/index.html"
+    "name": "Craftmine",
+    "image": "icons/craftmine.webp",
+    "url": "craftmine/index.html"
   },
   {
     "name": "Jetpack Joyride",
@@ -1515,6 +1540,16 @@ window.MAGES_GAMES = [
     "url": "pleasedontfeedme/index.html"
   },
   {
+    "name": "Speed Each Click",
+    "image": "icons/speedeachclick.webp",
+    "url": "speedeachclick/index.html"
+  },
+  {
+    "name": "Wop",
+    "image": "icons/wop.webp",
+    "url": "wop/index.html"
+  },
+  {
     "name": "Plinko",
     "image": "icons/plinko.webp",
     "url": "plinko/index.html"
@@ -1780,7 +1815,7 @@ window.MAGES_GAMES = [
     "url": "sonicblox/index.html"
   },
   {
-    "name": "Spacebarclicker",
+    "name": "Spacebar clicker",
     "image": "icons/spacebarclicker.webp",
     "url": "spacebarclicker/index.html"
   },
@@ -1788,11 +1823,6 @@ window.MAGES_GAMES = [
     "name": "Spank the monkey",
     "image": "icons/spankthemonkey.webp",
     "url": "spankthemonkey/index.html"
-  },
-  {
-    "name": "Speed each click",
-    "image": "icons/speedeachclick.webp",
-    "url": "speedeachclick/index.html"
   },
   {
     "name": "Speedle",
@@ -2150,19 +2180,9 @@ window.MAGES_GAMES = [
     "url": "webglfluidsim/index.html"
   },
   {
-    "name": "Wolf 2D",
-    "image": "icons/wolf2d.webp",
-    "url": "wolf2d/index.html"
-  },
-  {
-    "name": "Wolf 3D",
+    "name": "Wolfenstein 3D",
     "image": "icons/wolf3d.webp",
     "url": "wolf3d/index.html"
-  },
-  {
-    "name": "Wop",
-    "image": "icons/wop.webp",
-    "url": "wop/index.html"
   },
   {
     "name": "Wordle",
@@ -2201,7 +2221,7 @@ window.MAGES_GAMES = [
   },
   {
     "name": "Xx142B2.Exe",
-    "image": "icons/xx142b2.exe.webp",
+    "image": "icons/xx142b2exe.webp",
     "url": "xx142b2.exe/index.html"
   },
   {

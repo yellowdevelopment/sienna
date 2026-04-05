@@ -840,20 +840,16 @@
       
       if (url) {
         try {
-          // Open a new window and write a redirect page
           const newWin = window.open();
           if (newWin) {
             newWin.document.write(`
               <!DOCTYPE html>
               <html>
               <head>
-                <title>Redirecting...</title>
-                <script>
-                  window.location.replace('${url}');
-                <\/script>
+                <title>New Tab</title>
               </head>
-              <body>
-                <p>Redirecting to game...</p>
+              <body style="margin:0; padding:0; overflow:hidden;">
+                <iframe src="${url}" style="width:100vw; height:100vh; border:none;"></iframe>
               </body>
               </html>
             `);
