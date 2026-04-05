@@ -69,7 +69,7 @@
         </div>
       </div>
 
-      <!-- Search bar (new) -->
+      <!-- Search bar -->
       <div class="browse-search-wrap">
         <div class="browse-search-container">
           <svg class="browse-search-icon" viewBox="0 0 24 24" fill="none"
@@ -126,27 +126,29 @@
     <div class="popup-client">
       <div class="popup-client-dot"></div>
       <span class="popup-client-label">client</span>
-      <span class="popup-client-value">Night. beta v1</span>
+      <span class="popup-client-value">Night. beta v0.1.5</span>
     </div>
 
     <div class="popup-divider"></div>
 
     <div class="popup-analytics-header">
       <span class="popup-analytics-label">Analytics</span>
-      <span class="popup-analytics-tag">in development</span>
+      <span class="popup-analytics-tag">live</span>
     </div>
 
     <div class="popup-graph">
-      <canvas id="graphCanvas"></canvas>
-      <div class="popup-graph-overlay">
-        <div class="popup-graph-label">In Development</div>
-        <div class="popup-graph-sublabel">site visit module</div>
-      </div>
+      <iframe
+        src="https://lookerstudio.google.com/embed/reporting/b335d6e0-b7c3-40ec-b87d-19e0d0ceaa78/page/x8DuF"
+        style="width:100%;height:200px;border:0;border-radius:8px;filter:invert(1) hue-rotate(180deg);"
+        allowfullscreen
+        sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+      ></iframe>
     </div>
+
     <div class="popup-footer">made with ❤️ by yellowdevelopmnt</div>
   </div>
 
-  <!-- ══ GAME VIEWER WINDOW ── TO BOTTOM SO FIXED/OVERLAY AREN'T NESTED INSIDE INFO PANEL -->
+  <!-- ══ GAME VIEWER WINDOW ══ -->
   <div id="gameVisorOverlay" class="game-visor-overlay" aria-hidden="true"></div>
   <div id="gameVisor" class="game-visor" role="dialog" aria-modal="true" aria-label="Game window">
     <div class="game-visor-titlebar" id="gameVisorTitlebar">
@@ -167,7 +169,7 @@
       </div>
       <img src="loading.gif" alt="Loading" class="game-visor-loader-img" />
     </div>
-    <iframe id="gameVisorIframe" class="game-visor-iframe" src="" frameborder="0" allowfullscreen allow="autoplay; picture-in-picture; fullscreen"></iframe>
+    <iframe id="gameVisorIframe" class="game-visor-iframe" src="" frameborder="0" allowfullscreen allow="autoplay; picture-in-picture; fullscreen; clipboard-write"></iframe>
   </div>
 
   <div id="gameVisorDock" class="game-visor-dock hidden" aria-label="Game tabs">
@@ -175,7 +177,7 @@
     <div id="gameVisorDockTabs" class="game-visor-dock-tabs"></div>
   </div>
 
-  <!-- ══ INLINE ENHANCEMENT SCRIPT ─═ -->
+  <!-- ══ INLINE ENHANCEMENT SCRIPT ══ -->
   <script>
     /* ── Scroll button ── */
     document.getElementById('scrollBtn')?.addEventListener('click', () => {
@@ -194,14 +196,7 @@
       obs.observe(browseInner);
     }
 
-    /* ── Search filter ──
-       night.js wraps each entry as:
-         <div class="browse-tile">
-           <a class="browse-card" href="…"><img …></a>
-           <div class="browse-card-name">Name</div>
-         </div>
-       We show/hide the whole tile so the card image always stays visible.
-    ── */
+    /* ── Search filter ── */
     document.getElementById('browseSearch')?.addEventListener('input', function () {
       const q = this.value.trim().toLowerCase();
       document.querySelectorAll('.browse-tile').forEach(tile => {
