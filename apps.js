@@ -45,6 +45,11 @@ window.APPS_ITEMS = [
     "url": "winxp/index.html"
   },
   {
+    "name": "gn-math ai",
+    "image": "icons/gnmathai.webp",
+    "url": "gnmathai/index.html"
+  },
+  {
     "name": "Voxiles",
     "image": "icons/voxiles.webp",
     "url": "voxiles/index.html"

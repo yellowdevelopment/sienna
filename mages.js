@@ -275,6 +275,21 @@ window.MAGES_GAMES = [
     "url": "unfairdyne/index.html"
   },
   {
+    "name": "Rocket league 2D",
+    "image": "icons/rocketleague2d.webp",
+    "url": "rocketleague2d/index.html"
+  },
+  {
+    "name": "Rocket Goal.io",
+    "image": "icons/rocketgoalio.webp",
+    "url": "rocketgoalio/index.html"
+  },
+  {
+    "name": "They Are Coming",
+    "image": "icons/theyarecoming.webp",
+    "url": "theyarecoming/index.html"
+  },
+  {
     "name": "Bad Piggies",
     "image": "icons/badpiggies.webp",
     "url": "badpiggies/index.html"
@@ -1683,11 +1698,6 @@ window.MAGES_GAMES = [
     "name": "Rise higher",
     "image": "icons/risehigher.webp",
     "url": "risehigher/index.html"
-  },
-  {
-    "name": "Rocket league 2D",
-    "image": "icons/rocketleague2d.webp",
-    "url": "rocketleague2d/index.html"
   },
   {
     "name": "Rooftop snipers",
