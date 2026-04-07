@@ -681,6 +681,7 @@
       tab.loaded = true;
       this.saveTabsToStorage();
       this.renderDock();
+      window.particleBg?.stop();
     },
 
     close() {
@@ -710,6 +711,7 @@
         this.hideDock();
       }
       this.renderDock();
+      window.particleBg?.start();
     },
 
     minimize(isViaOverlay = false) {
@@ -725,6 +727,7 @@
       this.overlay.classList.remove('visible');
       this.showDock();
       this.renderDock();
+      window.particleBg?.start();
     },
 
     restoreTab(tabId) {
@@ -745,6 +748,7 @@
       this.saveTabsToStorage();
       this.hideDock();
       this.renderDock();
+      window.particleBg?.stop();
     },
 
     startLoading() {
@@ -950,6 +954,7 @@
             this.container.classList.remove('open', 'minimized');
             this.iframe.src = 'about:blank';
             this.titleEl.textContent = 'Game';
+            window.particleBg?.start();
           }
           this.saveTabsToStorage();
           this.renderDock();

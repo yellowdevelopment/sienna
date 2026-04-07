@@ -600,6 +600,16 @@ window.MAGES_GAMES = [
     "url": "dokidokiliteratureclub/index.html"
   },
   {
+    "name": "I Hate My Waifu Streamer",
+    "image": "icons/ihatemywaifustreamer.webp",
+    "url": "ihatemywaifustreamer/index.html"
+  },
+  {
+    "name": "Pumpkill 64",
+    "image": "icons/pumpkill64.webp",
+    "url": "pumpkill64/index.html"
+  },
+  {
     "name": "Donkey Kong",
     "image": "icons/donkeykong.webp",
     "url": "donkeykong/index.html"
@@ -748,11 +758,6 @@ window.MAGES_GAMES = [
     "name": "Final Ninja",
     "image": "icons/finalninja.webp",
     "url": "finalninja/index.html"
-  },
-  {
-    "name": "Find me",
-    "image": "icons/findme.webp",
-    "url": "findme/index.html"
   },
   {
     "name": "Fireboy and Watergirl",
@@ -953,6 +958,11 @@ window.MAGES_GAMES = [
     "name": "Geometry Vibes",
     "image": "icons/geometryvibes.webp",
     "url": "geometryvibes/index.html"
+  },
+  {
+    "name": "Dune Dash",
+    "image": "icons/dunedash.webp",
+    "url": "dunedash/index.html"
   },
   {
     "name": "Gimme the airpod",
