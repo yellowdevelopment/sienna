@@ -155,11 +155,6 @@ window.MAGES_GAMES = [
     "url": "9007199254740992/index.html"
   },
   {
-    "name": "99 Nights in the Forest",
-    "image": "icons/99nightsintheforest.webp",
-    "url": "99nightsintheforest/index.html"
-  },
-  {
     "name": "Achievement Unlocked",
     "image": "icons/achievementunlocked.webp",
     "url": "achievementunlocked/index.html"
@@ -295,9 +290,69 @@ window.MAGES_GAMES = [
     "url": "rocketgoalio/index.html"
   },
   {
+    "name": "Buckshot Roulette",
+    "image": "icons/buckshotroulette.webp",
+    "url": "buckshotroulette/index.html"
+  },
+  {
     "name": "They Are Coming",
     "image": "icons/theyarecoming.webp",
     "url": "theyarecoming/index.html"
+  },
+  {
+    "name": "Yume Nikki",
+    "image": "icons/yumenikki.webp",
+    "url": "yumenikki/index.html"
+  },
+  {
+    "name": "Omori",
+    "image": "icons/omori.webp",
+    "url": "omori/index.html"
+  },
+  {
+    "name": "Omori x Yume Nikki",
+    "image": "icons/omorixyumenikki.webp",
+    "url": "omorixyumenikki/index.html"
+  },
+  {
+    "name": "Doki Doki Literature Club",
+    "image": "icons/ddlc.webp",
+    "url": "dokidokiliteratureclub/index.html"
+  },
+  {
+    "name": "I Hate My Waifu Streamer",
+    "image": "icons/ihatemywaifustreamer.webp",
+    "url": "ihatemywaifustreamer/index.html"
+  },
+  {
+    "name": "Class of '09",
+    "image": "icons/classof09.webp",
+    "url": "classof09/index.html"
+  },
+  {
+    "name": "Miss Inconspicuous Maid Girl Cleaning Co",
+    "image": "icons/mimco.webp",
+    "url": "mimco/index.html"
+  },
+  {
+    "name": "Miss Inconspicuous Maid Girl Cleaning Co 2",
+    "image": "icons/mimco2.webp",
+    "url": "mimco2/index.html"
+  },
+  {
+    "name": "Pumpkill 64",
+    "image": "icons/pumpkill64.webp",
+    "url": "pumpkill64/index.html"
+  },
+  {
+    "name": "Please Don't Feed Me",
+    "image": "icons/pleasedontfeedme.webp",
+    "url": "pleasedontfeedme/index.html"
+  },
+  {
+    "name": "Bee Swarm Simulator",
+    "image": "icons/bss.webp",
+    "url": "bss/index.html"
   },
   {
     "name": "Bad Piggies",
@@ -340,9 +395,19 @@ window.MAGES_GAMES = [
     "url": "volleyrandom/index.html"
   },
   {
-    "name": "Big Red Button",
-    "image": "icons/bigredbutton.webp",
-    "url": "bigredbutton/index.html"
+    "name": "Cool Brainrot Clicker",
+    "image": "icons/coolbrainrotclicker.webp",
+    "url": "coolbrainrotclicker/index.html"
+  },
+  {
+    "name": "Plants vs Brainrots",
+    "image": "icons/plantsvsbrainrots.webp",
+    "url": "plantsvsbrainrots/index.html"
+  },
+  {
+    "name": "99 Nights in the Forest",
+    "image": "icons/99nightsintheforest.webp",
+    "url": "99nightsintheforest/index.html"
   },
   {
     "name": "Bikechamp 2",
@@ -460,11 +525,6 @@ window.MAGES_GAMES = [
     "url": "circloo/index.html"
   },
   {
-    "name": "Class of '09",
-    "image": "icons/classof09.webp",
-    "url": "classof09/index.html"
-  },
-  {
     "name": "Color Switch",
     "image": "icons/colorswitch.webp",
     "url": "colorswitch/index.html"
@@ -483,11 +543,6 @@ window.MAGES_GAMES = [
     "name": "Cookie Clicker",
     "image": "icons/cookieclicker.webp",
     "url": "cookieclicker/index.html"
-  },
-  {
-    "name": "Cool Brainrot Clicker",
-    "image": "icons/coolbrainrotclicker.webp",
-    "url": "coolbrainrotclicker/index.html"
   },
   {
     "name": "Corporation Inc",
@@ -533,6 +588,11 @@ window.MAGES_GAMES = [
     "name": "CSGO Clicker",
     "image": "icons/csgoclicker.webp",
     "url": "csgoclicker/index.html"
+  },
+  {
+    "name": "Big Red Button",
+    "image": "icons/bigredbutton.webp",
+    "url": "bigredbutton/index.html"
   },
   {
     "name": "Cube Field",
@@ -593,21 +653,6 @@ window.MAGES_GAMES = [
     "name": "Dogeminer",
     "image": "icons/dogeminer.webp",
     "url": "dogeminer/index.html"
-  },
-  {
-    "name": "Doki Doki Literature Club",
-    "image": "icons/ddlc.webp",
-    "url": "dokidokiliteratureclub/index.html"
-  },
-  {
-    "name": "I Hate My Waifu Streamer",
-    "image": "icons/ihatemywaifustreamer.webp",
-    "url": "ihatemywaifustreamer/index.html"
-  },
-  {
-    "name": "Pumpkill 64",
-    "image": "icons/pumpkill64.webp",
-    "url": "pumpkill64/index.html"
   },
   {
     "name": "Donkey Kong",
@@ -1375,11 +1420,6 @@ window.MAGES_GAMES = [
     "url": "metroidzeromission/index.html"
   },
   {
-    "name": "Miss Inconspicuous Maid",
-    "image": "icons/mimco.webp",
-    "url": "mimco/index.html"
-  },
-  {
     "name": "Mindustry",
     "image": "icons/mindustry.webp",
     "url": "mindustry/index.html"
@@ -1560,19 +1600,9 @@ window.MAGES_GAMES = [
     "url": "pinball/index.html"
   },
   {
-    "name": "Plants vs Brainrots",
-    "image": "icons/plantsvsbrainrots.webp",
-    "url": "plantsvsbrainrots/index.html"
-  },
-  {
     "name": "Plants vs Zombies",
     "image": "icons/plantsvszombies.webp",
     "url": "plantsvszombies/index.html"
-  },
-  {
-    "name": "Please dont feed me",
-    "image": "icons/pleasedontfeedme.webp",
-    "url": "pleasedontfeedme/index.html"
   },
   {
     "name": "Speed Each Click",
