@@ -680,31 +680,6 @@ window.MAGES_GAMES = [
     "url": "doomwasm/index.html"
   },
   {
-    "name": "Drift Boss",
-    "image": "icons/driftboss.webp",
-    "url": "driftboss/index.html"
-  },
-  {
-    "name": "Drift Bus",
-    "image": "icons/driftbus.webp",
-    "url": "driftbus/index.html"
-  },
-  {
-    "name": "Drift Mania",
-    "image": "icons/driftmania.webp",
-    "url": "driftmania/index.html"
-  },
-  {
-    "name": "Drive mad",
-    "image": "icons/drivemad.webp",
-    "url": "drivemad/index.html"
-  },
-  {
-    "name": "Driving force 4",
-    "image": "icons/drivingforce4.webp",
-    "url": "drivingforce4/index.html"
-  },
-  {
     "name": "Duckhunt JS",
     "image": "icons/duckhunt.webp",
     "url": "duckhunt/index.html"
@@ -993,6 +968,11 @@ window.MAGES_GAMES = [
     "name": "Geometry Dash Scratch",
     "image": "icons/geometrydash.webp",
     "url": "geometrydash/index.html"
+  },
+  {
+    "name": "Geometry Dash Lite",
+    "image": "icons/geometrydashlite.webp",
+    "url": "geometrydashlite/index.html"
   },
   {
     "name": "Geometry Rash",
@@ -1360,11 +1340,6 @@ window.MAGES_GAMES = [
     "url": "littlealchemy2/index.html"
   },
   {
-    "name": "Love tester",
-    "image": "icons/lovetester.webp",
-    "url": "lovetester/index.html"
-  },
-  {
     "name": "Lows adventures",
     "image": "icons/lowsadventures.webp",
     "url": "lowsadventures/index.html"
@@ -1433,6 +1408,31 @@ window.MAGES_GAMES = [
     "name": "Monster tracks",
     "image": "icons/monstertracks.webp",
     "url": "monstertracks/index.html"
+  },
+  {
+    "name": "Drive mad",
+    "image": "icons/drivemad.webp",
+    "url": "drivemad/index.html"
+  },
+  {
+    "name": "Drift Boss",
+    "image": "icons/driftboss.webp",
+    "url": "driftboss/index.html"
+  },
+  {
+    "name": "Drift Bus",
+    "image": "icons/driftbus.webp",
+    "url": "driftbus/index.html"
+  },
+  {
+    "name": "Drift Mania",
+    "image": "icons/driftmania.webp",
+    "url": "driftmania/index.html"
+  },
+  {
+    "name": "Driving force 4",
+    "image": "icons/drivingforce4.webp",
+    "url": "drivingforce4/index.html"
   },
   {
     "name": "Moto X3M",
