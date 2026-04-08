@@ -1,6 +1,6 @@
 window.MAGES_GAMES = [
   {
-    "name": "sienna. is in BETA, if you're seeing this you got an early release but just know that: Not all features are established, games are still being mass added, no socials, will be bugs but barely, games will be worked on, etc.",
+    "name": "sienna. is in BETA, if you're seeing this you got an early release but just know that: Not all features are established, games are still being mass added, no socials, will be bugs but barely, games will be worked on, etc. If you were redirected from old gn-math links, use the gn-math button next to this",
     "image": "icons/thisisinbeta.webp",
     "url": "https://usesienna.vercel.app"
   },
@@ -8,6 +8,11 @@ window.MAGES_GAMES = [
     "name": "gn-math",
     "image": "icons/gnmath.webp",
     "url": "gnmath/index.html"
+  },
+  {
+    "name": "UGS files",
+    "image": "icons/ugsfiles.webp",
+    "url": "ugsfiles/index.html"
   },
   {
     "name": "BuildNow.gg",
@@ -95,9 +100,9 @@ window.MAGES_GAMES = [
     "url": "cheeserolling/index.html"
   },
   {
-    "name": "1",
-    "image": "icons/1.webp",
-    "url": "1/index.html"
+    "name": "Buckshot Roulette",
+    "image": "icons/buckshotroulette.webp",
+    "url": "buckshotroulette/index.html"
   },
   {
     "name": "Backrooms",
@@ -113,21 +118,6 @@ window.MAGES_GAMES = [
     "name": "13 Days in Hell",
     "image": "icons/13daysinhell.webp",
     "url": "13daysinhell/index.html"
-  },
-  {
-    "name": "1 on 1 Soccer",
-    "image": "icons/1on1soccer.webp",
-    "url": "1on1soccer/index.html"
-  },
-  {
-    "name": "2048",
-    "image": "icons/2048.webp",
-    "url": "2048/index.html"
-  },
-  {
-    "name": "3 Lines",
-    "image": "icons/3lines.webp",
-    "url": "3lines/index.html"
   },
   {
     "name": "3 Nights Lobotomized",
@@ -148,11 +138,6 @@ window.MAGES_GAMES = [
     "name": "60s Santa Run",
     "image": "icons/60ssantarun.webp",
     "url": "60ssantarun/index.html"
-  },
-  {
-    "name": "9007199254740992",
-    "image": "icons/9007199254740992.webp",
-    "url": "9007199254740992/index.html"
   },
   {
     "name": "Achievement Unlocked",
@@ -290,11 +275,6 @@ window.MAGES_GAMES = [
     "url": "rocketgoalio/index.html"
   },
   {
-    "name": "Buckshot Roulette",
-    "image": "icons/buckshotroulette.webp",
-    "url": "buckshotroulette/index.html"
-  },
-  {
     "name": "They Are Coming",
     "image": "icons/theyarecoming.webp",
     "url": "theyarecoming/index.html"
@@ -363,6 +343,11 @@ window.MAGES_GAMES = [
     "name": "Ballistic Chickens",
     "image": "icons/ballisticchickens.webp",
     "url": "ballisticchickens/index.html"
+  },
+  {
+    "name": "1 on 1 Soccer",
+    "image": "icons/1on1soccer.webp",
+    "url": "1on1soccer/index.html"
   },
   {
     "name": "Basketball Stars",
@@ -480,9 +465,14 @@ window.MAGES_GAMES = [
     "url": "bongocat/index.html"
   },
   {
-    "name": "Breaking the Bank",
+    "name": "Henry Stickmin: Breaking the Bank",
     "image": "icons/breakingthebank.webp",
     "url": "breakingthebank/index.html"
+  },
+  {
+    "name": "Henry Stickmin: Escaping the prison",
+    "image": "icons/escapingtheprison.webp",
+    "url": "escapingtheprison/index.html"
   },
   {
     "name": "Bubble Shooter",
@@ -493,11 +483,6 @@ window.MAGES_GAMES = [
     "name": "Capybara Village",
     "image": "icons/capybaravillage.webp",
     "url": "capybaravillage/index.html"
-  },
-  {
-    "name": "Cat 2048",
-    "image": "icons/cat2048.webp",
-    "url": "cat2048/index.html"
   },
   {
     "name": "Cell Machine",
@@ -645,14 +630,14 @@ window.MAGES_GAMES = [
     "url": "dino/index.html"
   },
   {
-    "name": "Doge 2048",
-    "image": "icons/doge2048.webp",
-    "url": "doge2048/index.html"
-  },
-  {
     "name": "Dogeminer",
     "image": "icons/dogeminer.webp",
     "url": "dogeminer/index.html"
+  },
+  {
+    "name": "Universal paperclips",
+    "image": "icons/universalpaperclips.webp",
+    "url": "universalpaperclips/index.html"
   },
   {
     "name": "Donkey Kong",
@@ -723,11 +708,6 @@ window.MAGES_GAMES = [
     "name": "Elden Ring GB",
     "image": "icons/eldenringgb.webp",
     "url": "eldenringgb/index.html"
-  },
-  {
-    "name": "Escaping the prison",
-    "image": "icons/escapingtheprison.webp",
-    "url": "escapingtheprison/index.html"
   },
   {
     "name": "Evil Glitch",
@@ -966,8 +946,8 @@ window.MAGES_GAMES = [
   },
   {
     "name": "Geometry Dash Scratch",
-    "image": "icons/geometrydash.webp",
-    "url": "geometrydash/index.html"
+    "image": "icons/geometrydashscratch.webp",
+    "url": "geometrydashscratch/index.html"
   },
   {
     "name": "Geometry Dash Lite",
@@ -1043,21 +1023,6 @@ window.MAGES_GAMES = [
     "name": "Grand theft grotto",
     "image": "icons/grandtheftgrotto.webp",
     "url": "grandtheftgrotto/index.html"
-  },
-  {
-    "name": "Driver",
-    "image": "icons/driver.webp",
-    "url": "driver/index.html"
-  },
-  {
-    "name": "Grand truckismo",
-    "image": "icons/grandtruckismo.webp",
-    "url": "grandtruckismo/index.html"
-  },
-  {
-    "name": "Grimaces Birthday",
-    "image": "icons/grimacebirthday.webp",
-    "url": "grimacebirthday/index.html"
   },
   {
     "name": "Grind craft",
@@ -1265,6 +1230,96 @@ window.MAGES_GAMES = [
     "url": "craftmine/index.html"
   },
   {
+    "name": "Pokémon Client",
+    "image": "icons/pokemon.webp",
+    "url": "pokemon/index.html"
+  },
+  {
+    "name": "Pokemon Blue",
+    "image": "icons/pokemonblue.webp",
+    "url": "pokemonblue/index.html"
+  },
+  {
+    "name": "Pokemon Red",
+    "image": "icons/pokemonred.webp",
+    "url": "pokemonred/index.html"
+  },
+  {
+    "name": "Pokemon Green English",
+    "image": "icons/pokemongreen.webp",
+    "url": "pokemongreen/index.html"
+  },
+  {
+    "name": "Pokemon Yellow",
+    "image": "icons/pokemonyellow.webp",
+    "url": "pokemonyellow/index.html"
+  },
+  {
+    "name": "Pokemon Crystal",
+    "image": "icons/pokemoncrystal.webp",
+    "url": "pokemoncrystal/index.html"
+  },
+  {
+    "name": "Pokemon Silver",
+    "image": "icons/pokemonsilver.webp",
+    "url": "pokemonsilver/index.html"
+  },
+  {
+    "name": "Pokemon Gold",
+    "image": "icons/pokemongold.webp",
+    "url": "pokemongold/index.html"
+  },
+  {
+    "name": "Pokemon Sapphire",
+    "image": "icons/pokemonsapphire.webp",
+    "url": "pokemonsapphire/index.html"
+  },
+  {
+    "name": "Pokemon Ruby",
+    "image": "icons/pokemonruby.webp",
+    "url": "pokemonruby/index.html"
+  },
+  {
+    "name": "Pokemon Emerald",
+    "image": "icons/pokemonemerald.webp",
+    "url": "pokemonemerald/index.html"
+  },
+  {
+    "name": "Pokemon LeafGreen",
+    "image": "icons/pokemonleafgreen.webp",
+    "url": "pokemonleafgreen/index.html"
+  },
+  {
+    "name": "Pokemon FireRed",
+    "image": "icons/pokemonfirered.webp",
+    "url": "pokemonfirered/index.html"
+  },
+  {
+    "name": "Pokemon Classic (RomHack)",
+    "image": "icons/pokeclassic.webp",
+    "url": "pokeclassic/index.html"
+  },
+  {
+    "name": "Pokemon Ultraviolet (RomHack)",
+    "image": "icons/pokeultraviolet.webp",
+    "url": "pokeultraviolet/index.html"
+  },
+  {
+    "name": "Pokemon Jupiter (RomHack)",
+    "image": "icons/pokejupiter.webp",
+    "url": "pokejupiter/index.html"
+  },
+  {
+    "name": "Pokemon Prism (RomHack)",
+    "image": "icons/pokeprism.webp",
+    "url": "pokeprism/index.html"
+  },
+  {
+    "name": "Pokemon Brown (RomHack)",
+    "image": "icons/pokemonbrown.webp",
+    "url": "pokemonbrown/index.html"
+  },
+  {
     "name": "Jetpack Joyride",
     "image": "icons/jetpackjoyride.webp",
     "url": "jetpackjoyride/index.html"
@@ -1360,29 +1415,39 @@ window.MAGES_GAMES = [
     "url": "makesureitsclosed/index.html"
   },
   {
-    "name": "Mario",
-    "image": "icons/mario.webp",
-    "url": "mario/index.html"
-  },
-  {
-    "name": "Mario 63",
-    "image": "icons/mario63.webp",
-    "url": "mario63/index.html"
-  },
-  {
-    "name": "Mario Paint",
-    "image": "icons/mariopaint.webp",
-    "url": "mariopaint/index.html"
-  },
-  {
-    "name": "Mcdonalds",
-    "image": "icons/mcdonalds.webp",
-    "url": "mcdonalds/index.html"
-  },
-  {
     "name": "Meme 2048",
     "image": "icons/meme2048.webp",
     "url": "meme2048/index.html"
+  },
+  {
+    "name": "Doge 2048",
+    "image": "icons/doge2048.webp",
+    "url": "doge2048/index.html"
+  },
+  {
+    "name": "Cat 2048",
+    "image": "icons/cat2048.webp",
+    "url": "cat2048/index.html"
+  },
+  {
+    "name": "2048",
+    "image": "icons/2048.webp",
+    "url": "2048/index.html"
+  },
+  {
+    "name": "1",
+    "image": "icons/1.webp",
+    "url": "1/index.html"
+  },
+  {
+    "name": "3 Lines",
+    "image": "icons/3lines.webp",
+    "url": "3lines/index.html"
+  },
+  {
+    "name": "9007199254740992",
+    "image": "icons/9007199254740992.webp",
+    "url": "9007199254740992/index.html"
   },
   {
     "name": "Meteor run",
@@ -1433,6 +1498,16 @@ window.MAGES_GAMES = [
     "name": "Driving force 4",
     "image": "icons/drivingforce4.webp",
     "url": "drivingforce4/index.html"
+  },
+  {
+    "name": "Driver",
+    "image": "icons/driver.webp",
+    "url": "driver/index.html"
+  },
+  {
+    "name": "Grand truckismo",
+    "image": "icons/grandtruckismo.webp",
+    "url": "grandtruckismo/index.html"
   },
   {
     "name": "Moto X3M",
@@ -1990,11 +2065,6 @@ window.MAGES_GAMES = [
     "url": "suikademake/index.html"
   },
   {
-    "name": "Super Mario 64 DS",
-    "image": "icons/supermario64ds.webp",
-    "url": "supermario64ds/index.html"
-  },
-  {
     "name": "Tomodachi Collection",
     "image": "icons/tomodachicollection.webp",
     "url": "tomodachicollection/index.html"
@@ -2190,9 +2260,34 @@ window.MAGES_GAMES = [
     "url": "unfairmario/index.html"
   },
   {
-    "name": "Universal paperclips",
-    "image": "icons/universalpaperclips.webp",
-    "url": "universalpaperclips/index.html"
+    "name": "Super Mario 64 DS",
+    "image": "icons/supermario64ds.webp",
+    "url": "supermario64ds/index.html"
+  },
+  {
+    "name": "Mario",
+    "image": "icons/mario.webp",
+    "url": "mario/index.html"
+  },
+  {
+    "name": "Mario 63",
+    "image": "icons/mario63.webp",
+    "url": "mario63/index.html"
+  },
+  {
+    "name": "Mario Paint",
+    "image": "icons/mariopaint.webp",
+    "url": "mariopaint/index.html"
+  },
+  {
+    "name": "Mcdonalds",
+    "image": "icons/mcdonalds.webp",
+    "url": "mcdonalds/index.html"
+  },
+  {
+    "name": "Grimaces Birthday",
+    "image": "icons/grimacebirthday.webp",
+    "url": "grimacebirthday/index.html"
   },
   {
     "name": "Vex",

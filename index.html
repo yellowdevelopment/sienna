@@ -95,6 +95,12 @@
       <!-- Grid section label -->
       <div class="grid-section-label">All titles</div>
 
+      <!-- Favorites Section -->
+      <div id="favoritesSection" class="favorites-section hidden">
+        <div class="grid-section-label">Favorites</div>
+        <div class="browse-grid" id="favoritesGrid"></div>
+      </div>
+
       <!-- Grid — populated by JS -->
       <div class="browse-grid" id="browseGrid"></div>
 
@@ -115,8 +121,8 @@
   <div class="info-popup" id="infoPopup">
     <div class="popup-header">
       <div>
-        <div class="popup-name">sienna v0.1.1</div>
-        <div class="popup-version">build 004</div>
+        <div class="popup-name">sienna v0.1.2</div>
+        <div class="popup-version">build 005</div>
       </div>
       <div class="popup-badge" data-status="pre-release">BETA</div>
     </div>
@@ -126,7 +132,7 @@
     <div class="popup-client">
       <div class="popup-client-dot"></div>
       <span class="popup-client-label">client</span>
-      <span class="popup-client-value">Night. beta v0.1.6</span>
+      <span class="popup-client-value">Night. beta v0.1.7</span>
     </div>
 
     <div class="popup-divider"></div>
@@ -178,6 +184,77 @@
   </div>
 
   <!-- ══ INLINE ENHANCEMENT SCRIPT ══ -->
+  <style>
+    .favorite-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.4);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: transform 0.2s, background 0.2s, color 0.2s, opacity 0.2s;
+      backdrop-filter: blur(4px);
+      opacity: 0.8;
+    }
+    .favorite-btn:hover { transform: scale(1.1); background: rgba(0, 0, 0, 0.6); opacity: 1; }
+    .favorite-btn.active { color: #ff4757; }
+    .browse-tile { position: relative; }
+    .favorites-section { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+    .favorites-section.hidden { display: none; }
+    .favorite-btn svg { width: 18px; height: 18px; fill: currentColor; }
+    .browse-tile:hover .favorite-btn { opacity: 1; }
+
+    /* Slideshow Enhancements */
+    .featured { border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .featured-slide { position: relative; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; }
+    .featured-bg {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-size: cover; background-position: center;
+      filter: blur(50px) brightness(0.5); transform: scale(1.2);
+      z-index: 1; transition: opacity 0.5s ease;
+    }
+    .featured-content {
+      position: relative; z-index: 2; display: flex; align-items: center; gap: 30px;
+      padding: 40px; width: 100%; max-width: 900px;
+    }
+    .featured-icon {
+      width: 140px; height: 140px; border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: cover;
+    }
+    .featured-meta { flex: 1; }
+    .featured-title {
+      font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 15px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .featured-play {
+      display: inline-block; padding: 12px 32px; background: #fff; color: #000;
+      border-radius: 12px; font-weight: 700; text-decoration: none;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .featured-play:hover { transform: translateY(-2px); background: #f0f0f0; }
+    
+    .featured-dots { margin-top: 20px; gap: 8px; }
+    .featured-dot {
+      width: 8px; height: 8px; background: rgba(255,255,255,0.2);
+      border: none; border-radius: 4px; transition: width 0.3s, background 0.3s;
+    }
+    .featured-dot.active { width: 24px; background: #fff; }
+
+    @media (max-width: 768px) {
+      .featured-content { flex-direction: column; text-align: center; padding: 20px; }
+      .featured-icon { width: 100px; height: 100px; }
+      .featured-title { font-size: 1.5rem; }
+    }
+  </style>
+
   <script>
     /* ── Scroll button ── */
     document.getElementById('scrollBtn')?.addEventListener('click', () => {

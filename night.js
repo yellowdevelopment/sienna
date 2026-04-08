@@ -239,14 +239,17 @@
     buildItemsHtml(items, basePath) {
       return items
         .map((g) => {
+          if (!g || !g.url) return '';
           const name = util.escapeHtml(util.formatDisplayName(g));
           const hrefRaw = util.resolveUrl(`${basePath}${g.url}`);
           const href = encodeURI(hrefRaw);
           const icon = util.iconPathFor(g);
+          const isFav = favorites.has(href);
+          const favClass = isFav ? 'active' : '';
           const iconHtml = icon
             ? `<img class="browse-card-icon" data-src="${encodeURI(icon)}" alt="${name}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.parentElement.classList.add('icon-missing');">`
             : '';
-          return `<div class="browse-tile" data-game-url="${href}" title="Play ${name}"><a class="browse-card" href="${href}" data-game-url="${href}">${iconHtml}</a><div class="browse-card-name">${name}</div></div>`;
+          return `<div class="browse-tile" data-game-url="${href}" title="Play ${name}"><a class="browse-card" href="${href}" data-game-url="${href}">${iconHtml}</a><div class="browse-card-name">${name}</div><button class="favorite-btn ${favClass}" data-fav-url="${href}" aria-label="Favorite ${name}"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button></div>`;
         })
         .join('');
     },
@@ -283,6 +286,72 @@
         iconLazyLoader.init();
       }, GRID_FADE_MS);
     },
+  };
+
+  const favorites = {
+    items: new Set(),
+    init() {
+      try {
+        const stored = localStorage.getItem('sienna_favs');
+        if (stored) {
+          const saved = JSON.parse(stored);
+          this.items = new Set(Array.isArray(saved) ? saved : []);
+        }
+      } catch (e) { this.items = new Set(); }
+      this.render();
+    },
+    has(url) { return this.items.has(url); },
+    toggle(url, btnElement) {
+      if (!url) return;
+      if (this.items.has(url)) this.items.delete(url);
+      else this.items.add(url);
+      
+      // Immediate visual feedback
+      if (btnElement) btnElement.classList.toggle('active', this.items.has(url));
+      
+      localStorage.setItem('sienna_favs', JSON.stringify(Array.from(this.items)));
+      this.render();
+      
+      // Update state in the main grid if the item exists there
+      const mainGridBtn = document.querySelector(`#browseGrid .favorite-btn[data-fav-url="${url}"]`);
+      if (mainGridBtn) mainGridBtn.classList.toggle('active', this.items.has(url));
+    },
+    render() {
+      const section = document.getElementById('favoritesSection');
+      const el = section?.querySelector('#favoritesGrid');
+      if (!section || !el) return;
+
+      if (this.items.size === 0) {
+        section.classList.add('hidden');
+        return;
+      }
+
+      section.classList.remove('hidden');
+      
+      // Find full data objects for favorited URLs
+      const allItems = [
+        ...(window.MAGES_GAMES || []).map(i => ({ ...i, base: 'mages/' })),
+        ...(window.APPS_ITEMS || []).map(i => ({ ...i, base: 'apps/' }))
+      ];
+
+      const favData = [];
+      this.items.forEach(url => {
+        const found = allItems.find(item => {
+          const resolved = util.resolveUrl(`${item.base}${item.url}`);
+          return encodeURI(resolved) === url;
+        });
+        if (found) favData.push(found);
+      });
+
+      // Build the grid HTML safely
+      const html = favData.map(item => grid.buildItemsHtml([item], item.base)).join('');
+
+      el.innerHTML = html;
+      iconLazyLoader.init();
+      
+      const cards = el.querySelectorAll('.browse-card');
+      opening.staggerCards(cards, 0, 10);
+    }
   };
 
   let activeCategory = 'All Games';
@@ -408,6 +477,7 @@
     pool: [],
     idx: 0,
     intervalId: null,
+    isHovered: false,
     pickPool(category = activeCategory) {
       const cfg = CATEGORY_CONFIG[category];
       if (!cfg) return [];
@@ -424,10 +494,23 @@
       const item = wrapped.it || wrapped;
       const base = wrapped.base || 'mages/';
       const name = util.escapeHtml(util.formatDisplayName(item));
-      const icon = util.iconPathFor(item);
+      const iconRaw = util.iconPathFor(item);
+      const icon = iconRaw ? encodeURI(iconRaw) : '';
       const href = encodeURI(`${base}${item.url}`) || '#';
-      const imgHtml = icon ? `<img class="featured-icon" src="${encodeURI(icon)}" alt="${name}" loading="lazy">` : '';
-      return `<div class="featured-slide">${imgHtml}<div class="featured-meta"><div class="featured-title">${name}</div></div><a class="featured-play" href="${href}" data-game-url="${href}">Play</a></div>`;
+      const imgHtml = icon ? `<img class="featured-icon" src="${icon}" alt="${name}" loading="lazy">` : '';
+      const bgStyle = icon ? `style="background-image: url('${icon}');"` : '';
+      
+      return `
+        <div class="featured-slide">
+          <div class="featured-bg" ${bgStyle}></div>
+          <div class="featured-content">
+            ${imgHtml}
+            <div class="featured-meta">
+              <div class="featured-title">${name}</div>
+              <a class="featured-play" href="${href}" data-game-url="${href}">Play Now</a>
+            </div>
+          </div>
+        </div>`;
     },
     renderDots() {
       if (!this.dotsEl) return;
@@ -439,6 +522,7 @@
           const i = Number(btn.getAttribute('data-dot-idx') || 0);
           this.pause();
           this.showIndex(i);
+          this.resume();
         });
       });
     },
@@ -451,20 +535,25 @@
     showIndex(i) {
       if (!this.inner || !this.pool.length) return;
       this.idx = i % this.pool.length;
-      const html = this.renderItem(this.pool[this.idx]);
-      // create new slide and append
+      
       const node = document.createElement('div');
-      node.innerHTML = html;
+      node.innerHTML = this.renderItem(this.pool[this.idx]).trim();
       const slide = node.firstElementChild;
-      slide.classList.add('enter');
-      // collect existing slides and mark them exiting
+
+      // Clean up existing slides to prevent stacking during fast navigation
       const existing = Array.from(this.inner.querySelectorAll('.featured-slide'));
-      this.inner.appendChild(slide);
       existing.forEach((prev) => {
-        prev.classList.remove('enter');
+        prev.classList.remove('active');
         prev.classList.add('exit');
-        setTimeout(() => { if (prev.parentElement) prev.parentElement.removeChild(prev); }, 480);
+        setTimeout(() => { if (prev.parentElement) prev.remove(); }, 850);
       });
+
+      this.inner.appendChild(slide);
+      
+      // Trigger reflow to ensure initial transform is registered before transition starts
+      void slide.offsetHeight; 
+      slide.classList.add('active');
+
       this.updateDots();
     },
     next() {
@@ -489,6 +578,7 @@
       }
     },
     resume() {
+      if (this.isHovered) return;
       if (!this.intervalId && this.pool.length) {
         this.intervalId = setInterval(() => this.next(), 5000);
       }
@@ -520,11 +610,11 @@
       // wire buttons
       const prevBtn = document.getElementById('featuredPrev');
       const nextBtn = document.getElementById('featuredNext');
-      prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); this.pause(); this.prev(); });
-      nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); this.pause(); this.next(); });
+      prevBtn?.addEventListener('click', (e) => { e.stopPropagation(); this.pause(); this.prev(); this.resume(); });
+      nextBtn?.addEventListener('click', (e) => { e.stopPropagation(); this.pause(); this.next(); this.resume(); });
       // pause on hover
-      this.el.addEventListener('mouseenter', () => this.pause());
-      this.el.addEventListener('mouseleave', () => this.resume());
+      this.el.addEventListener('mouseenter', () => { this.isHovered = true; this.pause(); });
+      this.el.addEventListener('mouseleave', () => { this.isHovered = false; this.resume(); });
       this.start();
     },
   };
@@ -988,10 +1078,19 @@
     analyticsGraph.init();
     featured.init();
     gameVisor.init();
+    favorites.init();
 
     const browseGridElement = document.getElementById('browseGrid');
-    if (browseGridElement) {
-      browseGridElement.addEventListener('click', (event) => {
+    const favoritesGridElement = document.getElementById('favoritesGrid');
+
+    const handleGridClick = (event) => {
+        const favBtn = event.target.closest('.favorite-btn');
+        if (favBtn) {
+          event.preventDefault();
+          event.stopPropagation();
+          favorites.toggle(favBtn.dataset.favUrl, favBtn);
+          return;
+        }
         const tile = event.target.closest('.browse-tile');
         if (!tile) return;
         event.preventDefault();
@@ -1000,8 +1099,10 @@
         if (url && url !== '#') {
           gameVisor.open(url, name);
         }
-      });
-    }
+    };
+
+    if (browseGridElement) browseGridElement.addEventListener('click', handleGridClick);
+    if (favoritesGridElement) favoritesGridElement.addEventListener('click', handleGridClick);
 
     document.body.addEventListener('click', (event) => {
       const featuredPlay = event.target.closest('.featured-play');
