@@ -10,14 +10,19 @@ window.MAGES_GAMES = [
     "url": "gnmath/index.html"
   },
   {
-    "name": "UGS files",
-    "image": "icons/ugsfiles.webp",
+    "name": "Ultimate Game Stash",
+    "image": "icons/ugssinglefile.webp",
     "url": "ugsfiles/index.html"
   },
   {
     "name": "BuildNow.gg",
     "image": "icons/buildnowgg.webp",
     "url": "buildnowgg/index.html"
+  },
+  {
+    "name": "Justfall.lol",
+    "image": "icons/justfalllol.webp",
+    "url": "justfalllol/index.html"
   },
   {
     "name": "Hollow Knight",
@@ -75,6 +80,11 @@ window.MAGES_GAMES = [
     "url": "cuphead/index.html"
   },
   {
+    "name": "10 Minutes Till Dawn",
+    "image": "icons/10minutestilldawn.webp",
+    "url": "10minutestilldawn/index.html"
+  },
+  {
     "name": "Bendy and the Ink Machine",
     "image": "icons/bendyink.webp",
     "url": "bendyink/index.html"
@@ -108,6 +118,11 @@ window.MAGES_GAMES = [
     "name": "Backrooms",
     "image": "icons/backrooms.webp",
     "url": "backrooms/index.html"
+  },
+  {
+    "name": "Backrooms 2D",
+    "image": "icons/backrooms2d.webp",
+    "url": "backrooms2d/index.html"
   },
   {
     "name": "Appel",
@@ -320,14 +335,44 @@ window.MAGES_GAMES = [
     "url": "mimco2/index.html"
   },
   {
+    "name": "Boba Simulator",
+    "image": "icons/bobasimulator.webp",
+    "url": "bobasimulator/index.html"
+  },
+  {
     "name": "Pumpkill 64",
     "image": "icons/pumpkill64.webp",
     "url": "pumpkill64/index.html"
   },
   {
+    "name": "Happy Cat Tavern",
+    "image": "icons/happycattavern.webp",
+    "url": "happycattavern/index.html"
+  },
+  {
+    "name": "House of Hazards",
+    "image": "icons/houseofhazards.webp",
+    "url": "houseofhazards/index.html"
+  },
+  {
     "name": "Please Don't Feed Me",
     "image": "icons/pleasedontfeedme.webp",
     "url": "pleasedontfeedme/index.html"
+  },
+  {
+    "name": "Get Yoked",
+    "image": "icons/getyoked.webp",
+    "url": "getyoked/index.html"
+  },
+  {
+    "name": "Gladihoppers",
+    "image": "icons/gladihoppers.webp",
+    "url": "gladihoppers/index.html"
+  },
+  {
+    "name": "Speed Stars",
+    "image": "icons/speedstars.webp",
+    "url": "speedstars/index.html"
   },
   {
     "name": "Bee Swarm Simulator",
@@ -343,6 +388,31 @@ window.MAGES_GAMES = [
     "name": "Ballistic Chickens",
     "image": "icons/ballisticchickens.webp",
     "url": "ballisticchickens/index.html"
+  },
+  {
+    "name": "Champion Island",
+    "image": "icons/championisland.webp",
+    "url": "championisland/index.html"
+  },
+  {
+    "name": "Clash Of Vikings",
+    "image": "icons/clashofvikings.webp",
+    "url": "clashofvikings/index.html"
+  },
+  {
+    "name": "Crimson Fantasia",
+    "image": "icons/crimsonfantasia.webp",
+    "url": "crimsonfantasia/index.html"
+  },
+  {
+    "name": "Chinese Fortnite",
+    "image": "icons/fortnitecn.webp",
+    "url": "fortnitecn/index.html"
+  },
+  {
+    "name": "Only Up",
+    "image": "icons/onlyup.webp",
+    "url": "onlyup/index.html"
   },
   {
     "name": "1 on 1 Soccer",
@@ -475,6 +545,11 @@ window.MAGES_GAMES = [
     "url": "escapingtheprison/index.html"
   },
   {
+    "name": "Henry Stickmin: Infiltrating the Airship",
+    "image": "icons/infiltratingtheairship.webp",
+    "url": "infiltratingtheairship/index.html"
+  },
+  {
     "name": "Bubble Shooter",
     "image": "icons/bubbleshooter.webp",
     "url": "bubbleshooter/index.html"
@@ -605,6 +680,11 @@ window.MAGES_GAMES = [
     "url": "dadish2/index.html"
   },
   {
+    "name": "Dadish 3",
+    "image": "icons/dadish3.webp",
+    "url": "dadish3/index.html"
+  },
+  {
     "name": "Dante",
     "image": "icons/dante.webp",
     "url": "dante/index.html"
@@ -680,6 +760,11 @@ window.MAGES_GAMES = [
     "url": "ducklife2/index.html"
   },
   {
+    "name": "Duck life 3: Evolution",
+    "image": "icons/ducklife3.webp",
+    "url": "ducklife3/index.html"
+  },
+  {
     "name": "Duck life 4",
     "image": "icons/ducklife4.webp",
     "url": "ducklife4/index.html"
@@ -690,6 +775,11 @@ window.MAGES_GAMES = [
     "url": "ducklife5/index.html"
   },
   {
+    "name": "Duck life 6: Space",
+    "image": "icons/ducklife6.webp",
+    "url": "ducklife6/index.html"
+  },
+  {
     "name": "Duke nukem 2",
     "image": "icons/dukenukem2.webp",
     "url": "dukenukem2/index.html"
@@ -698,11 +788,6 @@ window.MAGES_GAMES = [
     "name": "Earn to die",
     "image": "icons/earntodie.webp",
     "url": "earntodie/index.html"
-  },
-  {
-    "name": "Eggy car",
-    "image": "icons/eggycar.webp",
-    "url": "eggycar/index.html"
   },
   {
     "name": "Elden Ring GB",
@@ -1325,11 +1410,6 @@ window.MAGES_GAMES = [
     "url": "jetpackjoyride/index.html"
   },
   {
-    "name": "Justfall.lol",
-    "image": "icons/justfalllol.webp",
-    "url": "justfalllol/index.html"
-  },
-  {
     "name": "Just One Boss",
     "image": "icons/justoneboss.webp",
     "url": "justoneboss/index.html"
@@ -1490,9 +1570,34 @@ window.MAGES_GAMES = [
     "url": "driftbus/index.html"
   },
   {
+    "name": "Drift Hunters",
+    "image": "icons/drifthunters.webp",
+    "url": "drifthunters/index.html"
+  },
+  {
+    "name": "Drift King Online",
+    "image": "icons/driftking.webp",
+    "url": "driftking/index.html"
+  },
+  {
     "name": "Drift Mania",
     "image": "icons/driftmania.webp",
     "url": "driftmania/index.html"
+  },
+  {
+    "name": "Eggy car",
+    "image": "icons/eggycar.webp",
+    "url": "eggycar/index.html"
+  },
+  {
+    "name": "Madalin Cars",
+    "image": "icons/madalincars.webp",
+    "url": "madalincars/index.html"
+  },
+  {
+    "name": "Madalin Stunt Cars 2",
+    "image": "icons/madalinstuntcars2.webp",
+    "url": "madalinstuntcars2/index.html"
   },
   {
     "name": "Driving force 4",
@@ -1830,6 +1935,11 @@ window.MAGES_GAMES = [
     "url": "rooftopsnipers/index.html"
   },
   {
+    "name": "Getaway Shooter",
+    "image": "icons/getawayshooter.webp",
+    "url": "getawayshooter/index.html"
+  },
+  {
     "name": "Run",
     "image": "icons/run.webp",
     "url": "run/index.html"
@@ -2065,6 +2175,16 @@ window.MAGES_GAMES = [
     "url": "suikademake/index.html"
   },
   {
+    "name": "Mcdonalds",
+    "image": "icons/mcdonalds.webp",
+    "url": "mcdonalds/index.html"
+  },
+  {
+    "name": "Grimaces Birthday",
+    "image": "icons/grimacebirthday.webp",
+    "url": "grimacebirthday/index.html"
+  },
+  {
     "name": "Tomodachi Collection",
     "image": "icons/tomodachicollection.webp",
     "url": "tomodachicollection/index.html"
@@ -2073,16 +2193,6 @@ window.MAGES_GAMES = [
     "name": "Super meat boy",
     "image": "icons/supermeatboy.webp",
     "url": "supermeatboy/index.html"
-  },
-  {
-    "name": "Super smash Bros",
-    "image": "icons/supersmashbros.webp",
-    "url": "supersmashbros/index.html"
-  },
-  {
-    "name": "Super smash flash",
-    "image": "icons/supersmashflash.webp",
-    "url": "supersmashflash/index.html"
   },
   {
     "name": "Survival race",
@@ -2098,11 +2208,6 @@ window.MAGES_GAMES = [
     "name": "Swerve",
     "image": "icons/swerve.webp",
     "url": "swerve/index.html"
-  },
-  {
-    "name": "Swing monkey",
-    "image": "icons/swingmonkey.webp",
-    "url": "swingmonkey/index.html"
   },
   {
     "name": "Tabs",
@@ -2280,14 +2385,14 @@ window.MAGES_GAMES = [
     "url": "mariopaint/index.html"
   },
   {
-    "name": "Mcdonalds",
-    "image": "icons/mcdonalds.webp",
-    "url": "mcdonalds/index.html"
+    "name": "Super Smash Bros",
+    "image": "icons/supersmashbros.webp",
+    "url": "supersmashbros/index.html"
   },
   {
-    "name": "Grimaces Birthday",
-    "image": "icons/grimacebirthday.webp",
-    "url": "grimacebirthday/index.html"
+    "name": "Super Smash Flash",
+    "image": "icons/supersmashflash.webp",
+    "url": "supersmashflash/index.html"
   },
   {
     "name": "Vex",
@@ -2320,19 +2425,19 @@ window.MAGES_GAMES = [
     "url": "wallsmash/index.html"
   },
   {
-    "name": "Weave silk",
+    "name": "Weave Silk",
     "image": "icons/weavesilk.webp",
     "url": "weavesilk/index.html"
+  },
+  {
+    "name": "WebGL Fluid Sim",
+    "image": "icons/webglfluidsim.webp",
+    "url": "webglfluidsim/index.html"
   },
   {
     "name": "We become what we behold",
     "image": "icons/webecomewhatwebehold.webp",
     "url": "webecomewhatwebehold/index.html"
-  },
-  {
-    "name": "Webgl fluid sim",
-    "image": "icons/webglfluidsim.webp",
-    "url": "webglfluidsim/index.html"
   },
   {
     "name": "Wolfenstein 3D",
