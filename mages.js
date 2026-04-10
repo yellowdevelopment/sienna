@@ -75,6 +75,16 @@ window.MAGES_GAMES = [
     "url": "terraria/index.html"
   },
   {
+    "name": "Stardew Valley",
+    "image": "icons/stardewvalley.webp",
+    "url": "stardewvalley/index.html"
+  },
+  {
+    "name": "Serenitrove",
+    "image": "icons/serenitrove.webp",
+    "url": "serenitrove/index.html"
+  },
+  {
     "name": "Cuphead",
     "image": "icons/cuphead.webp",
     "url": "cuphead/index.html"
@@ -88,6 +98,11 @@ window.MAGES_GAMES = [
     "name": "Bendy and the Ink Machine",
     "image": "icons/bendyink.webp",
     "url": "bendyink/index.html"
+  },
+  {
+    "name": "Gorilla Tag",
+    "image": "icons/gorillatag.webp",
+    "url": "gorillatag/index.html"
   },
   {
     "name": "Bad Parenting",
@@ -115,6 +130,31 @@ window.MAGES_GAMES = [
     "url": "buckshotroulette/index.html"
   },
   {
+    "name": "Clover Pit",
+    "image": "icons/cloverpit.webp",
+    "url": "cloverpit/index.html"
+  },
+  {
+    "name": "That's Not My Neighbor",
+    "image": "icons/thatsnotmyneighbor.webp",
+    "url": "thatsnotmyneighbor/index.html"
+  },
+  {
+    "name": "Ultrakill",
+    "image": "icons/ultrakill.webp",
+    "url": "ultrakill/index.html"
+  },
+  {
+    "name": "Iron Lung",
+    "image": "icons/ironlung.webp",
+    "url": "ironlung/index.html"
+  },
+  {
+    "name": "Schoolboy Runaway",
+    "image": "icons/schoolboyrunaway.webp",
+    "url": "schoolboyrunaway/index.html"
+  },
+  {
     "name": "Backrooms",
     "image": "icons/backrooms.webp",
     "url": "backrooms/index.html"
@@ -130,6 +170,16 @@ window.MAGES_GAMES = [
     "url": "appel/index.html"
   },
   {
+    "name": "Milk Inside A Bag Of Milk Inside A Bag Of Milk",
+    "image": "icons/milkinsideabagofmilkinsideabagofmilk.webp",
+    "url": "milkinsideabagofmilkinsideabagofmilk/index.html"
+  },
+  {
+    "name": "Milk Outside A Bag Of Milk Outside A Bag Of Milk",
+    "image": "icons/milkoutsideabagofmilkoutsideabagofmilk.webp",
+    "url": "milkoutsideabagofmilkoutsideabagofmilk/index.html"
+  },
+  {
     "name": "13 Days in Hell",
     "image": "icons/13daysinhell.webp",
     "url": "13daysinhell/index.html"
@@ -138,6 +188,11 @@ window.MAGES_GAMES = [
     "name": "3 Nights Lobotomized",
     "image": "icons/3nl.webp",
     "url": "3nl/index.html"
+  },
+  {
+    "name": "Flying Gorilla",
+    "image": "icons/flyinggorilla.webp",
+    "url": "flyinggorilla/index.html"
   },
   {
     "name": "Baby Sniper in Vietnam",
@@ -790,11 +845,6 @@ window.MAGES_GAMES = [
     "url": "earntodie/index.html"
   },
   {
-    "name": "Elden Ring GB",
-    "image": "icons/eldenringgb.webp",
-    "url": "eldenringgb/index.html"
-  },
-  {
     "name": "Evil Glitch",
     "image": "icons/evilglitch.webp",
     "url": "evilglitch/index.html"
@@ -965,49 +1015,14 @@ window.MAGES_GAMES = [
     "url": "abiteatfreddys/index.html"
   },
   {
-    "name": "FNAF GB",
+    "name": "Five Nights at Freddy's: GB",
     "image": "icons/fnafgb.webp",
     "url": "fnafgb/index.html"
   },
   {
-    "name": "Flappy 2048",
-    "image": "icons/flappy2048.webp",
-    "url": "flappy2048/index.html"
-  },
-  {
-    "name": "Flappy bird",
-    "image": "icons/flappybird.webp",
-    "url": "flappybird/index.html"
-  },
-  {
-    "name": "Flappy bird bounce",
-    "image": "icons/flappybirdbounce.webp",
-    "url": "flappybirdbounce/index.html"
-  },
-  {
-    "name": "Flappy copter",
-    "image": "icons/flappycopter.webp",
-    "url": "flappycopter/index.html"
-  },
-  {
-    "name": "Flappy dino",
-    "image": "icons/flappydino.webp",
-    "url": "flappydino/index.html"
-  },
-  {
-    "name": "Flappy duck",
-    "image": "icons/flappyduck.webp",
-    "url": "flappyduck/index.html"
-  },
-  {
-    "name": "Flash flappy",
-    "image": "icons/flashflappy.webp",
-    "url": "flashflappy/index.html"
-  },
-  {
-    "name": "Frogger",
-    "image": "icons/frogger.webp",
-    "url": "frogger/index.html"
+    "name": "Elden Ring GB",
+    "image": "icons/eldenringgb.webp",
+    "url": "eldenringgb/index.html"
   },
   {
     "name": "Fruit ninja",
@@ -1020,14 +1035,34 @@ window.MAGES_GAMES = [
     "url": "fryingnemo/index.html"
   },
   {
-    "name": "Funny ball game",
-    "image": "icons/funnyballgame.webp",
-    "url": "funnyballgame/index.html"
+    "name": "Last train home",
+    "image": "icons/lasttrainhome.webp",
+    "url": "lasttrainhome/index.html"
   },
   {
-    "name": "Funny shooter",
-    "image": "icons/funnyshooter.webp",
-    "url": "funnyshooter/index.html"
+    "name": "Make sure it's closed",
+    "image": "icons/makesureitsclosed.webp",
+    "url": "makesureitsclosed/index.html"
+  },
+  {
+    "name": "Crazy Cattle 3D",
+    "image": "icons/crazycattle3d.webp",
+    "url": "crazycattle3d/index.html"
+  },
+  {
+    "name": "Crazy Cattle 3D+",
+    "image": "icons/crazycattle3d+.webp",
+    "url": "crazycattle3d+/index.html"
+  },
+  {
+    "name": "Crazy Chicken 3D",
+    "image": "icons/crazychicken3d.webp",
+    "url": "crazychicken3d/index.html"
+  },
+  {
+    "name": "Crazy Kitten 3D",
+    "image": "icons/crazykitten3d.webp",
+    "url": "crazykitten3d/index.html"
   },
   {
     "name": "Geometry Dash Scratch",
@@ -1048,6 +1083,11 @@ window.MAGES_GAMES = [
     "name": "Geometry Vibes",
     "image": "icons/geometryvibes.webp",
     "url": "geometryvibes/index.html"
+  },
+  {
+    "name": "Space Waves",
+    "image": "icons/spacewaves.webp",
+    "url": "spacewaves/index.html"
   },
   {
     "name": "Dune Dash",
@@ -1135,19 +1175,54 @@ window.MAGES_GAMES = [
     "url": "gunknight/index.html"
   },
   {
-    "name": "Gun mayhem",
-    "image": "icons/gunmayhem.webp",
-    "url": "gunmayhem/index.html"
+    "name": "Funny ball game",
+    "image": "icons/funnyballgame.webp",
+    "url": "funnyballgame/index.html"
   },
   {
-    "name": "Gun mayhem 2",
-    "image": "icons/gunmayhem2.webp",
-    "url": "gunmayhem2/index.html"
+    "name": "Funny shooter",
+    "image": "icons/funnyshooter.webp",
+    "url": "funnyshooter/index.html"
   },
   {
-    "name": "Gun mayhem redux",
-    "image": "icons/gunmayhemredux.webp",
-    "url": "gunmayhemredux/index.html"
+    "name": "Flappy 2048",
+    "image": "icons/flappy2048.webp",
+    "url": "flappy2048/index.html"
+  },
+  {
+    "name": "Flappy bird",
+    "image": "icons/flappybird.webp",
+    "url": "flappybird/index.html"
+  },
+  {
+    "name": "Flappy bird bounce",
+    "image": "icons/flappybirdbounce.webp",
+    "url": "flappybirdbounce/index.html"
+  },
+  {
+    "name": "Flappy copter",
+    "image": "icons/flappycopter.webp",
+    "url": "flappycopter/index.html"
+  },
+  {
+    "name": "Flappy dino",
+    "image": "icons/flappydino.webp",
+    "url": "flappydino/index.html"
+  },
+  {
+    "name": "Flappy duck",
+    "image": "icons/flappyduck.webp",
+    "url": "flappyduck/index.html"
+  },
+  {
+    "name": "Flash flappy",
+    "image": "icons/flashflappy.webp",
+    "url": "flashflappy/index.html"
+  },
+  {
+    "name": "Frogger",
+    "image": "icons/frogger.webp",
+    "url": "frogger/index.html"
   },
   {
     "name": "Hackertype",
@@ -1305,6 +1380,11 @@ window.MAGES_GAMES = [
     "url": "eaglercraft1122u3wasm/index.html"
   },
   {
+    "name": "Wurst Client",
+    "image": "icons/eaglercraftx18wurst.webp",
+    "url": "eaglercraftx18wurst/index.html"
+  },
+  {
     "name": "Tuff Client 1.0.0",
     "image": "icons/tuffclient.webp",
     "url": "tuffclient1/index.html"
@@ -1430,11 +1510,6 @@ window.MAGES_GAMES = [
     "url": "knifehit/index.html"
   },
   {
-    "name": "Last train home",
-    "image": "icons/lasttrainhome.webp",
-    "url": "lasttrainhome/index.html"
-  },
-  {
     "name": "Lazyjump 3D",
     "image": "icons/lazyjump3d.webp",
     "url": "lazyjump3d/index.html"
@@ -1488,11 +1563,6 @@ window.MAGES_GAMES = [
     "name": "Lows adventures 3",
     "image": "icons/lowsadventures3.webp",
     "url": "lowsadventures3/index.html"
-  },
-  {
-    "name": "Make sure it's closed",
-    "image": "icons/makesureitsclosed.webp",
-    "url": "makesureitsclosed/index.html"
   },
   {
     "name": "Meme 2048",
@@ -1550,6 +1620,11 @@ window.MAGES_GAMES = [
     "url": "monkeymart/index.html"
   },
   {
+    "name": "Crazy Crash Landing",
+    "image": "icons/crazycrashlanding.webp",
+    "url": "crazycrashlanding/index.html"
+  },
+  {
     "name": "Monster tracks",
     "image": "icons/monstertracks.webp",
     "url": "monstertracks/index.html"
@@ -1558,6 +1633,11 @@ window.MAGES_GAMES = [
     "name": "Drive mad",
     "image": "icons/drivemad.webp",
     "url": "drivemad/index.html"
+  },
+  {
+    "name": "Survival race",
+    "image": "icons/survivalrace.webp",
+    "url": "survivalrace/index.html"
   },
   {
     "name": "Drift Boss",
@@ -1573,6 +1653,11 @@ window.MAGES_GAMES = [
     "name": "Drift Hunters",
     "image": "icons/drifthunters.webp",
     "url": "drifthunters/index.html"
+  },
+  {
+    "name": "Drive In Russia",
+    "image": "icons/driveinrussia.webp",
+    "url": "driveinrussia/index.html"
   },
   {
     "name": "Drift King Online",
@@ -1840,6 +1925,21 @@ window.MAGES_GAMES = [
     "url": "racer/index.html"
   },
   {
+    "name": "Gun mayhem",
+    "image": "icons/gunmayhem.webp",
+    "url": "gunmayhem/index.html"
+  },
+  {
+    "name": "Gun mayhem 2",
+    "image": "icons/gunmayhem2.webp",
+    "url": "gunmayhem2/index.html"
+  },
+  {
+    "name": "Gun mayhem redux",
+    "image": "icons/gunmayhemredux.webp",
+    "url": "gunmayhemredux/index.html"
+  },
+  {
     "name": "Raftwars",
     "image": "icons/raftwars.webp",
     "url": "raftwars/index.html"
@@ -1970,11 +2070,6 @@ window.MAGES_GAMES = [
     "url": "sandtrix/index.html"
   },
   {
-    "name": "Serenitrove",
-    "image": "icons/serenitrove.webp",
-    "url": "serenitrove/index.html"
-  },
-  {
     "name": "Shape shipper",
     "image": "icons/shapeshipper.webp",
     "url": "shapeshipper/index.html"
@@ -2018,6 +2113,16 @@ window.MAGES_GAMES = [
     "name": "Slope 2",
     "image": "icons/slope2.webp",
     "url": "slope2/index.html"
+  },
+  {
+    "name": "Slope 3",
+    "image": "icons/slope3.webp",
+    "url": "slope3/index.html"
+  },
+  {
+    "name": "Slope City",
+    "image": "icons/slopecity.webp",
+    "url": "slopecity/index.html"
   },
   {
     "name": "Snake",
@@ -2193,11 +2298,6 @@ window.MAGES_GAMES = [
     "name": "Super meat boy",
     "image": "icons/supermeatboy.webp",
     "url": "supermeatboy/index.html"
-  },
-  {
-    "name": "Survival race",
-    "image": "icons/survivalrace.webp",
-    "url": "survivalrace/index.html"
   },
   {
     "name": "Surviv.io",

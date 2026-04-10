@@ -771,6 +771,8 @@
       tab.loaded = true;
       this.saveTabsToStorage();
       this.renderDock();
+      // Stop background animations to give the iframe full GPU budget
+      document.body.classList.add('game-visor-open');
       window.particleBg?.stop();
     },
 
@@ -801,6 +803,7 @@
         this.hideDock();
       }
       this.renderDock();
+      document.body.classList.remove('game-visor-open');
       window.particleBg?.start();
     },
 
@@ -817,6 +820,7 @@
       this.overlay.classList.remove('visible');
       this.showDock();
       this.renderDock();
+      document.body.classList.remove('game-visor-open');
       window.particleBg?.start();
     },
 
@@ -838,6 +842,7 @@
       this.saveTabsToStorage();
       this.hideDock();
       this.renderDock();
+      document.body.classList.add('game-visor-open');
       window.particleBg?.stop();
     },
 
@@ -923,36 +928,27 @@
 
     openBlank() {
       if (!this.iframe) return;
-      
+
       let url = this.iframe.src;
-      
+
       // Fall back to active tab URL if iframe src is empty
       if (!url && this.activeTabId) {
         const activeTab = this.tabs.find((t) => t.id === this.activeTabId);
         if (activeTab) url = activeTab.url;
       }
-      
-      if (url) {
-        try {
-          const newWin = window.open();
-          if (newWin) {
-            newWin.document.write(`
-              <!DOCTYPE html>
-              <html>
-              <head>
-                <title>New Tab</title>
-              </head>
-              <body style="margin:0; padding:0; overflow:hidden;">
-                <iframe src="${url}" style="width:100vw; height:100vh; border:none;"></iframe>
-              </body>
-              </html>
-            `);
-            newWin.document.close();
-          }
-        } catch (e) {
-          console.error('Failed to open blank window:', e);
-        }
-      }
+
+      if (!url) return;
+
+      // Open a blank popup then set srcdoc on a child iframe — avoids document.write
+      const newWin = window.open('', '_blank');
+      if (!newWin) return;
+
+      const frame = newWin.document.createElement('iframe');
+      frame.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:none;';
+      frame.allow = 'autoplay; fullscreen; clipboard-write';
+      frame.src = url;
+      newWin.document.body.style.margin = '0';
+      newWin.document.body.appendChild(frame);
     },
 
     toggleDock() {
@@ -1044,6 +1040,7 @@
             this.container.classList.remove('open', 'minimized');
             this.iframe.src = 'about:blank';
             this.titleEl.textContent = 'Game';
+            document.body.classList.remove('game-visor-open');
             window.particleBg?.start();
           }
           this.saveTabsToStorage();

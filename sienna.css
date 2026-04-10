@@ -103,6 +103,7 @@ body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  will-change: transform; /* isolate into its own compositor layer */
 }
 
 #sidebar-container { position: relative; z-index: 10; }
@@ -262,8 +263,7 @@ body::after {
   bottom: 36px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: var(--r-pill);
   width: 44px; height: 44px;
@@ -1344,8 +1344,7 @@ body::after {
 .browse-search {
   width: 100%;
   max-width: 420px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.07);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--r-pill);
   padding: 11px 20px 11px 44px;
@@ -1469,3 +1468,46 @@ body::after {
 .browse-card:nth-child(10) { transition-delay: 0.30s; }
 .browse-card:nth-child(11) { transition-delay: 0.33s; }
 .browse-card:nth-child(12) { transition-delay: 0.36s; }
+/* ══════════════════════════════
+   PERFORMANCE: GAME OPEN STATE
+   When .game-visor-open is on <body>, kill all
+   background animations and expensive effects so
+   the iframe gets full GPU budget (critical for
+   low-end devices like school Chromebooks)
+══════════════════════════════ */
+
+/* JS adds this class to <body> when game opens */
+body.game-visor-open #page-landing .title {
+  animation: none !important;
+  filter: none !important;
+}
+
+body.game-visor-open .grain-overlay {
+  display: none;
+}
+
+body.game-visor-open body::after {
+  transition: none;
+}
+
+/* Promote the iframe to its own GPU layer so it doesn't
+   share a compositor surface with the rest of the page */
+.game-visor-iframe {
+  will-change: transform;
+  transform: translateZ(0);
+  isolation: isolate;
+}
+
+/* Game visor window itself gets its own layer */
+.game-visor {
+  will-change: transform;
+}
+
+/* Reduce motion for users who prefer it — also helps low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
