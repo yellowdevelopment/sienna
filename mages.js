@@ -210,21 +210,6 @@ window.MAGES_GAMES = [
     "url": "60ssantarun/index.html"
   },
   {
-    "name": "Achievement Unlocked",
-    "image": "icons/achievementunlocked.webp",
-    "url": "achievementunlocked/index.html"
-  },
-  {
-    "name": "Achievement Unlocked 2",
-    "image": "icons/achievementunlocked2.webp",
-    "url": "achievementunlocked2/index.html"
-  },
-  {
-    "name": "Achievement Unlocked 3",
-    "image": "icons/achievementunlocked3.webp",
-    "url": "achievementunlocked3/index.html"
-  },
-  {
     "name": "A Dance of Fire and Ice",
     "image": "icons/adanceoffireandice.webp",
     "url": "adanceoffireandice/index.html"
@@ -625,9 +610,9 @@ window.MAGES_GAMES = [
     "url": "checkoutfrenzy/index.html"
   },
   {
-    "name": "Chess",
-    "image": "icons/chess.webp",
-    "url": "chess/index.html"
+    "name": "Taco Stand",
+    "image": "icons/tacostand.webp",
+    "url": "tacostand/index.html"
   },
   {
     "name": "Chibi Knight",
@@ -963,6 +948,11 @@ window.MAGES_GAMES = [
     "name": "Five Nights at Freddy's",
     "image": "icons/fnaf.webp",
     "url": "fnaf/index.html"
+  },
+  {
+    "name": "Five Nights at Freddy's 3D",
+    "image": "icons/fnaf3d.webp",
+    "url": "fnaf3d/index.html"
   },
   {
     "name": "Five Nights at Freddy's 2",
@@ -2555,14 +2545,34 @@ window.MAGES_GAMES = [
     "url": "wordlebot/index.html"
   },
   {
+    "name": "Chess",
+    "image": "icons/chess.webp",
+    "url": "chess/index.html"
+  },
+  {
     "name": "Worlds hardest game 2",
     "image": "icons/worldhardestgame2.webp",
     "url": "worldhardestgame2/index.html"
   },
   {
-    "name": "Worlds ardestgame",
+    "name": "Worlds Hardest game",
     "image": "icons/worldshardestgame.webp",
     "url": "worldshardestgame/index.html"
+  },
+  {
+    "name": "Achievement Unlocked",
+    "image": "icons/achievementunlocked.webp",
+    "url": "achievementunlocked/index.html"
+  },
+  {
+    "name": "Achievement Unlocked 2",
+    "image": "icons/achievementunlocked2.webp",
+    "url": "achievementunlocked2/index.html"
+  },
+  {
+    "name": "Achievement Unlocked 3",
+    "image": "icons/achievementunlocked3.webp",
+    "url": "achievementunlocked3/index.html"
   },
   {
     "name": "Wubz",
@@ -2598,5 +2608,5 @@ window.MAGES_GAMES = [
     "name": "Zombocalypse",
     "image": "icons/zombocalypse.webp",
     "url": "zombocalypse/index.html"
-  }
+  },
 ];
