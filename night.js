@@ -832,13 +832,13 @@
       this.container.classList.add('open');
       this.overlay.classList.add('visible');
       this.titleEl.textContent = tab.name;
-      if (!tab.loaded) {
+
+      if (this.iframe.src !== tab.url) {
         this.startLoading();
         this.iframe.src = tab.url;
         tab.loaded = true;
-      } else {
-        this.iframe.src = this.iframe.src || tab.url;
       }
+
       this.saveTabsToStorage();
       this.hideDock();
       this.renderDock();

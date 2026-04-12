@@ -50,6 +50,11 @@ window.MAGES_GAMES = [
     "url": "hungryknight/index.html"
   },
   {
+    "name": "Silk Melody",
+    "image": "icons/silkmelody.webp",
+    "url": "silkmelody/index.html"
+  },
+  {
     "name": "Celeste Classic",
     "image": "icons/celesteclassic.webp",
     "url": "celesteclassic/index.html"
@@ -120,6 +125,11 @@ window.MAGES_GAMES = [
     "url": "coreball/index.html"
   },
   {
+    "name": "Incredibox",
+    "image": "icons/incredibox.webp",
+    "url": "incredibox/index.html"
+  },
+  {
     "name": "Cheese Rolling",
     "image": "icons/cheeserolling.webp",
     "url": "cheeserolling/index.html"
@@ -183,11 +193,6 @@ window.MAGES_GAMES = [
     "name": "13 Days in Hell",
     "image": "icons/13daysinhell.webp",
     "url": "13daysinhell/index.html"
-  },
-  {
-    "name": "3 Nights Lobotomized",
-    "image": "icons/3nl.webp",
-    "url": "3nl/index.html"
   },
   {
     "name": "Flying Gorilla",
@@ -360,6 +365,11 @@ window.MAGES_GAMES = [
     "url": "ihatemywaifustreamer/index.html"
   },
   {
+    "name": "Needy Streamer Overload",
+    "image": "icons/needystreameroverload.webp",
+    "url": "needystreameroverload/index.html"
+  },
+  {
     "name": "Class of '09",
     "image": "icons/classof09.webp",
     "url": "classof09/index.html"
@@ -420,6 +430,26 @@ window.MAGES_GAMES = [
     "url": "bss/index.html"
   },
   {
+    "name": "Karlson 3D",
+    "image": "icons/karlson3d.webp",
+    "url": "karlson3d/index.html"
+  },
+  {
+    "name": "Karlson",
+    "image": "icons/karlson.webp",
+    "url": "karlson/index.html"
+  },
+  {
+    "name": "Re:Run",
+    "image": "icons/rerun.webp",
+    "url": "rerun/index.html"
+  },
+  {
+    "name": "Slime Rancher",
+    "image": "icons/slimerancher.webp",
+    "url": "slimerancher/index.html"
+  },
+  {
     "name": "Bad Piggies",
     "image": "icons/badpiggies.webp",
     "url": "badpiggies/index.html"
@@ -448,6 +478,11 @@ window.MAGES_GAMES = [
     "name": "Chinese Fortnite",
     "image": "icons/fortnitecn.webp",
     "url": "fortnitecn/index.html"
+  },
+  {
+    "name": "Brotato",
+    "image": "icons/brotato.webp",
+    "url": "brotato/index.html"
   },
   {
     "name": "Only Up",
@@ -493,6 +528,26 @@ window.MAGES_GAMES = [
     "name": "Cool Brainrot Clicker",
     "image": "icons/coolbrainrotclicker.webp",
     "url": "coolbrainrotclicker/index.html"
+  },
+  {
+    "name": "Brainrot Clicker",
+    "image": "icons/brainrotclicker.webp",
+    "url": "brainrotclicker/index.html"
+  },
+  {
+    "name": "Brainrot Merge",
+    "image": "icons/brainrotmerge.webp",
+    "url": "brainrotmerge/index.html"
+  },
+  {
+    "name": "Fall Brainrots",
+    "image": "icons/fallbrainrots.webp",
+    "url": "fallbrainrots/index.html"
+  },
+  {
+    "name": "Italian Brainrot Parkour",
+    "image": "icons/italianbrainrotparkour.webp",
+    "url": "italianbrainrotparkour/index.html"
   },
   {
     "name": "Plants vs Brainrots",
@@ -590,9 +645,19 @@ window.MAGES_GAMES = [
     "url": "infiltratingtheairship/index.html"
   },
   {
-    "name": "Bubble Shooter",
-    "image": "icons/bubbleshooter.webp",
-    "url": "bubbleshooter/index.html"
+    "name": "Gacha Club",
+    "image": "icons/gachaclub.webp",
+    "url": "gachaclub/index.html"
+  },
+  {
+    "name": "Gacha Life",
+    "image": "icons/gachalife.webp",
+    "url": "gachalife/index.html"
+  },
+  {
+    "name": "Gacha Verse",
+    "image": "icons/gachaverse.webp",
+    "url": "gachaverse/index.html"
   },
   {
     "name": "Capybara Village",
@@ -615,6 +680,11 @@ window.MAGES_GAMES = [
     "url": "tacostand/index.html"
   },
   {
+    "name": "boil Noodles at Night",
+    "image": "icons/boilnoodlesatnight.webp",
+    "url": "boilnoodlesatnight/index.html"
+  },
+  {
     "name": "Chibi Knight",
     "image": "icons/chibiknight.webp",
     "url": "chibiknight/index.html"
@@ -623,21 +693,6 @@ window.MAGES_GAMES = [
     "name": "Circloo",
     "image": "icons/circloo.webp",
     "url": "circloo/index.html"
-  },
-  {
-    "name": "Color Switch",
-    "image": "icons/colorswitch.webp",
-    "url": "colorswitch/index.html"
-  },
-  {
-    "name": "Commodore Clicker",
-    "image": "icons/commodoreclicker.webp",
-    "url": "commodoreclicker/index.html"
-  },
-  {
-    "name": "Connect 4",
-    "image": "icons/connect4.webp",
-    "url": "connect4/index.html"
   },
   {
     "name": "Cookie Clicker",
@@ -675,11 +730,6 @@ window.MAGES_GAMES = [
     "url": "crazyflasher6/index.html"
   },
   {
-    "name": "Creep Craft 2",
-    "image": "icons/creepcraft2.webp",
-    "url": "creepcraft2/index.html"
-  },
-  {
     "name": "Crossy Road",
     "image": "icons/crossyroad.webp",
     "url": "crossyroad/index.html"
@@ -690,19 +740,9 @@ window.MAGES_GAMES = [
     "url": "csgoclicker/index.html"
   },
   {
-    "name": "Big Red Button",
-    "image": "icons/bigredbutton.webp",
-    "url": "bigredbutton/index.html"
-  },
-  {
     "name": "Cube Field",
     "image": "icons/cubefield.webp",
     "url": "cubefield/index.html"
-  },
-  {
-    "name": "Cupcake 2048",
-    "image": "icons/cupcake2048.webp",
-    "url": "cupcake2048/index.html"
   },
   {
     "name": "Cut the Rope Holiday",
@@ -753,11 +793,6 @@ window.MAGES_GAMES = [
     "name": "Dogeminer",
     "image": "icons/dogeminer.webp",
     "url": "dogeminer/index.html"
-  },
-  {
-    "name": "Universal paperclips",
-    "image": "icons/universalpaperclips.webp",
-    "url": "universalpaperclips/index.html"
   },
   {
     "name": "Donkey Kong",
@@ -850,11 +885,6 @@ window.MAGES_GAMES = [
     "url": "factoryballsforever/index.html"
   },
   {
-    "name": "Fall heroes knockout",
-    "image": "icons/fallheroesknockout.webp",
-    "url": "fallheroesknockout/index.html"
-  },
-  {
     "name": "Fancy pants adventures",
     "image": "icons/fancypantsadventures.webp",
     "url": "fancypantsadventures/index.html"
@@ -863,16 +893,6 @@ window.MAGES_GAMES = [
     "name": "Fancy pants adventures 2",
     "image": "icons/fancypantsadventures2.webp",
     "url": "fancypantsadventures2/index.html"
-  },
-  {
-    "name": "Farmer craft",
-    "image": "icons/farmercraft.webp",
-    "url": "farmercraft/index.html"
-  },
-  {
-    "name": "Fast Food Rush",
-    "image": "icons/fastfoodrush.webp",
-    "url": "fastfoodrush/index.html"
   },
   {
     "name": "Final Ninja",
@@ -900,12 +920,22 @@ window.MAGES_GAMES = [
     "url": "fireboywatergirl4/index.html"
   },
   {
-    "name": "Baldis Basics",
+    "name": "3 Nights Lobotomized",
+    "image": "icons/3nl.webp",
+    "url": "3nl/index.html"
+  },
+  {
+    "name": "Baldi's Basic's",
     "image": "icons/baldisbasics.webp",
     "url": "baldisbasics/index.html"
   },
   {
-    "name": "Baldis Basics The Ultra Decompile",
+    "name": "Baldi's Basic's PLus",
+    "image": "icons/baldisbasicsplus.webp",
+    "url": "baldisbasicsplus/index.html"
+  },
+  {
+    "name": "Baldi's Basic's The Ultra Decompile",
     "image": "icons/baldisbasicstheultradecomp.webp",
     "url": "baldisbasicstheultradecomp/index.html"
   },
@@ -1055,6 +1085,11 @@ window.MAGES_GAMES = [
     "url": "crazykitten3d/index.html"
   },
   {
+    "name": "Geometry Dash",
+    "image": "icons/geometrydash.webp",
+    "url": "geometrydash/index.html"
+  },
+  {
     "name": "Geometry Dash Scratch",
     "image": "icons/geometrydashscratch.webp",
     "url": "geometrydashscratch/index.html"
@@ -1073,6 +1108,16 @@ window.MAGES_GAMES = [
     "name": "Geometry Vibes",
     "image": "icons/geometryvibes.webp",
     "url": "geometryvibes/index.html"
+  },
+  {
+    "name": "Geometry Vibes 3D",
+    "image": "icons/geometryvibes3d.webp",
+    "url": "geometryvibes3d/index.html"
+  },
+  {
+    "name": "Geometry Vibes X-Ball",
+    "image": "icons/geometryvibesxball.webp",
+    "url": "geometryvibesxball/index.html"
   },
   {
     "name": "Space Waves",
@@ -1320,6 +1365,11 @@ window.MAGES_GAMES = [
     "url": "idlebreakout/index.html"
   },
   {
+    "name": "Creep Craft 2",
+    "image": "icons/creepcraft2.webp",
+    "url": "creepcraft2/index.html"
+  },
+  {
     "name": "Minecraft Pocket Edition",
     "image": "icons/minecraftpocketedition.webp",
     "url": "minecraftpocketedition/index.html"
@@ -1475,6 +1525,11 @@ window.MAGES_GAMES = [
     "url": "pokemonbrown/index.html"
   },
   {
+    "name": "Universal paperclips",
+    "image": "icons/universalpaperclips.webp",
+    "url": "universalpaperclips/index.html"
+  },
+  {
     "name": "Jetpack Joyride",
     "image": "icons/jetpackjoyride.webp",
     "url": "jetpackjoyride/index.html"
@@ -1555,6 +1610,11 @@ window.MAGES_GAMES = [
     "url": "lowsadventures3/index.html"
   },
   {
+    "name": "Cupcake 2048",
+    "image": "icons/cupcake2048.webp",
+    "url": "cupcake2048/index.html"
+  },
+  {
     "name": "Meme 2048",
     "image": "icons/meme2048.webp",
     "url": "meme2048/index.html"
@@ -1605,9 +1665,29 @@ window.MAGES_GAMES = [
     "url": "mindustry/index.html"
   },
   {
-    "name": "Monkey mart",
+    "name": "Monkey Mart",
     "image": "icons/monkeymart.webp",
     "url": "monkeymart/index.html"
+  },
+  {
+    "name": "Farmer craft",
+    "image": "icons/farmercraft.webp",
+    "url": "farmercraft/index.html"
+  },
+  {
+    "name": "Fall Boys",
+    "image": "icons/fallboys.webp",
+    "url": "fallboys/index.html"
+  },
+  {
+    "name": "Fall heroes knockout",
+    "image": "icons/fallheroesknockout.webp",
+    "url": "fallheroesknockout/index.html"
+  },
+  {
+    "name": "Fast Food Rush",
+    "image": "icons/fastfoodrush.webp",
+    "url": "fastfoodrush/index.html"
   },
   {
     "name": "Crazy Crash Landing",
@@ -1628,6 +1708,16 @@ window.MAGES_GAMES = [
     "name": "Survival race",
     "image": "icons/survivalrace.webp",
     "url": "survivalrace/index.html"
+  },
+  {
+    "name": "Crazy Karts",
+    "image": "icons/crazykarts.webp",
+    "url": "crazykarts/index.html"
+  },
+  {
+    "name": "Survival Karts",
+    "image": "icons/survivalkarts.webp",
+    "url": "survivalkarts/index.html"
   },
   {
     "name": "Drift Boss",
@@ -1738,6 +1828,11 @@ window.MAGES_GAMES = [
     "name": "Online omnichord",
     "image": "icons/onlineomnichord.webp",
     "url": "onlineomnichord/index.html"
+  },
+  {
+    "name": "The Oregon trail",
+    "image": "icons/theoregontrail.webp",
+    "url": "theoregontrail/index.html"
   },
   {
     "name": "Organ trail",
@@ -2190,7 +2285,7 @@ window.MAGES_GAMES = [
     "url": "squidgame2minigames/index.html"
   },
   {
-    "name": "Squid race sim",
+    "name": "Squid Race Simulator",
     "image": "icons/squidracesim.webp",
     "url": "squidracesim/index.html"
   },
@@ -2543,6 +2638,26 @@ window.MAGES_GAMES = [
     "name": "Wordle bot",
     "image": "icons/wordlebot.webp",
     "url": "wordlebot/index.html"
+  },
+  {
+    "name": "Color Switch",
+    "image": "icons/colorswitch.webp",
+    "url": "colorswitch/index.html"
+  },
+  {
+    "name": "Bubble Shooter",
+    "image": "icons/bubbleshooter.webp",
+    "url": "bubbleshooter/index.html"
+  },
+  {
+    "name": "Commodore Clicker",
+    "image": "icons/commodoreclicker.webp",
+    "url": "commodoreclicker/index.html"
+  },
+  {
+    "name": "Connect 4",
+    "image": "icons/connect4.webp",
+    "url": "connect4/index.html"
   },
   {
     "name": "Chess",
