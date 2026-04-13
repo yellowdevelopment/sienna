@@ -685,6 +685,11 @@ window.MAGES_GAMES = [
     "url": "boilnoodlesatnight/index.html"
   },
   {
+    "name": "Kitty Toy",
+    "image": "icons/kittytoy.webp",
+    "url": "kittytoy/index.html"
+  },
+  {
     "name": "Chibi Knight",
     "image": "icons/chibiknight.webp",
     "url": "chibiknight/index.html"
@@ -918,6 +923,11 @@ window.MAGES_GAMES = [
     "name": "Fireboy and Watergirl 4",
     "image": "icons/fireboywatergirl4.webp",
     "url": "fireboywatergirl4/index.html"
+  },
+  {
+    "name": "Assessment Examination",
+    "image": "icons/assessmentexamination.webp",
+    "url": "assessmentexamination/index.html"
   },
   {
     "name": "3 Nights Lobotomized",

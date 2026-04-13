@@ -44,6 +44,12 @@
   <section class="page" id="page-browse">
     <div class="browse-inner" id="browseInner">
 
+      <!-- Credits & Information -->
+      <div class="browse-credits">
+        <div class="credits-title">credits & information</div>
+        <div class="credits-text">Thank you to sites & people like selenite, gn-math, 3kh0, freezenova, wasm.rip, ugs (Ultimate Game Stash), interstellar, and dogeunblocker for the inspiration and games I might've taken for this project</div>
+      </div>
+
       <!-- Heading + dropdown -->
       <div class="browse-heading">
         <span class="browse-heading-static">You are currently viewing</span>
@@ -107,6 +113,21 @@
     </div>
   </section>
 
+  <!-- ══ FOOTER ══ -->
+  <footer class="site-footer">
+    <div class="footer-section">
+      <a href="https://usesienna.vercel.app" class="footer-site-link">usesienna.vercel.app</a>
+      <div class="members-group">
+        <div class="footer-section-title">members</div>
+        <div class="members-list" id="membersList"></div>
+      </div>
+      <div class="about-group">
+        <div class="footer-section-title">about me</div>
+        <div class="about-text">I made a site cause I was bored but it was the best site and is the best. I also port games like 3 Night's Lobotomized etc that you can find exclusive to sienna. I also made Night. if you know what that is.</div>
+      </div>
+    </div>
+  </footer>
+
   <!-- ══ INFO BUTTON ══ -->
   <button class="info-btn" id="infoBtn" aria-label="App info">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -121,8 +142,8 @@
   <div class="info-popup" id="infoPopup">
     <div class="popup-header">
       <div>
-        <div class="popup-name">sienna v0.1.3</div>
-        <div class="popup-version">build 009</div>
+        <div class="popup-name">sienna v0.1.4</div>
+        <div class="popup-version">build 010</div>
       </div>
       <div class="popup-badge" data-status="pre-release">BETA</div>
     </div>
@@ -283,7 +304,7 @@
     .featured-icon {
       width: 256px; 
       height: 256px; 
-      border-radius: 24px;
+      border-radius: 0;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
       object-fit: cover;
     }
@@ -358,6 +379,109 @@
         min-height: 250px;
       }
     }
+
+    /* Footer Styles */
+    .site-footer {
+      padding: 60px 40px 100px;
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 70px;
+    }
+    .members-group {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .footer-site-link {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .footer-site-link:hover {
+      opacity: 0.7;
+    }
+    .footer-section-title {
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+    }
+    .members-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+    .member-profile {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 120px;
+    }
+    .member-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 0;
+      object-fit: cover;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .member-name {
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      word-wrap: break-word;
+      width: 100%;
+    }
+    .about-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 100%;
+    }
+    .about-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 400;
+    }
+
+    /* Credits Section Styling */
+    .browse-credits {
+      margin-bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .credits-title {
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+    }
+    .credits-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 400;
+      max-width: 800px;
+    }
   </style>
 
   <!-- ══ MINIMAL INLINE SCRIPTS ══ -->
@@ -395,6 +519,27 @@
         const searchEl = document.getElementById('browseSearch');
         if (searchEl && searchEl.value.trim()) searchEl.dispatchEvent(new Event('input'));
       }).observe(browseGrid, { childList: true, subtree: true });
+    }
+
+    /* ── Dynamic Member Loading ── */
+    const members = [
+      {
+        name: "yellowdevelopment (me)",
+        avatar: "icons/yellowdevelopment.png"
+      },
+    ];
+
+    const membersList = document.getElementById('membersList');
+    if (membersList) {
+      members.forEach(member => {
+        const profile = document.createElement('div');
+        profile.className = 'member-profile';
+        profile.innerHTML = `
+          <img src="${member.avatar}" alt="${member.name}" class="member-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random'"/>
+          <div class="member-name">${member.name}</div>
+        `;
+        membersList.appendChild(profile);
+      });
     }
   </script>
 
