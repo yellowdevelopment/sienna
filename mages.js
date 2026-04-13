@@ -115,6 +115,11 @@ window.MAGES_GAMES = [
     "url": "badparenting/index.html"
   },
   {
+    "name": "Darkbound",
+    "image": "icons/darkbound.webp",
+    "url": "darkboundwebport/index.html"
+  },
+  {
     "name": "Deepest Sword",
     "image": "icons/deepestsword.webp",
     "url": "deepestsword/index.html"
