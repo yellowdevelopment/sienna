@@ -490,6 +490,11 @@ window.MAGES_GAMES = [
     "url": "brotato/index.html"
   },
   {
+    "name": "Harvest Festival 64",
+    "image": "icons/harvestfestival64webport.webp",
+    "url": "harvestfestival64webport/index.html"
+  },
+  {
     "name": "Only Up",
     "image": "icons/onlyup.webp",
     "url": "onlyup/index.html"
@@ -928,6 +933,11 @@ window.MAGES_GAMES = [
     "name": "Fireboy and Watergirl 4",
     "image": "icons/fireboywatergirl4.webp",
     "url": "fireboywatergirl4/index.html"
+  },
+  {
+    "name": "Cirno Fumo: The Horror Game",
+    "image": "icons/cirnofumo.webp",
+    "url": "cirnofumowebport/index.html"
   },
   {
     "name": "Assessment Examination",
