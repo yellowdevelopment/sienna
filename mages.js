@@ -20,6 +20,11 @@ window.MAGES_GAMES = [
     "url": "buildnowgg/index.html"
   },
   {
+    "name": "Call Of Battle",
+    "image": "icons/callofbattle.webp",
+    "url": "callofbattle/index.html"
+  },
+  {
     "name": "Justfall.lol",
     "image": "icons/justfalllol.webp",
     "url": "justfalllol/index.html"
@@ -148,6 +153,11 @@ window.MAGES_GAMES = [
     "name": "Clover Pit",
     "image": "icons/cloverpit.webp",
     "url": "cloverpit/index.html"
+  },
+  {
+    "name": "Job Hunt",
+    "image": "icons/jobhunt.webp",
+    "url": "jobhuntwebport/index.html"
   },
   {
     "name": "That's Not My Neighbor",
@@ -400,6 +410,36 @@ window.MAGES_GAMES = [
     "url": "pumpkill64/index.html"
   },
   {
+    "name": "The Man In The Window",
+    "image": "icons/themaninthewindow.webp",
+    "url": "themaninthewindow/index.html"
+  },
+  {
+    "name": "The Man In The Window 2",
+    "image": "icons/themaninthewindow2.webp",
+    "url": "themaninthewindow2/index.html"
+  },
+  {
+    "name": "Delivery Mystery",
+    "image": "icons/deliverymystery.webp",
+    "url": "deliverymystery/index.html"
+  },
+  {
+    "name": "Santy Is Home",
+    "image": "icons/santyishome.webp",
+    "url": "santyishome/index.html"
+  },
+  {
+    "name": "Katnap Survival",
+    "image": "icons/katnapsurvival.webp",
+    "url": "katnapsurvival/index.html"
+  },
+  {
+    "name": "Rainbow friends return",
+    "image": "icons/rainbowfriendsreturn.webp",
+    "url": "rainbowfriendsreturn/index.html"
+  },
+  {
     "name": "Happy Cat Tavern",
     "image": "icons/happycattavern.webp",
     "url": "happycattavern/index.html"
@@ -490,6 +530,11 @@ window.MAGES_GAMES = [
     "url": "brotato/index.html"
   },
   {
+    "name": "Web Fishing",
+    "image": "icons/webfishing.webp",
+    "url": "webfishing/index.html"
+  },
+  {
     "name": "Harvest Festival 64",
     "image": "icons/harvestfestival64webport.webp",
     "url": "harvestfestival64webport/index.html"
@@ -568,6 +613,11 @@ window.MAGES_GAMES = [
     "name": "99 Nights in the Forest",
     "image": "icons/99nightsintheforest.webp",
     "url": "99nightsintheforest/index.html"
+  },
+  {
+    "name": "Brookhaven",
+    "image": "icons/brookhaven.webp",
+    "url": "brookhaven/index.html"
   },
   {
     "name": "Bikechamp 2",
@@ -945,6 +995,16 @@ window.MAGES_GAMES = [
     "url": "assessmentexamination/index.html"
   },
   {
+    "name": "Man In The Park",
+    "image": "icons/maninthepark.webp",
+    "url": "manintheparkwebport/index.html"
+  },
+  {
+    "name": "Man In The Park 2",
+    "image": "icons/maninthepark2.webp",
+    "url": "maninthepark2webport/index.html"
+  },
+  {
     "name": "3 Nights Lobotomized",
     "image": "icons/3nl.webp",
     "url": "3nl/index.html"
@@ -988,6 +1048,11 @@ window.MAGES_GAMES = [
     "name": "Five Nights at Winston's",
     "image": "icons/fivenightsatwinstons.webp",
     "url": "fivenightsatwinstons/index.html"
+  },
+  {
+    "name": "Five Nights With Voxels",
+    "image": "icons/fivenightswithvoxels.webp",
+    "url": "fivenightswithvoxelswebport/index.html"
   },
   {
     "name": "Five Nights at Candy's",
@@ -1153,6 +1218,16 @@ window.MAGES_GAMES = [
     "name": "Dune Dash",
     "image": "icons/dunedash.webp",
     "url": "dunedash/index.html"
+  },
+  {
+    "name": "Burrito Bison",
+    "image": "icons/burritobison.webp",
+    "url": "burritobison/index.html"
+  },
+  {
+    "name": "Burrito Bison Revenge",
+    "image": "icons/burritobisonr.webp",
+    "url": "burritobisonrevenge/index.html"
   },
   {
     "name": "Gimme the airpod",
@@ -2058,11 +2133,6 @@ window.MAGES_GAMES = [
     "name": "Raftwars 2",
     "image": "icons/raftwars2.webp",
     "url": "raftwars2/index.html"
-  },
-  {
-    "name": "Rainbow friends return",
-    "image": "icons/rainbowfriendsreturn.webp",
-    "url": "rainbowfriendsreturn/index.html"
   },
   {
     "name": "Recoil",

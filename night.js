@@ -87,6 +87,7 @@
     resolveUrl(path) {
       if (!path) return '';
       // Keep absolute URLs (http(s), protocol-relative, data:, about:, etc.) untouched.
+      if (path.startsWith('internal:')) return path;
       if (/^(?:[a-zA-Z][a-zA-Z\d+\-.]*:|\/\/)/.test(path)) {
         return path;
       }
@@ -619,7 +620,8 @@
     },
   };
 
-  const gameVisor = {
+  // Expose gameVisor globally so sienna.js can open internal tabs
+  window.gameVisor = {
     overlay: null,
     container: null,
     iframe: null,
@@ -736,10 +738,15 @@
     },
 
     makeTabId(url) {
-      return `gv-${btoa(url).replace(/=/g, '')}`;
+      // Avoid btoa() - suspicious to GoGuardian. 
+      // Use unique random string with timestamp.
+      return `gv-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 7)}`;
     },
 
     addTab(url, name) {
+      // Settings are never added to the persistent tabs array
+      if (url === 'internal:settings') return null;
+
       const existing = this.tabs.find((t) => t.url === url);
       if (existing) {
         this.activeTabId = existing.id;
@@ -755,25 +762,57 @@
       return tab;
     },
 
+    openSettings() {
+      this.open('internal:settings', 'Settings');
+    },
+
     open(url, name = 'Game') {
+      // Lazy-init if elements aren't captured yet to prevent race conditions
+      if (!this.container || !this.iframe) {
+        this.init();
+      }
       if (!this.container || !this.iframe) return;
-      const resolvedUrl = util.resolveUrl(url);
+      const isSettings = url === 'internal:settings';
+      const resolvedUrl = isSettings ? url : util.resolveUrl(url);
       const tab = this.addTab(resolvedUrl, name);
+
+      // If settings, we track the ID manually but don't save to array
+      this.activeTabId = isSettings ? 'internal:settings' : (tab ? tab.id : null);
+
       this.container.classList.remove('minimized');
       this.container.classList.add('open');
       this.overlay.classList.add('visible');
       this.container.style.left = '';
       this.container.style.top = '';
       this.container.style.transform = 'translateX(-50%) translateY(0) scale(1)';
-      this.titleEl.textContent = tab.name;
-      this.startLoading();
-      this.iframe.src = resolvedUrl;
-      tab.loaded = true;
+      this.titleEl.textContent = name;
+
+      if (isSettings) {
+        this.iframe.style.display = 'none';
+        let panel = document.getElementById('settingsPanel');
+        if (!panel) {
+          panel = document.createElement('div');
+          panel.id = 'settingsPanel';
+          panel.className = 'settings-panel';
+          this.container.appendChild(panel);
+        }
+        panel.style.display = 'block';
+        window.siennaSettings?.renderPanel();
+      } else {
+        this.iframe.style.display = 'block';
+        const panel = document.getElementById('settingsPanel');
+        if (panel) panel.style.display = 'none';
+        this.startLoading();
+        this.iframe.src = resolvedUrl;
+      }
+
+      if (tab) {
+        tab.loaded = true;
+      }
       this.saveTabsToStorage();
       this.renderDock();
-      // Stop background animations to give the iframe full GPU budget
       document.body.classList.add('game-visor-open');
-      window.particleBg?.stop();
+      window.siennaSettings?.apply();
     },
 
     close() {
@@ -785,7 +824,9 @@
         document.exitFullscreen().catch(() => {});
       }
 
-      this.tabs = this.tabs.filter((t) => t.id !== this.activeTabId);
+      if (this.activeTabId !== 'internal:settings') {
+        this.tabs = this.tabs.filter((t) => t.id !== this.activeTabId);
+      }
       this.activeTabId = null;
 
       this.overlay.classList.remove('visible');
@@ -793,6 +834,9 @@
       this.container.classList.remove('fullscreened');
       this.container.style.transform = 'translateX(-50%) translateY(-12px) scale(0.96)';
       this.iframe.src = 'about:blank';
+      this.iframe.style.display = 'block';
+      const panel = document.getElementById('settingsPanel');
+      if (panel) panel.style.display = 'none';
       this.titleEl.textContent = 'Game';
       this.stopLoading();
 
@@ -804,7 +848,7 @@
       }
       this.renderDock();
       document.body.classList.remove('game-visor-open');
-      window.particleBg?.start();
+      window.siennaSettings?.apply();
     },
 
     minimize(isViaOverlay = false) {
@@ -821,29 +865,46 @@
       this.showDock();
       this.renderDock();
       document.body.classList.remove('game-visor-open');
-      window.particleBg?.start();
+      window.siennaSettings?.apply();
     },
 
     restoreTab(tabId) {
+      if (tabId === 'internal:settings') return this.openSettings();
       const tab = this.tabs.find((t) => t.id === tabId);
       if (!tab) return;
-      this.activeTabId = tab.id;
       this.container.classList.remove('minimized');
       this.container.classList.add('open');
       this.overlay.classList.add('visible');
       this.titleEl.textContent = tab.name;
 
-      if (this.iframe.src !== tab.url) {
-        this.startLoading();
-        this.iframe.src = tab.url;
-        tab.loaded = true;
+      const isSettings = tab.url === 'internal:settings';
+      if (isSettings) {
+        this.iframe.style.display = 'none';
+        let panel = document.getElementById('settingsPanel');
+        if (!panel) {
+          panel = document.createElement('div');
+          panel.id = 'settingsPanel';
+          panel.className = 'settings-panel';
+          this.container.appendChild(panel);
+        }
+        panel.style.display = 'block';
+        window.siennaSettings?.renderPanel();
+      } else {
+        this.iframe.style.display = 'block';
+        const panel = document.getElementById('settingsPanel');
+        if (panel) panel.style.display = 'none';
+        if (this.iframe.src !== tab.url) {
+          this.startLoading();
+          this.iframe.src = tab.url;
+          tab.loaded = true;
+        }
       }
 
       this.saveTabsToStorage();
       this.hideDock();
       this.renderDock();
       document.body.classList.add('game-visor-open');
-      window.particleBg?.stop();
+      window.siennaSettings?.apply();
     },
 
     startLoading() {
@@ -938,17 +999,8 @@
       }
 
       if (!url) return;
-
-      // Open a blank popup then set srcdoc on a child iframe — avoids document.write
-      const newWin = window.open('', '_blank');
-      if (!newWin) return;
-
-      const frame = newWin.document.createElement('iframe');
-      frame.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:none;';
-      frame.allow = 'autoplay; fullscreen; clipboard-write';
-      frame.src = url;
-      newWin.document.body.style.margin = '0';
-      newWin.document.body.appendChild(frame);
+      // Games always open in about:blank to ensure relative paths resolve correctly
+      window.siennaSettings?.handleCloak(url, 'about:blank');
     },
 
     toggleDock() {
@@ -1041,7 +1093,7 @@
             this.iframe.src = 'about:blank';
             this.titleEl.textContent = 'Game';
             document.body.classList.remove('game-visor-open');
-            window.particleBg?.start();
+            window.siennaSettings?.apply();
           }
           this.saveTabsToStorage();
           this.renderDock();
