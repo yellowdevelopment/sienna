@@ -232,7 +232,18 @@
     },
     bind() {
       document.getElementById('scrollBtn')?.addEventListener('click', () => scroll.toBrowseSection());
-      window.addEventListener('scroll', () => this.ensureBrowseVisible(), { passive: true });
+      // Throttle scroll event to avoid excessive getBoundingClientRect calls
+      let ticking = false;
+      const scrollHandler = () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            this.ensureBrowseVisible();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+      window.addEventListener('scroll', scrollHandler, { passive: true });
     },
   };
 

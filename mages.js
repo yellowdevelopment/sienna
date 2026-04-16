@@ -1015,7 +1015,7 @@ window.MAGES_GAMES = [
     "url": "baldisbasics/index.html"
   },
   {
-    "name": "Baldi's Basic's PLus",
+    "name": "Baldi's Basic's Plus",
     "image": "icons/baldisbasicsplus.webp",
     "url": "baldisbasicsplus/index.html"
   },
@@ -1023,6 +1023,11 @@ window.MAGES_GAMES = [
     "name": "Baldi's Basic's The Ultra Decompile",
     "image": "icons/baldisbasicstheultradecomp.webp",
     "url": "baldisbasicstheultradecomp/index.html"
+  },
+  {
+    "name": "Baldi's Basic's Birthday Bash",
+    "image": "icons/bbbirthdaybash.webp",
+    "url": "bbbirthdaybashwebport/index.html"
   },
   {
     "name": "CaseOh's Basics in Eating and Fast Food",
@@ -1975,59 +1980,69 @@ window.MAGES_GAMES = [
     "url": "papalouie3/index.html"
   },
   {
-    "name": "Papas bakeria",
+    "name": "Papas Bakeria",
     "image": "icons/papasbakeria.webp",
     "url": "papasbakeria/index.html"
   },
   {
-    "name": "Papas burgeria",
+    "name": "Papas Burgeria",
     "image": "icons/papasburgeria.webp",
     "url": "papasburgeria/index.html"
   },
   {
-    "name": "Papas cheeseria",
+    "name": "Papas Cheeseria",
     "image": "icons/papascheeseria.webp",
     "url": "papascheeseria/index.html"
   },
   {
-    "name": "Papas donuteria",
+    "name": "Papas Donuteria",
     "image": "icons/papasdonuteria.webp",
     "url": "papasdonuteria/index.html"
   },
   {
-    "name": "Papas freezeria",
+    "name": "Papas Freezeria",
     "image": "icons/papasfreezeria.webp",
     "url": "papasfreezeria/index.html"
   },
   {
-    "name": "Papas pancakeria",
+    "name": "Papas Pancakeria",
     "image": "icons/papaspancakeria.webp",
     "url": "papaspancakeria/index.html"
   },
   {
-    "name": "Papas pastaria",
+    "name": "Papas Pastaria",
     "image": "icons/papaspastaria.webp",
     "url": "papaspastaria/index.html"
   },
   {
-    "name": "Papas pizzeria",
+    "name": "Papas Pizzeria",
     "image": "icons/papaspizzeria.webp",
     "url": "papaspizzeria/index.html"
   },
   {
-    "name": "Papas sushiria",
+    "name": "Papas Sushiria",
     "image": "icons/papassushiria.webp",
     "url": "papassushiria/index.html"
   },
   {
-    "name": "Papas tacomia",
+    "name": "Papas Taco Mia!",
     "image": "icons/papastacomia.webp",
     "url": "papastacomia/index.html"
   },
   {
-    "name": "Papas wingeria",
+    "name": "Papas Wingeria",
     "image": "icons/papaswingeria.webp",
     "url": "papaswingeria/index.html"
+  },
+  {
+    "name": "Papas Hot Doggeria",
+    "image": "icons/papashotdoggeria.webp",
+    "url": "papashotdoggeria/index.html"
+  },
+  {
+    "name": "Papas Scooperia",
+    "image": "icons/papasscooperia.webp",
+    "url": "papasscooperia/index.html"
   },
   {
     "name": "Paper.io",

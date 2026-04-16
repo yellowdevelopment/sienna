@@ -198,9 +198,36 @@ window.siennaSettings = {
   state: {
     particlesDisabled: false,
     cloakMethod: 'about:blank',
-    autoOpen: 'Disabled'
+    autoOpen: 'Disabled',
+    activeThemeId: 'none',
+    themeGridExpanded: false,
+    themeCreditsVisible: false,
+    themeCreditsText: '',
+    gamesProvider: 'Base'
   },
 
+  // Built-in theme registry is authoritative.
+  manifestUrl: '',
+
+  themes: [
+    { id: 'Astray', label: 'Astray', url: 'backgrounds/astray.jpg' },
+    { id: 'Invain', label: 'Invain', url: 'backgrounds/invain.jpg' },
+    { id: 'Isolated', label: 'Isolated', url: 'backgrounds/isolated.jpg' },
+    { id: 'backrooms', label: 'Backrooms', url: 'backgrounds/backrooms.jpg' },
+    { id: 'interstellar', label: 'Interstellar', url: 'backgrounds/interstellar.jpg' },
+    { id: 'projecthailmary', label: 'Project Hail Mary', url: 'backgrounds/projecthailmary.jpg' },
+    { id: 'meaning', label: 'Meaning', url: 'backgrounds/meaning.jpg' },
+    { id: 'underthestarrysky', label: 'Under the Starry Sky', url: 'backgrounds/underthestarrysky.jpg' },
+    { id: 'walkbythebeach', label: 'Walk by the Beach', url: 'backgrounds/walkbythebeach.gif' },
+    { id: 'yourname', label: 'Your Name', url: 'backgrounds/yourname.gif' },
+    { id: 'minecraftforest', label: 'Minecraft Forest', url: 'backgrounds/minecraftforest.gif' },
+    { id: 'sakuracherrybiome', label: 'Sakura Biome', url: 'backgrounds/sakuracherrybiome.gif' },
+    { id: 'Akaza\'s Fireworks', label: 'Akaza\'s Fireworks', url: 'backgrounds/kny.gif' },
+    { id: 'cyberpunk', label: 'Cyberpunk', url: 'backgrounds/cyberpunk.gif' },
+    { id: 'かえりみち', label: 'かえりみち', url: 'backgrounds/かえりみち.jpg' },
+    { id: '心流', label: '心流', url: 'backgrounds/心流.jpg' },
+    { id: 'larp', label: 'larp', url: 'backgrounds/larp.jpg' },
+  ],
   // ════════════════════════════════════════════════
   // SETTINGS REGISTRY: Add new settings objects here!
   // ════════════════════════════════════════════════
@@ -259,15 +286,45 @@ window.siennaSettings = {
       type: 'action',
       buttonLabel: 'Open Now',
       onClick: () => window.siennaSettings.handleCloak(window.location.href)
+    },
+    {
+      id: 'gamesProvider',
+      section: 'Games',
+      label: 'Games Provider',
+      desc: 'Choose the game provider incase one gets blocked, night. is the default',
+      type: 'choice',
+      options: ['night.', 'Lumin'],
+      get: () => window.siennaSettings.state.gamesProvider,
+      set: (val) => {
+        window.siennaSettings.state.gamesProvider = val;
+        localStorage.setItem('sienna_games_provider', val);
+        window.siennaSettings.applyGamesProvider(val);
+        window.siennaSettings.renderPanel(); // Update active state
+      }
+    },
+    {
+      id: 'themePicker',
+      section: 'Themes',
+      label: 'Selectable themes',
+      desc: 'Choose a nice looking theme',
+      type: 'theme-grid'
     }
   ],
 
-  init() {
+  async init() {
     // 1. Load saved states
     this.state.particlesDisabled = localStorage.getItem('sienna_particles_disabled') === 'true';
     this.state.cloakMethod = localStorage.getItem('sienna_cloak_method') || 'about:blank';
     this.state.autoOpen = localStorage.getItem('sienna_auto_open') || 'Disabled';
-    
+    this.state.activeThemeId = localStorage.getItem('sienna_theme_id') || 'none';
+    this.state.gamesProvider = localStorage.getItem('sienna_games_provider') || 'Night';
+    this.state.themeGridExpanded = false;
+    this.state.themeCreditsVisible = false;
+    this.state.themeCreditsText = '';
+    await this.loadThemes();
+    this.applyTheme(this.state.activeThemeId);
+    this.applyGamesProvider(this.state.gamesProvider);
+
     // 2. Handle Auto Open Trigger (Detects if already cloaked to prevent loops)
     const isFramed = window.self !== window.top;
     const isBlob = window.location.protocol === 'blob:';
@@ -301,6 +358,184 @@ window.siennaSettings = {
     if (!window.particleBg) return;
     const shouldStop = this.state.particlesDisabled || document.body.classList.contains('game-visor-open');
     shouldStop ? window.particleBg.stop() : window.particleBg.start();
+    this.applyTheme(this.state.activeThemeId);
+  },
+
+  escapeHtml(str) {
+    return String(str).replace(/[&<>'"]/g, (char) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[char]));
+  },
+
+  applyTheme(themeId) {
+    if (themeId === 'none') {
+      this.state.activeThemeId = 'none';
+      localStorage.setItem('sienna_theme_id', 'none');
+      document.documentElement.style.setProperty('--bg-image', 'none');
+      return;
+    }
+    const theme = this.themes.find((t) => t.id === themeId) || this.themes[0];
+    this.state.activeThemeId = theme.id;
+    localStorage.setItem('sienna_theme_id', theme.id);
+    document.documentElement.style.setProperty('--bg-image', theme.url ? `url('${theme.url}') center/cover no-repeat` : 'none');
+  },
+
+  applyGamesProvider(provider) {
+    const browseGrid = document.getElementById('browseGrid');
+    const favoritesGrid = document.getElementById('favoritesGrid');
+    const featured = document.getElementById('featured');
+    const featuredDots = document.getElementById('featuredDots');
+    const gridSectionLabel = document.querySelector('.grid-section-label');
+    if (!browseGrid) return;
+
+    // Remove existing lumin if present
+    const existingGames = document.getElementById('games');
+    if (existingGames) {
+      existingGames.remove();
+    }
+    const existingLuminWrapper = document.getElementById('lumin-section');
+    if (existingLuminWrapper) {
+      existingLuminWrapper.remove();
+    }
+    const existingScripts = document.querySelectorAll('script[src*="lumin"]');
+    existingScripts.forEach(script => script.remove());
+
+    // Remove existing message
+    const existingMessage = document.getElementById('lumin-message');
+    if (existingMessage) {
+      existingMessage.remove();
+    }
+
+    if (provider === 'Lumin') {
+      // Hide normal grids and featured
+      browseGrid.style.display = 'none';
+      if (favoritesGrid) favoritesGrid.style.display = 'none';
+      if (featured) featured.style.display = 'none';
+      if (featuredDots) featuredDots.style.display = 'none';
+
+      // Add message
+      if (gridSectionLabel) {
+        const messageDiv = document.createElement('div');
+        messageDiv.id = 'lumin-message';
+        messageDiv.style.cssText = 'text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.8); font-size: 18px;';
+        messageDiv.textContent = "You're using the Lumin SDK provider";
+        gridSectionLabel.parentNode.insertBefore(messageDiv, gridSectionLabel);
+      }
+
+      // Add Lumin section wrapper
+      const luminWrapper = document.createElement('div');
+      luminWrapper.id = 'lumin-section';
+      luminWrapper.style.cssText = 'width: 100%; margin-bottom: 40px;';
+      gridSectionLabel.parentNode.insertBefore(luminWrapper, gridSectionLabel);
+
+      // Add lumin container inside wrapper
+      const gamesDiv = document.createElement('div');
+      gamesDiv.id = 'games';
+      gamesDiv.style.cssText = 'width: 100%; height: 600px;';
+      luminWrapper.appendChild(gamesDiv);
+
+      // Add scripts
+      const script1 = document.createElement('script');
+      script1.src = 'https://cdn.jsdelivr.net/gh/luminsdk/script@latest/lumin.min.js';
+      script1.onload = () => {
+        const script2 = document.createElement('script');
+        script2.textContent = `
+          Lumin.init({
+            container: '#games',
+            theme: 'dark'
+          });
+        `;
+        document.head.appendChild(script2);
+      };
+      document.head.appendChild(script1);
+    } else {
+      // Show normal grids and featured
+      browseGrid.style.display = '';
+      if (favoritesGrid) favoritesGrid.style.display = '';
+      if (featured) featured.style.display = '';
+      if (featuredDots) featuredDots.style.display = '';
+    }
+  },
+
+  normalizeThemeLabel(filename) {
+    if (!filename) return 'No Theme';
+    const name = filename.replace(/\.[^/.]+$/, '')
+      .replace(/[-_]+/g, ' ')
+      .trim();
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  },
+
+  async loadThemes() {
+    // Load custom themes from localStorage
+    const customThemes = JSON.parse(localStorage.getItem('sienna_custom_themes') || '[]');
+    this.themes = [...this.themes, ...customThemes];
+
+    const panel = document.getElementById('settingsPanel');
+    if (panel) this.renderPanel();
+  },
+
+  handleUpload() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.style.display = 'none';
+    document.body.appendChild(input);
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const url = event.target.result;
+        const customTheme = {
+          id: `custom-${Date.now()}`,
+          label: file.name.replace(/\.[^/.]+$/, ''),
+          url: url
+        };
+        this.themes.push(customTheme);
+        this.saveCustomThemes();
+        this.applyTheme(customTheme.id);
+        this.renderPanel();
+      };
+      reader.readAsDataURL(file);
+      document.body.removeChild(input);
+    };
+    input.click();
+  },
+
+  saveCustomThemes() {
+    const customThemes = this.themes.filter(t => t.id.startsWith('custom-'));
+    localStorage.setItem('sienna_custom_themes', JSON.stringify(customThemes));
+  },
+
+  toggleThemeExpansion() {
+    this.state.themeGridExpanded = !this.state.themeGridExpanded;
+    this.renderPanel();
+  },
+
+  loadThemeCredits() {
+    if (this.state.themeCreditsVisible) {
+      this.state.themeCreditsVisible = false;
+      this.renderPanel();
+      return;
+    }
+
+    const creditsUrl = new URL('backgrounds/credits.txt', window.location.href).href;
+    fetch(creditsUrl)
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to load credits');
+        return response.text();
+      })
+      .then((text) => {
+        this.state.themeCreditsText = text;
+        this.state.themeCreditsVisible = true;
+        this.renderPanel();
+      })
+      .catch(() => {
+        this.state.themeCreditsText = 'Unable to load background credits.';
+        this.state.themeCreditsVisible = true;
+        this.renderPanel();
+      });
   },
 
   notifyAutoOpen() {
@@ -320,7 +555,7 @@ window.siennaSettings = {
 
   handleCloak(url, preferredMethod = null) {
     const method = preferredMethod || this.state.cloakMethod;
-    const title = "Google"; // Common decoy title
+    const title = "New Tab"; // Common decoy title
     
     if (method === 'blob:null') {
       const html = `<!DOCTYPE html><html><head><title>${title}</title><style>body,html{margin:0;padding:0;height:100%;overflow:hidden}iframe{width:100%;height:100%;border:none}</style></head><body><iframe src="${url}"></iframe></body></html>`;
@@ -352,7 +587,9 @@ window.siennaSettings = {
     panel.innerHTML = Object.entries(sections).map(([title, items]) => `
       <div class="settings-section">
         <div class="settings-section-title">${title}</div>
-        ${items.map(item => `
+        ${items.map(item => {
+          if (item.type === 'theme-grid') return this.renderThemeSection(item);
+          return `
         <div class="settings-item">
           <div class="settings-info">
             <span class="settings-label">${item.label}</span>
@@ -382,7 +619,8 @@ window.siennaSettings = {
             <button class="action-btn" data-action-id="${item.id}">${item.buttonLabel}</button>
           ` : ''}
         </div>
-        `).join('')}
+        `;
+        }).join('')}
       </div>
     `).join('');
 
@@ -417,6 +655,77 @@ window.siennaSettings = {
         if (setting?.onClick) setting.onClick();
       });
     });
+
+    panel.querySelectorAll('[data-theme-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.applyTheme(btn.dataset.themeId);
+        this.state.themeCreditsVisible = false;
+        this.renderPanel();
+      });
+    });
+
+    panel.querySelectorAll('[data-theme-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.themeAction;
+        if (action === 'credits') {
+          this.loadThemeCredits();
+        } else if (action === 'more') {
+          this.toggleThemeExpansion();
+        } else if (action === 'clear') {
+          this.applyTheme('none');
+          this.state.themeCreditsVisible = false;
+          this.renderPanel();
+        } else if (action === 'upload') {
+          this.handleUpload();
+        }
+      });
+    });
+  },
+
+  renderThemeSection(item) {
+    const selectedTheme = this.state.activeThemeId || 'none';
+    const visibleThemes = this.state.themeGridExpanded ? this.themes : this.themes.slice(0, 8);
+    const cards = visibleThemes.map((theme) => {
+      const hoverTitle = theme.label;
+      return `
+      <button type="button" class="theme-card ${selectedTheme === theme.id ? 'selected' : ''}" data-theme-id="${theme.id}" title="${this.escapeHtml(hoverTitle)}">
+        <div class="theme-preview" style="background-image: ${theme.url ? `url('${theme.url}')` : 'none'};">
+          ${theme.url ? `<img src="${theme.url}" alt="${this.escapeHtml(theme.label)} preview" class="theme-preview-img" />` : ''}
+          <span class="theme-label">${this.escapeHtml(theme.label)}</span>
+        </div>
+      </button>
+    `;
+    }).join('');
+
+    return `
+      <div class="settings-item theme-settings-item">
+        <div class="settings-info">
+          <span class="settings-label">${item.label}</span>
+          <span class="settings-desc">${item.desc}</span>
+        </div>
+        <div class="theme-control-group">
+          <button type="button" class="action-btn theme-credits-btn" data-theme-action="credits">Credits</button>
+          <button type="button" class="action-btn theme-clear-btn" data-theme-action="clear">Remove theme</button>
+        </div>
+      </div>
+      <div class="settings-theme-grid ${this.state.themeGridExpanded ? 'expanded' : ''}">
+        <button type="button" class="theme-card upload-card" data-theme-action="upload" title="Upload custom image">
+          <div class="theme-preview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 32px; height: 32px; color: rgba(255,255,255,0.6);">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10,9 9,9 8,9"/>
+            </svg>
+            <span class="theme-label">Upload</span>
+          </div>
+        </button>
+        ${cards}
+      </div>
+      ${this.themes.length > 8 ? `<button type="button" class="action-btn theme-more-btn" data-theme-action="more">${this.state.themeGridExpanded ? 'Show less' : 'See more'}</button>` : ''}
+      ${this.state.themeCreditsVisible ? `<div class="theme-credits-panel"><pre>${this.escapeHtml(this.state.themeCreditsText)}</pre></div>` : ''}
+    `;
   }
 };
 
