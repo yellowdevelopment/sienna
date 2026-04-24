@@ -184,10 +184,24 @@ class ParticleBg {
   isRunning() {
     return this.running;
   }
+
+  destroy() {
+    this.stop();
+    window.removeEventListener('resize', this._resize);
+    document.removeEventListener('mousemove', this._mouseMove);
+    document.removeEventListener('mouseleave', this._mouseLeave);
+    this.particles = [];
+    this.alphaLUT = [];
+    this.canvas.width = 0;
+    this.canvas.height = 0;
+  }
 }
 
 const canvas = document.getElementById('particleCanvas');
 if (canvas) window.particleBg = new ParticleBg(canvas, 60);
+window.addEventListener('pagehide', () => {
+  window.particleBg?.destroy?.();
+});
 
 /**
  * SIENNA SETTINGS SYSTEM
@@ -209,6 +223,13 @@ window.siennaSettings = {
   // Built-in theme registry is authoritative.
   manifestUrl: '',
 
+  // Updates bar content
+  // Edit these two strings whenever you want to post a new update in Settings.
+  updates: {
+    title: 'Sienna v0.5.0 | Night. v0.5.0 | Build 013',
+    description: 'Performance improvements like idle memory usage from 700mb to ~380mb. Minor UI and Bug fixes involving lag. New menu UI for settings and added Updates Bar. New Games',
+  },
+
   themes: [
     { id: 'Astray', label: 'Astray', url: 'backgrounds/astray.jpg' },
     { id: 'Invain', label: 'Invain', url: 'backgrounds/invain.jpg' },
@@ -216,6 +237,9 @@ window.siennaSettings = {
     { id: 'backrooms', label: 'Backrooms', url: 'backgrounds/backrooms.jpg' },
     { id: 'interstellar', label: 'Interstellar', url: 'backgrounds/interstellar.jpg' },
     { id: 'projecthailmary', label: 'Project Hail Mary', url: 'backgrounds/projecthailmary.jpg' },
+    { id: 'terraria', label: 'Terraria', url: 'backgrounds/terraria.png' },
+    { id: 'hollowknight', label: 'Hollow Knight', url: 'backgrounds/hollowknight.jpg' },
+    { id: 'hollowknightsilksong', label: 'Hollow Knight: Silksong', url: 'backgrounds/hollowknightsilksong.jpg' },
     { id: 'meaning', label: 'Meaning', url: 'backgrounds/meaning.jpg' },
     { id: 'underthestarrysky', label: 'Under the Starry Sky', url: 'backgrounds/underthestarrysky.jpg' },
     { id: 'walkbythebeach', label: 'Walk by the Beach', url: 'backgrounds/walkbythebeach.gif' },
@@ -227,6 +251,7 @@ window.siennaSettings = {
     { id: 'かえりみち', label: 'かえりみち', url: 'backgrounds/かえりみち.jpg' },
     { id: '心流', label: '心流', url: 'backgrounds/心流.jpg' },
     { id: 'larp', label: 'larp', url: 'backgrounds/larp.jpg' },
+    { id: 'waifumommy', label: 'Waifu Mommy', url: 'backgrounds/waifumommy.jpg' },
   ],
   // ════════════════════════════════════════════════
   // SETTINGS REGISTRY: Add new settings objects here!
@@ -334,7 +359,15 @@ window.siennaSettings = {
       // Attempt to close original tab.
       window.close();
       // Fallback: Clear body to prevent "naked" site usage
-      document.body.innerHTML = `<div style="color:white;text-align:center;padding-top:20vh;font-family:Syne;font-weight:700;">Auto-open active. You can close this tab.</div>`;
+      document.body.replaceChildren();
+      const fallbackMessage = document.createElement('div');
+      fallbackMessage.style.color = 'white';
+      fallbackMessage.style.textAlign = 'center';
+      fallbackMessage.style.paddingTop = '20vh';
+      fallbackMessage.style.fontFamily = 'Syne';
+      fallbackMessage.style.fontWeight = '700';
+      fallbackMessage.textContent = 'Auto-open active. You can close this tab.';
+      document.body.appendChild(fallbackMessage);
       return;
     }
 
@@ -349,9 +382,86 @@ window.siennaSettings = {
     toolbar.innerHTML = `
       <button class="settings-btn" id="settingsBtn" title="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
+      <button class="updates-btn" id="updatesBtn" title="Updates" aria-haspopup="dialog" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 4l8 8"/>
+          <path d="M5 4l5 13 3-5 5-3z"/>
+          <path d="M15 4v3"/>
+          <path d="M19 7l-2 2"/>
+          <path d="M19 13h-3"/>
+          <path d="M8 2v2"/>
+          <path d="M11 5H9"/>
+        </svg>
       </button>`;
+    const popup = document.createElement('div');
+    popup.id = 'updatesPopup';
+    popup.className = 'updates-popup';
+    popup.setAttribute('role', 'dialog');
+    popup.setAttribute('aria-label', 'Site updates');
+    popup.innerHTML = this.renderUpdatesPopupMarkup();
     document.body.appendChild(toolbar);
-    document.getElementById('settingsBtn')?.addEventListener('click', () => window.gameVisor?.openSettings());
+    document.body.appendChild(popup);
+    document.getElementById('settingsBtn')?.addEventListener('click', () => {
+      this.closeUpdatesPopup();
+      window.gameVisor?.openSettings();
+    });
+    document.getElementById('updatesBtn')?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      this.toggleUpdatesPopup();
+    });
+    popup.addEventListener('click', (event) => event.stopPropagation());
+    document.addEventListener('click', () => this.closeUpdatesPopup());
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') this.closeUpdatesPopup();
+    });
+  },
+
+  renderUpdatesPopupMarkup() {
+    const title = String(this.updates?.title || '').trim();
+    const description = String(this.updates?.description || '').trim();
+
+    return `
+      <div class="updates-popup-header">
+        <div>
+          <div class="updates-popup-kicker">Latest updates</div>
+          <div class="updates-popup-eyebrow">might not be up to date all the time</div>
+        </div>
+        <button class="updates-popup-close" id="updatesPopupClose" type="button" aria-label="Close updates">&times;</button>
+      </div>
+      <div class="updates-popup-body">
+        ${title
+          ? `<h3 class="updates-popup-title">${this.escapeHtml(title)}</h3>`
+          : `<div class="updates-popup-placeholder updates-popup-placeholder-title" aria-hidden="true"></div>`
+        }
+        ${description
+          ? `<p class="updates-popup-desc">${this.escapeHtml(description)}</p>`
+          : `
+            <div class="updates-popup-placeholder updates-popup-placeholder-line" aria-hidden="true"></div>
+            <div class="updates-popup-placeholder updates-popup-placeholder-line short" aria-hidden="true"></div>
+          `
+        }
+      </div>
+    `;
+  },
+
+  toggleUpdatesPopup(forceState = null) {
+    const popup = document.getElementById('updatesPopup');
+    const btn = document.getElementById('updatesBtn');
+    if (!popup || !btn) return;
+    popup.innerHTML = this.renderUpdatesPopupMarkup();
+    popup.querySelector('#updatesPopupClose')?.addEventListener('click', () => this.closeUpdatesPopup());
+
+    const shouldOpen = forceState ?? !popup.classList.contains('visible');
+    popup.classList.toggle('visible', shouldOpen);
+    btn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+  },
+
+  closeUpdatesPopup() {
+    const popup = document.getElementById('updatesPopup');
+    const btn = document.getElementById('updatesBtn');
+    if (popup) popup.classList.remove('visible');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
   },
 
   apply() {
@@ -561,7 +671,12 @@ window.siennaSettings = {
       const html = `<!DOCTYPE html><html><head><title>${title}</title><style>body,html{margin:0;padding:0;height:100%;overflow:hidden}iframe{width:100%;height:100%;border:none}</style></head><body><iframe src="${url}"></iframe></body></html>`;
       const blob = new Blob([html], { type: 'text/html' });
       const blobUrl = URL.createObjectURL(blob);
-      window.open(blobUrl, '_blank');
+      const cloakedWin = window.open(blobUrl, '_blank');
+      if (cloakedWin) {
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+      } else {
+        URL.revokeObjectURL(blobUrl);
+      }
     } else {
       const win = window.open('about:blank', '_blank');
       if (!win) return;
@@ -576,6 +691,7 @@ window.siennaSettings = {
   renderPanel() {
     const panel = document.getElementById('settingsPanel');
     if (!panel) return;
+    const previousScrollTop = panel.scrollTop;
 
     // Group settings by section
     const sections = {};
@@ -584,17 +700,58 @@ window.siennaSettings = {
       sections[item.section].push(item);
     });
 
-    panel.innerHTML = Object.entries(sections).map(([title, items]) => `
-      <div class="settings-section">
-        <div class="settings-section-title">${title}</div>
+    const activeTheme = this.themes.find((theme) => theme.id === this.state.activeThemeId);
+    const activeThemeLabel = this.state.activeThemeId === 'none' ? 'Default gradient' : (activeTheme?.label || 'Custom theme');
+    const particlesLabel = this.state.particlesDisabled ? 'Muted' : 'Active';
+    const cloakLabel = this.state.autoOpen === 'Disabled' ? this.state.cloakMethod : this.state.autoOpen;
+
+    panel.innerHTML = `
+      <div class="settings-shell">
+        <div class="settings-hero">
+          <div class="settings-kicker">sienna settings</div>
+          <div class="settings-hero-row">
+            <div class="settings-hero-copy">
+              <h2 class="settings-hero-title">Tune the space without changing the vibe.</h2>
+              <p class="settings-hero-desc">Everything here keeps the site feeling like sienna, just closer to how you want it to behave.</p>
+            </div>
+            <div class="settings-status-grid">
+              <div class="settings-status-card">
+                <span class="settings-status-label">Theme</span>
+                <strong class="settings-status-value">${this.escapeHtml(activeThemeLabel)}</strong>
+              </div>
+              <div class="settings-status-card">
+                <span class="settings-status-label">Particles</span>
+                <strong class="settings-status-value">${this.escapeHtml(particlesLabel)}</strong>
+              </div>
+              <div class="settings-status-card">
+                <span class="settings-status-label">Cloak</span>
+                <strong class="settings-status-value">${this.escapeHtml(cloakLabel)}</strong>
+              </div>
+              <div class="settings-status-card">
+                <span class="settings-status-label">Games</span>
+                <strong class="settings-status-value">${this.escapeHtml(this.state.gamesProvider)}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        ${Object.entries(sections).map(([title, items]) => `
+      <section class="settings-section">
+        <div class="settings-section-heading">
+          <div class="settings-section-title-wrap">
+            <div class="settings-section-title">${title}</div>
+            <div class="settings-section-subtitle">${items.length} ${items.length === 1 ? 'setting' : 'settings'}</div>
+          </div>
+        </div>
+        <div class="settings-section-body">
         ${items.map(item => {
           if (item.type === 'theme-grid') return this.renderThemeSection(item);
           return `
-        <div class="settings-item">
+        <div class="settings-item settings-item--${item.type}">
           <div class="settings-info">
             <span class="settings-label">${item.label}</span>
             <span class="settings-desc">${item.desc}</span>
           </div>
+          <div class="settings-control">
           ${item.type === 'toggle' ? `
             <label class="toggle-switch">
               <input type="checkbox" data-setting-id="${item.id}" ${item.get() ? 'checked' : ''}>
@@ -618,11 +775,15 @@ window.siennaSettings = {
           ${item.type === 'action' ? `
             <button class="action-btn" data-action-id="${item.id}">${item.buttonLabel}</button>
           ` : ''}
+          </div>
         </div>
         `;
         }).join('')}
+        </div>
+      </section>
+    `).join('')}
       </div>
-    `).join('');
+    `;
 
     // Bind events
     panel.querySelectorAll('input[data-setting-id]').forEach(input => {
@@ -680,10 +841,17 @@ window.siennaSettings = {
         }
       });
     });
+
+    requestAnimationFrame(() => {
+      panel.scrollTop = previousScrollTop;
+    });
   },
 
   renderThemeSection(item) {
     const selectedTheme = this.state.activeThemeId || 'none';
+    const selectedThemeLabel = selectedTheme === 'none'
+      ? 'Default gradient'
+      : (this.themes.find((theme) => theme.id === selectedTheme)?.label || 'Custom theme');
     const visibleThemes = this.state.themeGridExpanded ? this.themes : this.themes.slice(0, 8);
     const cards = visibleThemes.map((theme) => {
       const hoverTitle = theme.label;
@@ -708,6 +876,14 @@ window.siennaSettings = {
           <button type="button" class="action-btn theme-clear-btn" data-theme-action="clear">Remove theme</button>
         </div>
       </div>
+      <div class="theme-studio">
+        <div class="theme-studio-header">
+          <div class="theme-studio-copy">
+            <span class="theme-studio-label">Current selection</span>
+            <strong class="theme-studio-value">${this.escapeHtml(selectedThemeLabel)}</strong>
+          </div>
+          <span class="theme-studio-meta">${this.themes.length} themes available</span>
+        </div>
       <div class="settings-theme-grid ${this.state.themeGridExpanded ? 'expanded' : ''}">
         <button type="button" class="theme-card upload-card" data-theme-action="upload" title="Upload custom image">
           <div class="theme-preview">
@@ -725,6 +901,7 @@ window.siennaSettings = {
       </div>
       ${this.themes.length > 8 ? `<button type="button" class="action-btn theme-more-btn" data-theme-action="more">${this.state.themeGridExpanded ? 'Show less' : 'See more'}</button>` : ''}
       ${this.state.themeCreditsVisible ? `<div class="theme-credits-panel"><pre>${this.escapeHtml(this.state.themeCreditsText)}</pre></div>` : ''}
+      </div>
     `;
   }
 };

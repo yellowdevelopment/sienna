@@ -108,80 +108,135 @@
 
   const iconLazyLoader = {
     observer: null,
-    preloaded: new Set(),
+    loaded: new Set(),
+    releaseCheckRaf: null,
+    listenersBound: false,
+    releaseHandler: null,
+    loadMargin: 220,
+    releaseMargin: 1800,
 
     init() {
-      if (!('IntersectionObserver' in window) || !document.querySelectorAll) return;
+      if (!document.querySelectorAll) return;
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('img.browse-card-icon').forEach((img) => {
+          if (this.isWithinMargin(img, this.loadMargin)) this.loadImage(img);
+        });
+        return;
+      }
+      this.ensureObserver();
+      this.observeAll();
+      this.scheduleReleaseCheck();
+    },
+
+    ensureObserver() {
+      if (!('IntersectionObserver' in window)) return;
       if (this.observer) {
         this.observer.disconnect();
       }
 
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
           const img = entry.target;
-          this.observer.unobserve(img);
-          this.loadImage(img);
+          if (entry.isIntersecting || this.isWithinMargin(img, this.loadMargin)) {
+            this.loadImage(img);
+            return;
+          }
+          if (this.isOutsideMargin(img, this.releaseMargin)) {
+            this.unloadImage(img);
+          }
         });
       }, {
-        rootMargin: '400px',
+        rootMargin: `${this.loadMargin}px 0px`,
         threshold: 0.01,
       });
 
-      this.observeAll();
+      if (!this.listenersBound) {
+        this.releaseHandler = () => this.scheduleReleaseCheck();
+        window.addEventListener('scroll', this.releaseHandler, { passive: true });
+        window.addEventListener('resize', this.releaseHandler, { passive: true });
+        this.listenersBound = true;
+      }
     },
 
     observeAll() {
-      if (!this.observer) return;
-      document.querySelectorAll('img.browse-card-icon[data-src]').forEach((img) => {
-        if (img.dataset.src) this.observer.observe(img);
+      this.loaded.forEach((img) => {
+        if (!img.isConnected) this.loaded.delete(img);
       });
-      this.loadVisible();
+      document.querySelectorAll('img.browse-card-icon').forEach((img) => {
+        this.observer?.observe(img);
+      });
     },
 
-    loadVisible() {
-      document.querySelectorAll('img.browse-card-icon[data-src]').forEach((img) => {
-        if (this.isElementInViewport(img)) {
-          this.loadImage(img);
+    scheduleReleaseCheck() {
+      if (this.releaseCheckRaf) return;
+      this.releaseCheckRaf = requestAnimationFrame(() => {
+        this.releaseCheckRaf = null;
+        this.releaseFarImages();
+      });
+    },
+
+    releaseFarImages() {
+      this.loaded.forEach((img) => {
+        if (!img.isConnected || this.isOutsideMargin(img, this.releaseMargin)) {
+          this.unloadImage(img);
         }
       });
     },
 
-    isElementInViewport(el) {
+    isWithinMargin(el, margin) {
       const rect = el.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
       const windowWidth = window.innerWidth || document.documentElement.clientWidth;
       return (
-        rect.top >= -400 && // accounting for rootMargin
-        rect.left >= -400 &&
-        rect.bottom <= windowHeight + 400 &&
-        rect.right <= windowWidth + 400
+        rect.bottom >= -margin &&
+        rect.right >= -margin &&
+        rect.top <= windowHeight + margin &&
+        rect.left <= windowWidth + margin
+      );
+    },
+
+    isOutsideMargin(el, margin) {
+      const rect = el.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+      return (
+        rect.bottom < -margin ||
+        rect.right < -margin ||
+        rect.top > windowHeight + margin ||
+        rect.left > windowWidth + margin
       );
     },
 
     loadImage(img) {
       const url = img.dataset.src;
-      if (!url) return;
+      if (!url || img.dataset.broken === 'true' || img.dataset.loaded === 'true') return;
       img.src = url;
-      img.removeAttribute('data-src');
-      img.addEventListener('load', () => this.prefetchNext(img), { once: true });
-      img.addEventListener('error', () => this.prefetchNext(img), { once: true });
+      img.dataset.loaded = 'true';
+      this.loaded.add(img);
+      img.style.display = '';
     },
 
-    prefetchNext(currentImg) {
-      const allIcons = Array.from(document.querySelectorAll('img.browse-card-icon'));
-      const currentIdx = allIcons.indexOf(currentImg);
-      if (currentIdx === -1) return;
+    unloadImage(img) {
+      if (img.dataset.loaded !== 'true' || img.dataset.broken === 'true') return;
+      img.removeAttribute('src');
+      img.dataset.loaded = 'false';
+      this.loaded.delete(img);
+    },
 
-      const preloadCount = 12;
-      for (let i = currentIdx + 1; i < Math.min(allIcons.length, currentIdx + 1 + preloadCount); i++) {
-        const img = allIcons[i];
-        const dataSrc = img.dataset.src;
-        if (dataSrc && !this.preloaded.has(dataSrc)) {
-          this.preloaded.add(dataSrc);
-          const p = new Image();
-          p.src = dataSrc;
-        }
+    teardown() {
+      this.observer?.disconnect();
+      this.observer = null;
+      this.loaded.forEach((img) => this.unloadImage(img));
+      this.loaded.clear();
+      if (this.listenersBound && this.releaseHandler) {
+        window.removeEventListener('scroll', this.releaseHandler);
+        window.removeEventListener('resize', this.releaseHandler);
+        this.listenersBound = false;
+        this.releaseHandler = null;
+      }
+      if (this.releaseCheckRaf) {
+        cancelAnimationFrame(this.releaseCheckRaf);
+        this.releaseCheckRaf = null;
       }
     },
   };
@@ -212,16 +267,38 @@
   };
 
   const opening = {
+    staggerTimers: [],
+    clearStaggerTimers() {
+      this.staggerTimers.forEach((timerId) => clearTimeout(timerId));
+      this.staggerTimers = [];
+    },
     revealBrowse() {
       const inner = document.getElementById('browseInner');
+      const browseGrid = document.getElementById('browseGrid');
+      if (browseGrid && !browseGrid.childElementCount) {
+        grid.render(activeCategory);
+      }
       if (inner) requestAnimationFrame(() => inner.classList.add('revealed'));
+      featured.ensureStarted();
       this.staggerCards(document.querySelectorAll('.browse-card'), 60, 10);
     },
     staggerCards(cards, baseDelay, step) {
-      cards.forEach((card, i) => {
+      const items = Array.from(cards);
+      const staggeredCount = Math.min(items.length, 48);
+      this.clearStaggerTimers();
+
+      items.slice(0, staggeredCount).forEach((card, i) => {
         const delay = Math.min(baseDelay + i * step, STAGGER_CAP_MS + baseDelay);
-        setTimeout(() => card.classList.add('revealed'), delay);
+        this.staggerTimers.push(setTimeout(() => card.classList.add('revealed'), delay));
       });
+
+      if (items.length > staggeredCount) {
+        const remaining = items.slice(staggeredCount);
+        const delay = Math.min(baseDelay + staggeredCount * step, STAGGER_CAP_MS + baseDelay);
+        this.staggerTimers.push(setTimeout(() => {
+          remaining.forEach((card) => card.classList.add('revealed'));
+        }, delay));
+      }
     },
     ensureBrowseVisible() {
       const page = document.getElementById('page-browse');
@@ -248,6 +325,7 @@
   };
 
   const grid = {
+    renderTimer: null,
     buildItemsHtml(items, basePath) {
       return items
         .map((g) => {
@@ -258,10 +336,11 @@
           const icon = util.iconPathFor(g);
           const isFav = favorites.has(href);
           const favClass = isFav ? 'active' : '';
+          const gameDataAttr = `data-game-data="${encodeURIComponent(JSON.stringify(g))}"`;
           const iconHtml = icon
-            ? `<img class="browse-card-icon" data-src="${encodeURI(icon)}" alt="${name}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.parentElement.classList.add('icon-missing');">`
+            ? `<img class="browse-card-icon" data-src="${encodeURI(icon)}" data-loaded="false" alt="${name}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.dataset.broken='true'; this.style.display='none'; this.parentElement.classList.add('icon-missing');">`
             : '';
-          return `<div class="browse-tile" data-game-url="${href}" title="Play ${name}"><a class="browse-card" href="${href}" data-game-url="${href}">${iconHtml}</a><div class="browse-card-name">${name}</div><button class="favorite-btn ${favClass}" data-fav-url="${href}" aria-label="Favorite ${name}"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button></div>`;
+          return `<div class="browse-tile" data-game-url="${href}" ${gameDataAttr} title="Play ${name}"><a class="browse-card" href="${href}" data-game-url="${href}">${iconHtml}</a><div class="browse-card-name">${name}</div><button class="favorite-btn ${favClass}" data-fav-url="${href}" aria-label="Favorite ${name}"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button></div>`;
         })
         .join('');
     },
@@ -270,8 +349,13 @@
       if (!el) return;
 
       el.querySelectorAll('.browse-card').forEach((c) => c.classList.remove('revealed'));
+      if (this.renderTimer) {
+        clearTimeout(this.renderTimer);
+        this.renderTimer = null;
+      }
 
-      setTimeout(() => {
+      this.renderTimer = setTimeout(() => {
+        this.renderTimer = null;
         const cfg = CATEGORY_CONFIG[category];
         if (!cfg) {
           el.innerHTML = '';
@@ -410,17 +494,46 @@
   };
 
   const infoPopup = {
+    popup: null,
+    analyticsFrame: null,
+    unloadTimer: null,
+    show() {
+      if (!this.popup) return;
+      analyticsGraph.init();
+      this.popup.classList.add('visible');
+      clearTimeout(this.unloadTimer);
+      if (this.analyticsFrame && !this.analyticsFrame.getAttribute('src') && this.analyticsFrame.dataset.src) {
+        this.analyticsFrame.src = this.analyticsFrame.dataset.src;
+      }
+    },
+    hide() {
+      if (!this.popup) return;
+      this.popup.classList.remove('visible');
+      clearTimeout(this.unloadTimer);
+      this.unloadTimer = setTimeout(() => {
+        if (this.popup?.classList.contains('visible') || !this.analyticsFrame?.getAttribute('src')) return;
+        this.analyticsFrame.removeAttribute('src');
+      }, 20000);
+    },
     init() {
       const btn = document.getElementById('infoBtn');
       const popup = document.getElementById('infoPopup');
+      this.popup = popup;
+      this.analyticsFrame = document.getElementById('analyticsEmbed');
       if (!btn || !popup) return;
-      btn.addEventListener('mouseenter', () => popup.classList.add('visible'));
-      btn.addEventListener('mouseleave', () => popup.classList.remove('visible'));
+      btn.addEventListener('mouseenter', () => this.show());
+      btn.addEventListener('mouseleave', () => this.hide());
+      btn.addEventListener('focus', () => this.show());
+      btn.addEventListener('blur', () => this.hide());
+      popup.addEventListener('mouseenter', () => this.show());
+      popup.addEventListener('mouseleave', () => this.hide());
     },
   };
 
   const analyticsGraph = {
+    initialized: false,
     init() {
+      if (this.initialized) return;
       const gc = document.getElementById('graphCanvas');
       if (!gc) return;
       const ctx = gc.getContext('2d');
@@ -479,6 +592,7 @@
 
       resize();
       drawGraph(generatePlaceholderData(14));
+      this.initialized = true;
     },
   };
 
@@ -490,6 +604,8 @@
     idx: 0,
     intervalId: null,
     isHovered: false,
+    initialized: false,
+    started: false,
     pickPool(category = activeCategory) {
       const cfg = CATEGORY_CONFIG[category];
       if (!cfg) return [];
@@ -511,14 +627,21 @@
       const href = encodeURI(`${base}${item.url}`) || '#';
       const imgHtml = icon ? `<img class="featured-icon" src="${icon}" alt="${name}" loading="lazy">` : '';
       const bgStyle = icon ? `style="background-image: url('${icon}');"` : '';
+      const section = util.escapeHtml(item.section || 'N/A');
+      const author = util.escapeHtml(item.author || 'N/A');
+      const gameDataAttr = `data-game-data="${encodeURIComponent(JSON.stringify(item))}"`;
       
       return `
-        <div class="featured-slide">
+        <div class="featured-slide" ${gameDataAttr}>
           <div class="featured-bg" ${bgStyle}></div>
           <div class="featured-content">
             ${imgHtml}
             <div class="featured-meta">
               <div class="featured-title">${name}</div>
+              <div class="featured-info">
+                <span class="featured-section">${section}</span>
+                <span class="featured-author">By: ${author}</span>
+              </div>
               <a class="featured-play" href="${href}" data-game-url="${href}">Play Now</a>
             </div>
           </div>
@@ -597,9 +720,10 @@
     },
     start() {
       if (!this.pool.length) return;
+      this.started = true;
       this.showIndex(0);
       this.renderDots();
-      this.intervalId = setInterval(() => this.next(), 5000);
+      this.resume();
     },
     reloadForCategory(category) {
       this.pause();
@@ -610,9 +734,16 @@
         if (this.dotsEl) this.dotsEl.innerHTML = '';
         return;
       }
+      if (!this.started) return;
+      this.start();
+    },
+    ensureStarted() {
+      if (!this.initialized) this.init();
+      if (this.started || !this.pool.length) return;
       this.start();
     },
     init() {
+      if (this.initialized) return;
       this.el = document.getElementById('featured');
       this.inner = document.getElementById('featuredInner');
       this.dotsEl = document.getElementById('featuredDots');
@@ -627,6 +758,14 @@
       // pause on hover
       this.el.addEventListener('mouseenter', () => { this.isHovered = true; this.pause(); });
       this.el.addEventListener('mouseleave', () => { this.isHovered = false; this.resume(); });
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.pause();
+        } else if (this.started) {
+          this.resume();
+        }
+      });
+      this.initialized = true;
       this.start();
     },
   };
@@ -637,12 +776,17 @@
     container: null,
     iframe: null,
     titleEl: null,
+    titleAreaEl: null,
     titlebar: null,
     closeBtn: null,
     minimizeBtn: null,
     fullscreenBtn: null,
     refreshBtn: null,
     openBlankBtn: null,
+    infoBtn: null,
+    infoTooltip: null,
+    infoModal: null,
+    infoModalOverlay: null,
     loader: null,
     progressBar: null,
     progressTimer: null,
@@ -659,12 +803,16 @@
     dragOffsetY: 0,
     tabs: [],
     activeTabId: null,
+    currentGameData: null,
+    iframeLoadHandler: null,
+    iframeErrorHandler: null,
 
     init() {
       this.overlay = document.getElementById('gameVisorOverlay');
       this.container = document.getElementById('gameVisor');
       this.iframe = document.getElementById('gameVisorIframe');
       this.titleEl = document.getElementById('gameVisorTitle');
+      this.titleAreaEl = document.querySelector('.game-visor-title-area');
       this.titlebar = document.getElementById('gameVisorTitlebar');
       this.closeBtn = document.getElementById('gameVisorClose');
       this.minimizeBtn = document.getElementById('gameVisorMinimize');
@@ -686,20 +834,12 @@
       this.refreshBtn?.addEventListener('click', () => this.refresh());
       this.openBlankBtn?.addEventListener('click', () => this.openBlank());
       this.dockToggle.addEventListener('click', () => this.toggleDock());
-
-      this.iframe.addEventListener('load', () => {
-        this.completeLoading();
-      });
-
-      this.iframe.addEventListener('error', () => {
-        console.error('gameVisor: iframe reported an error while loading.');
-        this.stopLoading();
-        this.titleEl.textContent = 'Game failed to load';
-      });
+      this.bindIframeEvents();
 
       this.titlebar.addEventListener('pointerdown', (e) => {
         if (e.target.closest('.mac-btn')) return;
         if (e.target.closest('.game-visor-action-btn')) return;
+        if (e.target.closest('.game-visor-info-btn')) return;
         if (this.container.classList.contains('minimized')) return;
         this.isDragCandidate = true;
         this.dragStartX = e.clientX;
@@ -748,13 +888,57 @@
       this.renderDock();
     },
 
+    bindIframeEvents() {
+      if (!this.iframe) return;
+      this.iframeLoadHandler = () => {
+        this.completeLoading();
+      };
+      this.iframeErrorHandler = () => {
+        console.error('gameVisor: iframe reported an error while loading.');
+        this.stopLoading();
+        this.titleEl.textContent = 'Game failed to load';
+      };
+      this.iframe.addEventListener('load', this.iframeLoadHandler);
+      this.iframe.addEventListener('error', this.iframeErrorHandler);
+    },
+
+    replaceIframe(nextSrc = 'about:blank') {
+      if (!this.iframe) return null;
+      const replacement = this.iframe.cloneNode(false);
+      replacement.src = nextSrc;
+      this.iframe.replaceWith(replacement);
+      this.iframe = replacement;
+      this.bindIframeEvents();
+      return replacement;
+    },
+
+    updateTitleArea(name, gameData) {
+      this.titleEl.textContent = util.escapeHtml(name);
+      this.currentGameData = gameData;
+      if (!this.infoBtn) {
+        this.infoBtn = document.createElement('button');
+        this.infoBtn.className = 'game-visor-info-btn';
+        this.infoBtn.type = 'button';
+        this.infoBtn.ariaLabel = 'Game info';
+        this.infoBtn.textContent = 'ℹ';
+        this.titleAreaEl.appendChild(this.infoBtn);
+        this.infoBtn.addEventListener('click', () => {
+          if (this.infoModal && this.infoModal.style.display === 'flex') {
+            this.hideInfoModal();
+          } else {
+            this.showInfoModal();
+          }
+        });
+      }
+    },
+
     makeTabId(url) {
       // Avoid btoa() - suspicious to GoGuardian. 
       // Use unique random string with timestamp.
       return `gv-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 7)}`;
     },
 
-    addTab(url, name) {
+    addTab(url, name, gameData = null) {
       // Settings are never added to the persistent tabs array
       if (url === 'internal:settings') return null;
 
@@ -765,7 +949,7 @@
         return existing;
       }
 
-      const tab = { id: this.makeTabId(url), url, name, loaded: false };
+      const tab = { id: this.makeTabId(url), url, name, loaded: false, gameData };
       this.tabs.push(tab);
       this.activeTabId = tab.id;
       this.saveTabsToStorage();
@@ -777,7 +961,7 @@
       this.open('internal:settings', 'Settings');
     },
 
-    open(url, name = 'Game') {
+    open(url, name = 'Game', gameData = null) {
       // Lazy-init if elements aren't captured yet to prevent race conditions
       if (!this.container || !this.iframe) {
         this.init();
@@ -785,7 +969,7 @@
       if (!this.container || !this.iframe) return;
       const isSettings = url === 'internal:settings';
       const resolvedUrl = isSettings ? url : util.resolveUrl(url);
-      const tab = this.addTab(resolvedUrl, name);
+      const tab = this.addTab(resolvedUrl, name, gameData);
 
       // If settings, we track the ID manually but don't save to array
       this.activeTabId = isSettings ? 'internal:settings' : (tab ? tab.id : null);
@@ -796,7 +980,8 @@
       this.container.style.left = '';
       this.container.style.top = '';
       this.container.style.transform = 'translateX(-50%) translateY(0) scale(1)';
-      this.titleEl.textContent = name;
+
+      this.updateTitleArea(name, gameData);
 
       if (isSettings) {
         this.iframe.style.display = 'none';
@@ -814,7 +999,10 @@
         const panel = document.getElementById('settingsPanel');
         if (panel) panel.style.display = 'none';
         this.startLoading();
-        this.iframe.src = resolvedUrl;
+        this.replaceIframe('about:blank');
+        requestAnimationFrame(() => {
+          if (this.iframe) this.iframe.src = resolvedUrl;
+        });
       }
 
       if (tab) {
@@ -830,6 +1018,7 @@
       if (!this.container || !this.overlay || !this.iframe) return;
       if (!this.activeTabId) return;
 
+      this.hideInfoModal();
       // Exit fullscreen if needed first, then close cleanly.
       if (document.fullscreenElement) {
         document.exitFullscreen().catch(() => {});
@@ -844,7 +1033,7 @@
       this.container.classList.remove('open', 'minimized');
       this.container.classList.remove('fullscreened');
       this.container.style.transform = 'translateX(-50%) translateY(-12px) scale(0.96)';
-      this.iframe.src = 'about:blank';
+      this.replaceIframe('about:blank');
       this.iframe.style.display = 'block';
       const panel = document.getElementById('settingsPanel');
       if (panel) panel.style.display = 'none';
@@ -868,6 +1057,7 @@
         document.exitFullscreen().catch(() => {});
         return;
       }
+      this.hideInfoModal();
       if (!this.activeTabId) return;
 
       this.container.classList.remove('open');
@@ -886,7 +1076,7 @@
       this.container.classList.remove('minimized');
       this.container.classList.add('open');
       this.overlay.classList.add('visible');
-      this.titleEl.textContent = tab.name;
+      this.updateTitleArea(tab.name, tab.gameData);
 
       const isSettings = tab.url === 'internal:settings';
       if (isSettings) {
@@ -906,7 +1096,10 @@
         if (panel) panel.style.display = 'none';
         if (this.iframe.src !== tab.url) {
           this.startLoading();
-          this.iframe.src = tab.url;
+          this.replaceIframe('about:blank');
+          requestAnimationFrame(() => {
+            if (this.iframe) this.iframe.src = tab.url;
+          });
           tab.loaded = true;
         }
       }
@@ -980,22 +1173,10 @@
       
       // Start loading indicator
       this.startLoading();
-      
-      try {
-        // Try to reload from within the iframe first (same-origin)
-        if (this.iframe.contentWindow && this.iframe.contentWindow.location) {
-          this.iframe.contentWindow.location.reload();
-          return;
-        }
-      } catch (e) {
-        // Cross-origin: fall back to src reload
-      }
-      
-      // Fallback: re-set the src to force reload the iframe
-      this.iframe.src = '';
-      setTimeout(() => {
-        this.iframe.src = currentSrc;
-      }, 50);
+      this.replaceIframe('about:blank');
+      requestAnimationFrame(() => {
+        if (this.iframe) this.iframe.src = currentSrc;
+      });
     },
 
     openBlank() {
@@ -1012,6 +1193,46 @@
       if (!url) return;
       // Games always open in about:blank to ensure relative paths resolve correctly
       window.siennaSettings?.handleCloak(url, 'about:blank');
+    },
+
+    showInfo() {
+      if (!this.currentGameData) return;
+      const section = this.currentGameData.section || 'N/A';
+      const author = this.currentGameData.author || 'N/A';
+      alert(`Section: ${section}\nBy: ${author}`);
+    },
+
+    showInfoModal() {
+      if (!this.currentGameData || !this.infoBtn) return;
+      if (!this.infoModalOverlay) {
+        this.infoModalOverlay = document.createElement('div');
+        this.infoModalOverlay.className = 'game-visor-info-modal-overlay';
+        this.infoModal = document.createElement('div');
+        this.infoModal.className = 'game-visor-info-modal';
+        this.infoModal.innerHTML = `
+          <div class="game-visor-info-modal-header">
+            <div class="game-visor-info-modal-title">Info</div>
+            <button class="game-visor-info-modal-close" type="button" aria-label="Close info">&times;</button>
+          </div>
+          <div class="game-visor-info-modal-content"></div>
+        `;
+        this.infoModalOverlay.appendChild(this.infoModal);
+        document.body.appendChild(this.infoModalOverlay);
+        this.infoModal.querySelector('.game-visor-info-modal-close').addEventListener('click', () => this.hideInfoModal());
+        this.infoModalOverlay.addEventListener('click', (e) => {
+          if (e.target === this.infoModalOverlay) this.hideInfoModal();
+        });
+      }
+      const section = this.currentGameData.section || 'N/A';
+      const author = this.currentGameData.author || 'N/A';
+      this.infoModal.querySelector('.game-visor-info-modal-content').innerHTML = `Section: ${util.escapeHtml(section)}<br>Author: ${util.escapeHtml(author)}`;
+      this.infoModalOverlay.style.display = 'flex';
+    },
+
+    hideInfoModal() {
+      if (this.infoModalOverlay) {
+        this.infoModalOverlay.style.display = 'none';
+      }
     },
 
     toggleDock() {
@@ -1040,7 +1261,7 @@
 
     saveTabsToStorage() {
       try {
-        localStorage.setItem('gameVisorTabs', JSON.stringify(this.tabs.map((t) => ({ id: t.id, url: t.url, name: t.name, loaded: false }))));
+        localStorage.setItem('gameVisorTabs', JSON.stringify(this.tabs.map((t) => ({ id: t.id, url: t.url, name: t.name, loaded: false, gameData: t.gameData }))));
         localStorage.setItem('gameVisorActiveTabId', this.activeTabId ?? '');
       } catch (e) {
         // localStorage may not be available
@@ -1101,8 +1322,8 @@
             this.activeTabId = null;
             this.overlay.classList.remove('visible');
             this.container.classList.remove('open', 'minimized');
-            this.iframe.src = 'about:blank';
-            this.titleEl.textContent = 'Game';
+            this.replaceIframe('about:blank');
+            this.updateTitleArea('Game', null);
             document.body.classList.remove('game-visor-open');
             window.siennaSettings?.apply();
           }
@@ -1135,8 +1356,6 @@
     opening.bind();
     dropdown.init();
     infoPopup.init();
-    analyticsGraph.init();
-    featured.init();
     gameVisor.init();
     favorites.init();
 
@@ -1156,8 +1375,14 @@
         event.preventDefault();
         const url = tile.dataset.gameUrl || tile.querySelector('.browse-card')?.dataset.gameUrl || tile.querySelector('.browse-card')?.href;
         const name = tile.querySelector('.browse-card-name')?.textContent?.trim() || 'Game';
+        let gameData = null;
+        if (tile.dataset.gameData) {
+          try {
+            gameData = JSON.parse(decodeURIComponent(tile.dataset.gameData));
+          } catch (e) {}
+        }
         if (url && url !== '#') {
-          gameVisor.open(url, name);
+          gameVisor.open(url, name, gameData);
         }
     };
 
@@ -1169,14 +1394,46 @@
       if (!featuredPlay) return;
       event.preventDefault();
       const url = featuredPlay.dataset.gameUrl || featuredPlay.href;
-      const title = featuredPlay.closest('.featured-slide')?.querySelector('.featured-title')?.textContent?.trim() || 'Game';
+      const slide = featuredPlay.closest('.featured-slide');
+      const title = slide?.querySelector('.featured-title')?.textContent?.trim() || 'Game';
+      let gameData = null;
+      if (slide?.dataset.gameData) {
+        try {
+          gameData = JSON.parse(decodeURIComponent(slide.dataset.gameData));
+        } catch (e) {}
+      }
       if (url && url !== '#') {
-        gameVisor.open(url, title);
+        gameVisor.open(url, title, gameData);
       }
     });
 
-    grid.render(activeCategory);
-    opening.ensureBrowseVisible();
+    const scheduleInitialGridRender = () => {
+      const browseGrid = document.getElementById('browseGrid');
+      if (!browseGrid || browseGrid.childElementCount) return;
+      grid.render(activeCategory);
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(scheduleInitialGridRender);
+    } else {
+      setTimeout(scheduleInitialGridRender, 320);
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        opening.ensureBrowseVisible();
+      });
+    });
+
+    window.addEventListener('pagehide', () => {
+      featured.pause();
+      opening.clearStaggerTimers();
+      iconLazyLoader.teardown();
+      infoPopup.analyticsFrame?.removeAttribute('src');
+      if (window.gameVisor?.replaceIframe) {
+        window.gameVisor.replaceIframe('about:blank');
+      }
+    });
   }
 
   // Ensure data is loaded from server endpoints if available. Falls back to any
