@@ -107,137 +107,79 @@
   };
 
   const iconLazyLoader = {
-    observer: null,
+    cardObserver: null,
+    iconObserver: null,
     loaded: new Set(),
-    releaseCheckRaf: null,
-    listenersBound: false,
-    releaseHandler: null,
-    loadMargin: 220,
-    releaseMargin: 1800,
+    queue: [],
+    isProcessing: false,
 
     init() {
-      if (!document.querySelectorAll) return;
-      if (!('IntersectionObserver' in window)) {
-        document.querySelectorAll('img.browse-card-icon').forEach((img) => {
-          if (this.isWithinMargin(img, this.loadMargin)) this.loadImage(img);
+      if (this.cardObserver) this.cardObserver.disconnect();
+      this.cardObserver = new IntersectionObserver((entries) => {
+        const intersecting = entries.filter(e => e.isIntersecting).map(e => e.target);
+        if (intersecting.length > 0) {
+          this.queue.push(...intersecting);
+          this.processQueue();
+        }
+      }, { threshold: 0.1 });
+
+      if (this.iconObserver) this.iconObserver.disconnect();
+      this.iconObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.loadImage(entry.target);
+            this.iconObserver.unobserve(entry.target);
+          }
         });
-        return;
-      }
-      this.ensureObserver();
+      }, { rootMargin: '200px' });
+
       this.observeAll();
-      this.scheduleReleaseCheck();
     },
 
-    ensureObserver() {
-      if (!('IntersectionObserver' in window)) return;
-      if (this.observer) {
-        this.observer.disconnect();
-      }
+    processQueue() {
+      if (this.isProcessing || this.queue.length === 0) return;
+      this.isProcessing = true;
 
-      this.observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          const img = entry.target;
-          if (entry.isIntersecting || this.isWithinMargin(img, this.loadMargin)) {
-            this.loadImage(img);
-            return;
-          }
-          if (this.isOutsideMargin(img, this.releaseMargin)) {
-            this.unloadImage(img);
-          }
-        });
-      }, {
-        rootMargin: `${this.loadMargin}px 0px`,
-        threshold: 0.01,
+      // Sort queue by position to maintain the left-to-right stagger
+      this.queue.sort((a, b) => {
+        const topA = a.getBoundingClientRect().top;
+        const topB = b.getBoundingClientRect().top;
+        if (Math.abs(topA - topB) > 10) return topA - topB;
+        return a.getBoundingClientRect().left - b.getBoundingClientRect().left;
       });
 
-      if (!this.listenersBound) {
-        this.releaseHandler = () => this.scheduleReleaseCheck();
-        window.addEventListener('scroll', this.releaseHandler, { passive: true });
-        window.addEventListener('resize', this.releaseHandler, { passive: true });
-        this.listenersBound = true;
-      }
+      const target = this.queue.shift();
+      target.classList.add('revealed');
+      this.cardObserver.unobserve(target);
+
+      setTimeout(() => {
+        this.isProcessing = false;
+        this.processQueue();
+      }, 45); // Optimized stagger speed
     },
 
     observeAll() {
-      this.loaded.forEach((img) => {
-        if (!img.isConnected) this.loaded.delete(img);
-      });
-      document.querySelectorAll('img.browse-card-icon').forEach((img) => {
-        this.observer?.observe(img);
-      });
-    },
-
-    scheduleReleaseCheck() {
-      if (this.releaseCheckRaf) return;
-      this.releaseCheckRaf = requestAnimationFrame(() => {
-        this.releaseCheckRaf = null;
-        this.releaseFarImages();
-      });
-    },
-
-    releaseFarImages() {
-      this.loaded.forEach((img) => {
-        if (!img.isConnected || this.isOutsideMargin(img, this.releaseMargin)) {
-          this.unloadImage(img);
-        }
-      });
-    },
-
-    isWithinMargin(el, margin) {
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-      return (
-        rect.bottom >= -margin &&
-        rect.right >= -margin &&
-        rect.top <= windowHeight + margin &&
-        rect.left <= windowWidth + margin
-      );
-    },
-
-    isOutsideMargin(el, margin) {
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-      return (
-        rect.bottom < -margin ||
-        rect.right < -margin ||
-        rect.top > windowHeight + margin ||
-        rect.left > windowWidth + margin
-      );
+      document.querySelectorAll('.browse-tile').forEach((tile) => this.cardObserver?.observe(tile));
+      document.querySelectorAll('.browse-card-icon').forEach((img) => this.iconObserver?.observe(img));
     },
 
     loadImage(img) {
       const url = img.dataset.src;
       if (!url || img.dataset.broken === 'true' || img.dataset.loaded === 'true') return;
-      img.src = url;
-      img.dataset.loaded = 'true';
-      this.loaded.add(img);
-      img.style.display = '';
-    },
-
-    unloadImage(img) {
-      if (img.dataset.loaded !== 'true' || img.dataset.broken === 'true') return;
-      img.removeAttribute('src');
-      img.dataset.loaded = 'false';
-      this.loaded.delete(img);
+      
+      const tempImg = new Image();
+      tempImg.onload = () => {
+        img.src = url;
+        img.dataset.loaded = 'true';
+        img.parentElement.classList.add('img-loaded');
+        this.loaded.add(img);
+      };
+      tempImg.src = url;
     },
 
     teardown() {
-      this.observer?.disconnect();
-      this.observer = null;
-      this.loaded.forEach((img) => this.unloadImage(img));
-      this.loaded.clear();
-      if (this.listenersBound && this.releaseHandler) {
-        window.removeEventListener('scroll', this.releaseHandler);
-        window.removeEventListener('resize', this.releaseHandler);
-        this.listenersBound = false;
-        this.releaseHandler = null;
-      }
-      if (this.releaseCheckRaf) {
-        cancelAnimationFrame(this.releaseCheckRaf);
-        this.releaseCheckRaf = null;
-      }
+      this.cardObserver?.disconnect();
+      this.iconObserver?.disconnect();
     },
   };
 
@@ -267,43 +209,22 @@
   };
 
   const opening = {
-    staggerTimers: [],
-    clearStaggerTimers() {
-      this.staggerTimers.forEach((timerId) => clearTimeout(timerId));
-      this.staggerTimers = [];
-    },
+    initialized: false,
     revealBrowse() {
       const inner = document.getElementById('browseInner');
-      const browseGrid = document.getElementById('browseGrid');
-      if (browseGrid && !browseGrid.childElementCount) {
+      if (!inner || this.initialized) return;
+      this.initialized = true;
+      
+      requestAnimationFrame(() => {
+        inner.classList.add('revealed');
+        featured.ensureStarted();
         grid.render(activeCategory);
-      }
-      if (inner) requestAnimationFrame(() => inner.classList.add('revealed'));
-      featured.ensureStarted();
-      this.staggerCards(document.querySelectorAll('.browse-card'), 60, 10);
-    },
-    staggerCards(cards, baseDelay, step) {
-      const items = Array.from(cards);
-      const staggeredCount = Math.min(items.length, 48);
-      this.clearStaggerTimers();
-
-      items.slice(0, staggeredCount).forEach((card, i) => {
-        const delay = Math.min(baseDelay + i * step, STAGGER_CAP_MS + baseDelay);
-        this.staggerTimers.push(setTimeout(() => card.classList.add('revealed'), delay));
       });
-
-      if (items.length > staggeredCount) {
-        const remaining = items.slice(staggeredCount);
-        const delay = Math.min(baseDelay + staggeredCount * step, STAGGER_CAP_MS + baseDelay);
-        this.staggerTimers.push(setTimeout(() => {
-          remaining.forEach((card) => card.classList.add('revealed'));
-        }, delay));
-      }
     },
     ensureBrowseVisible() {
       const page = document.getElementById('page-browse');
       const inner = document.getElementById('browseInner');
-      if (!page || !inner || inner.classList.contains('revealed')) return;
+      if (!page || !inner) return;
       const rect = page.getBoundingClientRect();
       if (rect.top <= window.innerHeight * 0.6) this.revealBrowse();
     },
@@ -337,9 +258,12 @@
           const isFav = favorites.has(href);
           const favClass = isFav ? 'active' : '';
           const gameDataAttr = `data-game-data="${encodeURIComponent(JSON.stringify(g))}"`;
-          const iconHtml = icon
-            ? `<img class="browse-card-icon" data-src="${encodeURI(icon)}" data-loaded="false" alt="${name}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.dataset.broken='true'; this.style.display='none'; this.parentElement.classList.add('icon-missing');">`
-            : '';
+          
+          const iconHtml = `
+            <div class="browse-card-icon-wrapper">
+              <img class="browse-card-icon" data-src="${encodeURI(icon)}" data-loaded="false" alt="${name}" decoding="async" fetchpriority="low" onerror="this.dataset.broken='true'; this.parentElement.classList.add('icon-missing');">
+            </div>`;
+
           return `<div class="browse-tile" data-game-url="${href}" ${gameDataAttr} title="Play ${name}"><a class="browse-card" href="${href}" data-game-url="${href}">${iconHtml}</a><div class="browse-card-name">${name}</div><button class="favorite-btn ${favClass}" data-fav-url="${href}" aria-label="Favorite ${name}"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button></div>`;
         })
         .join('');
@@ -371,15 +295,8 @@
           el.innerHTML = this.buildItemsHtml(items, cfg.basePath);
         }
 
-        const cards = el.querySelectorAll('.browse-card');
-        const inner = document.getElementById('browseInner');
-        if (inner?.classList.contains('revealed')) {
-          opening.staggerCards(cards, 0, STAGGER_STEP_MS);
-        } else {
-          opening.ensureBrowseVisible();
-        }
-
-        iconLazyLoader.init();
+        // Using requestAnimationFrame to ensure the grid items are rendered before observing
+        requestAnimationFrame(() => iconLazyLoader.init());
       }, GRID_FADE_MS);
     },
   };
@@ -443,10 +360,7 @@
       const html = favData.map(item => grid.buildItemsHtml([item], item.base)).join('');
 
       el.innerHTML = html;
-      iconLazyLoader.init();
-      
-      const cards = el.querySelectorAll('.browse-card');
-      opening.staggerCards(cards, 0, 10);
+      iconLazyLoader.init(); // Observe newly added favorite items
     }
   };
 
@@ -498,12 +412,13 @@
     analyticsFrame: null,
     unloadTimer: null,
     show() {
-      if (!this.popup) return;
-      analyticsGraph.init();
+      const popup = document.getElementById('infoPopup');
+      if (!popup) return;
       this.popup.classList.add('visible');
       clearTimeout(this.unloadTimer);
-      if (this.analyticsFrame && !this.analyticsFrame.getAttribute('src') && this.analyticsFrame.dataset.src) {
-        this.analyticsFrame.src = this.analyticsFrame.dataset.src;
+      const frame = document.getElementById('analyticsEmbed');
+      if (frame && !frame.src && frame.dataset.src) {
+        frame.src = frame.dataset.src;
       }
     },
     hide() {
@@ -1407,18 +1322,8 @@
       }
     });
 
-    const scheduleInitialGridRender = () => {
-      const browseGrid = document.getElementById('browseGrid');
-      if (!browseGrid || browseGrid.childElementCount) return;
-      grid.render(activeCategory);
-    };
-
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(scheduleInitialGridRender);
-    } else {
-      setTimeout(scheduleInitialGridRender, 320);
-    }
-
+    // Initial check to reveal browse section and render grids if already in view
+    // This handles page refreshes when scrolled down
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         opening.ensureBrowseVisible();
@@ -1427,7 +1332,6 @@
 
     window.addEventListener('pagehide', () => {
       featured.pause();
-      opening.clearStaggerTimers();
       iconLazyLoader.teardown();
       infoPopup.analyticsFrame?.removeAttribute('src');
       if (window.gameVisor?.replaceIframe) {

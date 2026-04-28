@@ -1,8 +1,8 @@
 window.MAGES_GAMES = [
   {
-    "name": "sienna. is in BETA, if you're seeing this you got an early release but just know that: Not all features are established, games are still being mass added, no socials, will be bugs but barely, games will be worked on, etc. If you were redirected from old gn-math links, use the gn-math button next to this",
-    "image": "icons/thisisinbeta.webp",
-    "url": "https://usesienna.vercel.app",
+    "name": "Thank you for using sienna. | Request a game | Not Working",
+    "image": "icons/link.webp",
+    "url": "link/index.html",
     "section": "website",
     "author": "yellowdevelopment"
   },
