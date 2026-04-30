@@ -314,17 +314,17 @@ body::after {
 
 .browse-inner {
   width: 100%;
-  max-width: 1450px;
-  margin: 0 auto;
-  padding: 0 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: opacity 0.6s var(--ease-out);
+  max-width: 1280px;
+  padding: 0 72px;
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s var(--ease-out),
+              transform 0.75s var(--ease-out);
 }
 
 .browse-inner.revealed {
   opacity: 1;
+  transform: translateY(0);
 }
 
 /* ── HEADING + DROPDOWN ── */
@@ -467,9 +467,8 @@ body::after {
 
 .browse-grid {
   display: grid;
-  /* Standardizing to 5 columns */
-  grid-template-columns: repeat(5, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 18px;
   will-change: contents;
   contain: layout style;
 }
@@ -487,50 +486,16 @@ body::after {
   color: rgba(255,255,255,0.95);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.2s;
+  opacity: 0;
+  transform: translateY(24px) scale(0.97);
+  transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out);
   overflow: hidden;
   position: relative;
   isolation: isolate;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   contain: layout style paint;
-  background: #161616; /* Dark "box" for the skeleton state */
 }
-
-/* ── SKELETON LAZY LOADING STYLES ── */
-.browse-card-icon-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* Shimmer Effect */
-.browse-card-icon-wrapper::after {
-  content: "";
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-  animation: skeleton-shimmer 1.5s infinite;
-}
-
-@keyframes skeleton-shimmer {
-  100% { left: 100%; }
-}
-
-.browse-card-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0; /* Image invisible until JS confirms it's loaded */
-  transition: opacity 0.5s ease;
-}
-
-/* Class added by night.js when image is ready */
-.img-loaded .browse-card-icon { opacity: 1; }
-.img-loaded::after { display: none; } /* Stop shimmer */
-
 
 /* Shimmer on hover */
 .browse-card::before {
@@ -1127,7 +1092,7 @@ body::after {
   height: 200px;
   object-fit: contain;
   object-position: center;
-  border-radius: 16px;
+  border-radius: var(--r-md);
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.06);
   flex-shrink: 0;
@@ -2561,7 +2526,7 @@ input:checked + .slider:before { transform: translateX(26px); background-color: 
 }
 
 @media (max-width: 1200px) {
-  .browse-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .browse-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
 }
 
 @media (max-width: 1000px) {

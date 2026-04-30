@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,17 +25,12 @@
   <!-- Grain texture overlay for depth -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
+  <canvas id="particleCanvas"></canvas>
   <div id="sidebar-container"></div>
 
   <!-- ══ PAGE 1: LANDING ══ -->
   <section class="page" id="page-landing">
-    <div class="landing-header">
-      <div class="title-wrapper">
-        <img src="logo.png" alt="sienna logo" class="landing-logo" />
-        <div class="title" data-text="sienna.">sienna.</div>
-        <div class="title-spacer" aria-hidden="true"></div>
-      </div>
-    </div>
+    <div class="title" data-text="sienna.">sienna.</div>
 
 
     <button class="scroll-btn" id="scrollBtn" aria-label="Scroll to browse">
@@ -148,8 +143,8 @@
   <div class="info-popup" id="infoPopup">
     <div class="popup-header">
       <div>
-        <div class="popup-name">sienna v0.5.5</div>
-        <div class="popup-version">build 014</div>
+        <div class="popup-name">sienna v0.5.0</div>
+        <div class="popup-version">build 013</div>
       </div>
       <div class="popup-badge" data-status="pre-release">BETA</div>
     </div>
@@ -159,7 +154,7 @@
     <div class="popup-client">
       <div class="popup-client-dot"></div>
       <span class="popup-client-label">client</span>
-      <span class="popup-client-value">Night. v0.5.5</span>
+      <span class="popup-client-value">Night. v0.5.0</span>
     </div>
 
     <div class="popup-divider"></div>
@@ -216,44 +211,6 @@
 
   <!-- ══ INLINE ENHANCEMENT STYLES ══ -->
   <style>
-    /* Fixed Header Logo Alignment */
-    .landing-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      padding: 0 20px;
-      z-index: 5;
-    }
-    .title-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(16px, 4vw, 32px);
-      width: 100%;
-    }
-    .landing-logo {
-      width: clamp(80px, 10vw, 110px);
-      height: auto;
-      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
-      flex-shrink: 0;
-    }
-    /* This spacer mirrors the logo size to keep the text perfectly centered */
-    .title-spacer {
-      width: clamp(80px, 10vw, 110px);
-      height: 10px;
-      visibility: hidden;
-      flex-shrink: 0;
-    }
-
-    .grid-section-label { text-align: center; margin-bottom: 28px !important; }
-
-    .browse-search-wrap, .featured, .browse-credits {
-      width: 100%;
-      max-width: 1350px;
-      margin: 0 auto !important;
-    }
-
     /* Favorite Button Styles */
     .favorite-btn {
       position: absolute;
@@ -536,6 +493,23 @@
 
   <!-- ══ MINIMAL INLINE SCRIPTS ══ -->
   <script>
+    /* ── Scroll button ── */
+    document.getElementById('scrollBtn')?.addEventListener('click', () => {
+      document.getElementById('page-browse')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    /* ── Browse reveal on scroll ── */
+    const browseInner = document.getElementById('browseInner');
+    if (browseInner) {
+      const obs = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+          browseInner.classList.add('revealed');
+          obs.disconnect();
+        }
+      }, { threshold: 0.05 });
+      obs.observe(browseInner);
+    }
+
     /* ── Search filter ── */
     document.getElementById('browseSearch')?.addEventListener('input', function () {
       const q = this.value.trim().toLowerCase();
@@ -587,10 +561,10 @@
   </script>
 
   <!-- Load external scripts - night.js handles the slideshow -->
-  <script src="mages.js" defer></script>
-  <script src="apps.js" defer></script>
-  <script src="sienna.js" defer></script>
-  <script src="night.js" defer></script>
+  <script src="mages.js"></script>
+  <script src="apps.js"></script>
+  <script src="sienna.js"></script>
+  <script src="night.js"></script>
 
 </body>
 </html>
