@@ -1,5 +1,5 @@
 /**
- * Browse / opening flow, games & apps grid, dropdown, info popup, analytics placeholder.
+ * Browse / opening flow, games & apps grid, dropdown, info popup.
  * Data: mages.js (window.MAGES_GAMES), apps.js (window.APPS_ITEMS).
  */
 (function () {
@@ -103,6 +103,261 @@
       } catch (e) {
         return path;
       }
+    },
+    itemHref(item, basePath = '') {
+      const raw = String(item?.url || '');
+      if (!raw) return '';
+      if (/^(?:[a-zA-Z][a-zA-Z\d+\-.]*:|\/\/)/.test(raw)) {
+        return this.resolveUrl(raw);
+      }
+      return this.resolveUrl(`${basePath}${raw}`);
+    },
+    isDisplayable() {
+      return true;
+    },
+  };
+
+  const customGames = {
+    storageKey: 'sienna_custom_games',
+    items: [],
+
+    load() {
+      try {
+        const stored = localStorage.getItem(this.storageKey);
+        this.items = stored ? JSON.parse(stored) : [];
+      } catch (e) {
+        this.items = [];
+      }
+    },
+
+    save() {
+      try {
+        localStorage.setItem(this.storageKey, JSON.stringify(this.items));
+      } catch (e) {}
+    },
+
+    add(name, html) {
+      const id = 'custom-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 7);
+      this.items.unshift({ id, name: String(name).trim(), html: String(html).trim() });
+      this.save();
+      return this.items[0];
+    },
+
+    remove(id) {
+      this.items = this.items.filter((g) => g.id !== id);
+      this.save();
+    },
+
+    getAll() {
+      return this.items;
+    },
+
+    toGameItems() {
+      return this.items.map((g) => {
+        // Generate a blob URL from the stored HTML
+        let url = g.url || '';
+        if (g.html && !url) {
+          try {
+            const blob = new Blob([g.html], { type: 'text/html' });
+            url = URL.createObjectURL(blob);
+          } catch (e) {
+            url = '';
+          }
+        }
+        return {
+          name: g.name,
+          image: '',
+          url: url,
+          section: 'Custom',
+          author: 'You',
+          _customId: g.id,
+        };
+      });
+    },
+
+    initModal() {
+      const modal = document.getElementById('customGameModal');
+      const openBtn = document.getElementById('customGameBtn');
+      const closeBtn = document.getElementById('customGameModalClose');
+      const cancelBtn = document.getElementById('customGameCancel');
+      const addBtn = document.getElementById('customGameAdd');
+      const nameInput = document.getElementById('customGameName');
+      const htmlInput = document.getElementById('customGameHtml');
+      const urlInput = document.getElementById('customGameUrl');
+      const htmlField = document.getElementById('customGameHtmlField');
+      const urlField = document.getElementById('customGameUrlField');
+      const typeBtns = modal?.querySelectorAll('.custom-game-type-btn');
+
+      if (!modal || !openBtn) return;
+
+      let activeType = 'html';
+
+      const switchType = (type) => {
+        activeType = type;
+        typeBtns?.forEach((btn) => {
+          btn.classList.toggle('active', btn.dataset.type === type);
+        });
+        htmlField?.classList.toggle('hidden', type !== 'html');
+        urlField?.classList.toggle('hidden', type !== 'url');
+      };
+
+      const open = () => {
+        modal.classList.add('open');
+        nameInput.value = '';
+        htmlInput.value = '';
+        urlInput.value = '';
+        switchType('html');
+        nameInput.focus();
+      };
+
+      const close = () => {
+        modal.classList.remove('open');
+      };
+
+      const submit = () => {
+        const name = nameInput.value.trim();
+        if (!name) return;
+
+        if (activeType === 'html') {
+          const html = htmlInput.value.trim();
+          if (!html) return;
+          this.add(name, html);
+        } else {
+          let url = urlInput.value.trim();
+          if (!url) return;
+          // Auto-add https:// if no protocol is present
+          if (!/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(url)) {
+            url = 'https://' + url;
+          }
+          const id = 'custom-' + Date.now().toString(36) + '-' + Math.random().toString(36).substring(2, 7);
+          this.items.unshift({ id, name, url, _type: 'url' });
+          this.save();
+        }
+
+        close();
+        grid.render(activeCategory);
+      };
+
+      typeBtns?.forEach((btn) => {
+        btn.addEventListener('click', () => switchType(btn.dataset.type));
+      });
+
+      openBtn.addEventListener('click', open);
+      closeBtn?.addEventListener('click', close);
+      cancelBtn?.addEventListener('click', close);
+      addBtn?.addEventListener('click', submit);
+      addBtn._submitHandler = submit;
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) close();
+      });
+      nameInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          if (activeType === 'html') htmlInput?.focus();
+          else urlInput?.focus();
+        }
+      });
+      htmlInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submit();
+      });
+      urlInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') submit();
+      });
+    },
+
+    openEditModal(id) {
+      const game = this.items.find((g) => g.id === id);
+      if (!game) return;
+
+      const modal = document.getElementById('customGameModal');
+      const nameInput = document.getElementById('customGameName');
+      const htmlInput = document.getElementById('customGameHtml');
+      const urlInput = document.getElementById('customGameUrl');
+      const htmlField = document.getElementById('customGameHtmlField');
+      const urlField = document.getElementById('customGameUrlField');
+      const typeBtns = modal?.querySelectorAll('.custom-game-type-btn');
+      const addBtn = document.getElementById('customGameAdd');
+      const titleEl = modal?.querySelector('.custom-game-modal-title');
+      const closeBtn = modal?.querySelector('#customGameModalClose');
+      const cancelBtn = modal?.querySelector('#customGameCancel');
+
+      if (!modal) return;
+
+      const isUrlType = game._type === 'url';
+      const originalTitle = titleEl?.textContent || '';
+      const originalBtnText = addBtn?.textContent || '';
+
+      // Set title and button to edit mode
+      if (titleEl) titleEl.textContent = 'Edit Custom Game';
+      if (addBtn) addBtn.textContent = 'Apply';
+
+      // Populate fields
+      nameInput.value = game.name;
+      htmlInput.value = game.html || '';
+      urlInput.value = game.url || '';
+
+      // Switch to correct type
+      const targetType = isUrlType ? 'url' : 'html';
+      typeBtns?.forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.type === targetType);
+      });
+      htmlField?.classList.toggle('hidden', targetType !== 'html');
+      urlField?.classList.toggle('hidden', targetType !== 'url');
+
+      modal.classList.add('open');
+      nameInput.focus();
+
+      // Store the original submit handler reference so we can restore it
+      const submitHandler = addBtn._submitHandler;
+
+      const editHandler = () => {
+        const newName = nameInput.value.trim();
+        if (!newName) return;
+
+        if (targetType === 'html') {
+          const newHtml = htmlInput.value.trim();
+          if (!newHtml) return;
+          game.name = newName;
+          game.html = newHtml;
+          delete game.url;
+          delete game._type;
+        } else {
+          let newUrl = urlInput.value.trim();
+          if (!newUrl) return;
+          if (!/^[a-zA-Z][a-zA-Z\d+\-.]*:/.test(newUrl)) {
+            newUrl = 'https://' + newUrl;
+          }
+          game.name = newName;
+          game.url = newUrl;
+          game._type = 'url';
+          delete game.html;
+        }
+
+        this.save();
+        restoreAddModal();
+        grid.render(activeCategory);
+      };
+
+      const restoreAddModal = () => {
+        modal.classList.remove('open');
+        if (titleEl) titleEl.textContent = originalTitle;
+        if (addBtn) addBtn.textContent = originalBtnText;
+        addBtn.removeEventListener('click', editHandler);
+        if (submitHandler) {
+          addBtn.addEventListener('click', submitHandler);
+        }
+        closeBtn?.removeEventListener('click', restoreAddModal);
+        cancelBtn?.removeEventListener('click', restoreAddModal);
+      };
+
+      // Remove the submit handler and add the edit handler
+      if (submitHandler) {
+        addBtn.removeEventListener('click', submitHandler);
+      }
+      addBtn.addEventListener('click', editHandler);
+
+      // Close/cancel restores the modal to add mode
+      closeBtn?.addEventListener('click', restoreAddModal);
+      cancelBtn?.addEventListener('click', restoreAddModal);
     },
   };
 
@@ -210,6 +465,14 @@
     loadImage(img) {
       const url = img.dataset.src;
       if (!url || img.dataset.broken === 'true' || img.dataset.loaded === 'true') return;
+      if (img.dataset.errorBound !== 'true') {
+        img.addEventListener('error', () => {
+          img.dataset.broken = 'true';
+          img.style.display = 'none';
+          img.parentElement?.classList.add('icon-missing');
+        }, { once: true });
+        img.dataset.errorBound = 'true';
+      }
       img.src = url;
       img.dataset.loaded = 'true';
       this.loaded.add(img);
@@ -329,18 +592,28 @@
     buildItemsHtml(items, basePath) {
       return items
         .map((g) => {
-          if (!g || !g.url) return '';
+          if (!g || !g.url || !util.isDisplayable(g)) return '';
           const name = util.escapeHtml(util.formatDisplayName(g));
-          const hrefRaw = util.resolveUrl(`${basePath}${g.url}`);
+          const hrefRaw = util.itemHref(g, basePath);
           const href = encodeURI(hrefRaw);
           const icon = util.iconPathFor(g);
           const isFav = favorites.has(href);
           const favClass = isFav ? 'active' : '';
           const gameDataAttr = `data-game-data="${encodeURIComponent(JSON.stringify(g))}"`;
+          const isCustom = g._customId;
           const iconHtml = icon
-            ? `<img class="browse-card-icon" data-src="${encodeURI(icon)}" data-loaded="false" alt="${name}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.dataset.broken='true'; this.style.display='none'; this.parentElement.classList.add('icon-missing');">`
+            ? `<img class="browse-card-icon" data-src="${encodeURI(icon)}" data-loaded="false" alt="${name}" loading="lazy" decoding="async" fetchpriority="low">`
             : '';
-          return `<div class="browse-tile" data-game-url="${href}" ${gameDataAttr} title="Play ${name}"><a class="browse-card" href="${href}" data-game-url="${href}">${iconHtml}</a><div class="browse-card-name">${name}</div><button class="favorite-btn ${favClass}" data-fav-url="${href}" aria-label="Favorite ${name}"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button></div>`;
+          const deleteBtn = isCustom
+            ? `<button class="custom-game-delete-btn" data-custom-id="${util.escapeHtml(g._customId)}" aria-label="Remove ${name}" title="Remove custom game">&times;</button>`
+            : '';
+          const editBtn = isCustom
+            ? `<button class="custom-game-edit-btn" data-custom-id="${util.escapeHtml(g._customId)}" aria-label="Edit ${name}" title="Edit custom game">&#9998;</button>`
+            : '';
+          const favBtn = isCustom
+            ? ''
+            : `<button class="favorite-btn ${favClass}" data-fav-url="${util.escapeHtml(href)}" aria-label="Favorite ${name}"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>`;
+          return `<div class="browse-tile ${isCustom ? 'custom-game-tile' : ''}" data-game-url="${util.escapeHtml(href)}" ${gameDataAttr} title="${name}"><a class="browse-card" href="${util.escapeHtml(href)}" data-game-url="${util.escapeHtml(href)}">${iconHtml}</a><div class="browse-card-name">${name}</div>${editBtn}${deleteBtn}${favBtn}</div>`;
         })
         .join('');
     },
@@ -363,12 +636,26 @@
         }
 
         const items = cfg.list();
+        let visibleCount = 0;
         if (!Array.isArray(items)) {
           el.innerHTML = `<p class="browse-empty">${util.escapeHtml(cfg.failMsg)}</p>`;
-        } else if (items.length === 0) {
-          el.innerHTML = `<p class="browse-empty">${util.escapeHtml(cfg.emptyMsg)}</p>`;
         } else {
-          el.innerHTML = this.buildItemsHtml(items, cfg.basePath);
+          const visibleItems = items.filter((item) => util.isDisplayable(item));
+          // Prepend custom games at the front
+          const customItems = customGames.toGameItems();
+          const allItems = [...customItems, ...visibleItems];
+          visibleCount = allItems.length;
+          if (allItems.length === 0) {
+            el.innerHTML = `<p class="browse-empty">${util.escapeHtml(cfg.emptyMsg)}</p>`;
+          } else {
+            el.innerHTML = this.buildItemsHtml(allItems, cfg.basePath);
+          }
+        }
+
+        // Update the titles count label
+        const titlesLabel = document.getElementById('titlesCount');
+        if (titlesLabel) {
+          titlesLabel.textContent = `Currently Showing ${visibleCount} Titles`;
         }
 
         const cards = el.querySelectorAll('.browse-card');
@@ -380,6 +667,7 @@
         }
 
         iconLazyLoader.init();
+        search.apply();
       }, GRID_FADE_MS);
     },
   };
@@ -409,7 +697,8 @@
       this.render();
       
       // Update state in the main grid if the item exists there
-      const mainGridBtn = document.querySelector(`#browseGrid .favorite-btn[data-fav-url="${url}"]`);
+      const mainGridBtn = Array.from(document.querySelectorAll('#browseGrid .favorite-btn'))
+        .find((button) => button.dataset.favUrl === url);
       if (mainGridBtn) mainGridBtn.classList.toggle('active', this.items.has(url));
     },
     render() {
@@ -428,12 +717,12 @@
       const allItems = [
         ...(window.MAGES_GAMES || []).map(i => ({ ...i, base: 'mages/' })),
         ...(window.APPS_ITEMS || []).map(i => ({ ...i, base: 'apps/' }))
-      ];
+      ].filter((item) => util.isDisplayable(item));
 
       const favData = [];
       this.items.forEach(url => {
         const found = allItems.find(item => {
-          const resolved = util.resolveUrl(`${item.base}${item.url}`);
+          const resolved = util.itemHref(item, item.base);
           return encodeURI(resolved) === url;
         });
         if (found) favData.push(found);
@@ -444,6 +733,7 @@
 
       el.innerHTML = html;
       iconLazyLoader.init();
+      search.apply();
       
       const cards = el.querySelectorAll('.browse-card');
       opening.staggerCards(cards, 0, 10);
@@ -495,104 +785,51 @@
 
   const infoPopup = {
     popup: null,
-    analyticsFrame: null,
     unloadTimer: null,
     show() {
       if (!this.popup) return;
-      analyticsGraph.init();
       this.popup.classList.add('visible');
       clearTimeout(this.unloadTimer);
-      if (this.analyticsFrame && !this.analyticsFrame.getAttribute('src') && this.analyticsFrame.dataset.src) {
-        this.analyticsFrame.src = this.analyticsFrame.dataset.src;
-      }
     },
     hide() {
       if (!this.popup) return;
       this.popup.classList.remove('visible');
       clearTimeout(this.unloadTimer);
-      this.unloadTimer = setTimeout(() => {
-        if (this.popup?.classList.contains('visible') || !this.analyticsFrame?.getAttribute('src')) return;
-        this.analyticsFrame.removeAttribute('src');
-      }, 20000);
     },
     init() {
       const btn = document.getElementById('infoBtn');
       const popup = document.getElementById('infoPopup');
       this.popup = popup;
-      this.analyticsFrame = document.getElementById('analyticsEmbed');
       if (!btn || !popup) return;
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        this.popup.classList.toggle('visible');
+      });
       btn.addEventListener('mouseenter', () => this.show());
       btn.addEventListener('mouseleave', () => this.hide());
       btn.addEventListener('focus', () => this.show());
       btn.addEventListener('blur', () => this.hide());
       popup.addEventListener('mouseenter', () => this.show());
       popup.addEventListener('mouseleave', () => this.hide());
+      popup.addEventListener('click', (event) => event.stopPropagation());
+      document.addEventListener('click', () => this.hide());
     },
   };
 
-  const analyticsGraph = {
-    initialized: false,
+  const search = {
+    input: null,
     init() {
-      if (this.initialized) return;
-      const gc = document.getElementById('graphCanvas');
-      if (!gc) return;
-      const ctx = gc.getContext('2d');
-
-      const resize = () => {
-        gc.width = gc.offsetWidth || 212;
-        gc.height = gc.offsetHeight || 90;
-      };
-
-      const generatePlaceholderData = (points) => {
-        const data = [];
-        let v = 40;
-        for (let i = 0; i < points; i += 1) {
-          v = Math.max(10, Math.min(90, v + (Math.random() - 0.48) * 22));
-          data.push(v);
-        }
-        return data;
-      };
-
-      const drawGraph = (data) => {
-        const { width: w, height: h } = gc;
-        ctx.clearRect(0, 0, w, h);
-        const pad = 8;
-        const min = Math.min(...data);
-        const max = Math.max(...data);
-        const range = max - min || 1;
-        const stepX = (w - pad * 2) / (data.length - 1);
-        const pts = data.map((v, i) => ({
-          x: pad + i * stepX,
-          y: pad + (1 - (v - min) / range) * (h - pad * 2),
-        }));
-        const grad = ctx.createLinearGradient(0, 0, 0, h);
-        grad.addColorStop(0, 'rgba(255,255,255,0.12)');
-        grad.addColorStop(1, 'rgba(255,255,255,0)');
-        const drawCurve = () => {
-          ctx.moveTo(pts[0].x, pts[0].y);
-          for (let i = 1; i < pts.length; i += 1) {
-            const cx = (pts[i - 1].x + pts[i].x) / 2;
-            ctx.bezierCurveTo(cx, pts[i - 1].y, cx, pts[i].y, pts[i].x, pts[i].y);
-          }
-        };
-        ctx.beginPath();
-        drawCurve();
-        ctx.lineTo(pts[pts.length - 1].x, h);
-        ctx.lineTo(pts[0].x, h);
-        ctx.closePath();
-        ctx.fillStyle = grad;
-        ctx.fill();
-        ctx.beginPath();
-        drawCurve();
-        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-        ctx.lineWidth = 1.5;
-        ctx.lineJoin = 'round';
-        ctx.stroke();
-      };
-
-      resize();
-      drawGraph(generatePlaceholderData(14));
-      this.initialized = true;
+      this.input = document.getElementById('browseSearch');
+      if (!this.input) return;
+      this.input.addEventListener('input', () => this.apply());
+    },
+    apply() {
+      const query = String(this.input?.value || '').trim().toLowerCase();
+      document.querySelectorAll('.browse-tile').forEach((tile) => {
+        const name = tile.querySelector('.browse-card-name')?.textContent?.toLowerCase() || '';
+        const visible = !query || name.includes(query);
+        tile.hidden = !visible;
+      });
     },
   };
 
@@ -609,7 +846,9 @@
     pickPool(category = activeCategory) {
       const cfg = CATEGORY_CONFIG[category];
       if (!cfg) return [];
-      const list = (cfg.list?.() || []).filter(Boolean).map((it) => ({ it, base: cfg.basePath || '' }));
+      const list = (cfg.list?.() || [])
+        .filter((item) => item && util.isDisplayable(item))
+        .map((it) => ({ it, base: cfg.basePath || '' }));
       if (!list.length) return [];
       const arr = list.slice();
       for (let i = arr.length - 1; i > 0; i--) {
@@ -624,7 +863,7 @@
       const name = util.escapeHtml(util.formatDisplayName(item));
       const iconRaw = util.iconPathFor(item);
       const icon = iconRaw ? encodeURI(iconRaw) : '';
-      const href = encodeURI(`${base}${item.url}`) || '#';
+      const href = encodeURI(util.itemHref(item, base)) || '#';
       const imgHtml = icon ? `<img class="featured-icon" src="${icon}" alt="${name}" loading="lazy">` : '';
       const bgStyle = icon ? `style="background-image: url('${icon}');"` : '';
       const section = util.escapeHtml(item.section || 'N/A');
@@ -642,7 +881,7 @@
                 <span class="featured-section">${section}</span>
                 <span class="featured-author">By: ${author}</span>
               </div>
-              <a class="featured-play" href="${href}" data-game-url="${href}">Play Now</a>
+              <a class="featured-play" href="${util.escapeHtml(href)}" data-game-url="${util.escapeHtml(href)}">Play</a>
             </div>
           </div>
         </div>`;
@@ -671,26 +910,31 @@
       if (!this.inner || !this.pool.length) return;
       this.idx = i % this.pool.length;
       
+      // Immediately remove all existing slides to prevent stacking/flooding
+      this.inner.querySelectorAll('.featured-slide').forEach((prev) => prev.remove());
+
       const node = document.createElement('div');
       node.innerHTML = this.renderItem(this.pool[this.idx]).trim();
       const slide = node.firstElementChild;
 
-      // Clean up existing slides to prevent stacking during fast navigation
-      const existing = Array.from(this.inner.querySelectorAll('.featured-slide'));
-      existing.forEach((prev) => {
-        prev.classList.remove('active');
-        prev.classList.add('exit');
-        setTimeout(() => { if (prev.parentElement) prev.remove(); }, 850);
-      });
+      // If this is the first slide ever, show it immediately without animation
+      // to prevent the initial slide-in from flooding into the home section
+      if (!this._hasShownFirst) {
+        this._hasShownFirst = true;
+        slide.classList.add('active', 'no-transition');
+      }
 
       this.inner.appendChild(slide);
       
       // Trigger reflow to ensure initial transform is registered before transition starts
       void slide.offsetHeight; 
+      slide.classList.remove('no-transition');
       slide.classList.add('active');
 
       this.updateDots();
     },
+
+
     next() {
       this.idx += 1;
       if (this.idx >= this.pool.length) {
@@ -913,14 +1157,14 @@
     },
 
     updateTitleArea(name, gameData) {
-      this.titleEl.textContent = util.escapeHtml(name);
+      this.titleEl.textContent = name;
       this.currentGameData = gameData;
       if (!this.infoBtn) {
         this.infoBtn = document.createElement('button');
         this.infoBtn.className = 'game-visor-info-btn';
         this.infoBtn.type = 'button';
-        this.infoBtn.ariaLabel = 'Game info';
-        this.infoBtn.textContent = 'ℹ';
+        this.infoBtn.setAttribute('aria-label', 'Game info');
+        this.infoBtn.textContent = 'i';
         this.titleAreaEl.appendChild(this.infoBtn);
         this.infoBtn.addEventListener('click', () => {
           if (this.infoModal && this.infoModal.style.display === 'flex') {
@@ -933,8 +1177,6 @@
     },
 
     makeTabId(url) {
-      // Avoid btoa() - suspicious to GoGuardian. 
-      // Use unique random string with timestamp.
       return `gv-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 7)}`;
     },
 
@@ -983,6 +1225,10 @@
 
       this.updateTitleArea(name, gameData);
 
+      // Hide refresh/open-blank buttons when settings is open
+      if (this.refreshBtn) this.refreshBtn.style.display = isSettings ? 'none' : '';
+      if (this.openBlankBtn) this.openBlankBtn.style.display = isSettings ? 'none' : '';
+
       if (isSettings) {
         this.iframe.style.display = 'none';
         let panel = document.getElementById('settingsPanel');
@@ -1016,7 +1262,6 @@
 
     close() {
       if (!this.container || !this.overlay || !this.iframe) return;
-      if (!this.activeTabId) return;
 
       this.hideInfoModal();
       // Exit fullscreen if needed first, then close cleanly.
@@ -1024,7 +1269,7 @@
         document.exitFullscreen().catch(() => {});
       }
 
-      if (this.activeTabId !== 'internal:settings') {
+      if (this.activeTabId && this.activeTabId !== 'internal:settings') {
         this.tabs = this.tabs.filter((t) => t.id !== this.activeTabId);
       }
       this.activeTabId = null;
@@ -1191,8 +1436,7 @@
       }
 
       if (!url) return;
-      // Games always open in about:blank to ensure relative paths resolve correctly
-      window.siennaSettings?.handleCloak(url, 'about:blank');
+      window.siennaSettings?.handleCloak?.(url);
     },
 
     showInfo() {
@@ -1241,7 +1485,7 @@
       this.dock.classList.toggle('collapsed', !isCollapsed);
       const toggleButton = this.dockToggle;
       if (toggleButton) {
-        toggleButton.textContent = isCollapsed ? '«' : '»';
+        toggleButton.textContent = isCollapsed ? '<<' : '>>';
       }
     },
 
@@ -1250,16 +1494,17 @@
       this.dock.classList.remove('collapsed');
       this.dock.classList.add('visible');
       this.dock.classList.remove('hidden');
-      if (this.dockToggle) this.dockToggle.textContent = '«';
+      if (this.dockToggle) this.dockToggle.textContent = '<<';
     },
 
     hideDock() {
       if (!this.dock) return;
       this.dock.classList.add('collapsed');
-      if (this.dockToggle) this.dockToggle.textContent = '»';
+      if (this.dockToggle) this.dockToggle.textContent = '>>';
     },
 
     saveTabsToStorage() {
+      if (!window.siennaSettings?.shouldRememberTabs?.()) return;
       try {
         localStorage.setItem('gameVisorTabs', JSON.stringify(this.tabs.map((t) => ({ id: t.id, url: t.url, name: t.name, loaded: false, gameData: t.gameData }))));
         localStorage.setItem('gameVisorActiveTabId', this.activeTabId ?? '');
@@ -1269,6 +1514,11 @@
     },
 
     loadTabsFromStorage() {
+      if (!window.siennaSettings?.shouldRememberTabs?.()) {
+        this.tabs = [];
+        this.activeTabId = null;
+        return;
+      }
       try {
         const saved = localStorage.getItem('gameVisorTabs');
         const activeId = localStorage.getItem('gameVisorActiveTabId');
@@ -1313,7 +1563,7 @@
         const closeEl = document.createElement('button');
         closeEl.className = 'game-visor-dock-tab-close';
         closeEl.setAttribute('aria-label', `Close ${tab.name}`);
-        closeEl.textContent = '×';
+        closeEl.textContent = 'x';
         closeEl.addEventListener('click', (e) => {
           e.stopPropagation();
           const wasActive = this.activeTabId === tab.id;
@@ -1353,8 +1603,11 @@
 
 
   function boot() {
+    customGames.load();
+    customGames.initModal();
     opening.bind();
     dropdown.init();
+    search.init();
     infoPopup.init();
     gameVisor.init();
     favorites.init();
@@ -1363,6 +1616,27 @@
     const favoritesGridElement = document.getElementById('favoritesGrid');
 
     const handleGridClick = (event) => {
+        const editBtn = event.target.closest('.custom-game-edit-btn');
+        if (editBtn) {
+          event.preventDefault();
+          event.stopPropagation();
+          const id = editBtn.dataset.customId;
+          if (id) {
+            customGames.openEditModal(id);
+          }
+          return;
+        }
+        const deleteBtn = event.target.closest('.custom-game-delete-btn');
+        if (deleteBtn) {
+          event.preventDefault();
+          event.stopPropagation();
+          const id = deleteBtn.dataset.customId;
+          if (id) {
+            customGames.remove(id);
+            grid.render(activeCategory);
+          }
+          return;
+        }
         const favBtn = event.target.closest('.favorite-btn');
         if (favBtn) {
           event.preventDefault();
@@ -1429,7 +1703,6 @@
       featured.pause();
       opening.clearStaggerTimers();
       iconLazyLoader.teardown();
-      infoPopup.analyticsFrame?.removeAttribute('src');
       if (window.gameVisor?.replaceIframe) {
         window.gameVisor.replaceIframe('about:blank');
       }
@@ -1449,7 +1722,7 @@
         if (r2.ok) window.APPS_ITEMS = await r2.json();
       }
     } catch (e) {
-      // network or server not present — fall back to embedded globals
+      // Network or server not present; fall back to embedded globals.
       // (no-op)
     }
     boot();

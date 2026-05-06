@@ -14,6 +14,16 @@ https://usesienna.vercel.app | https://usenight.vercel.app | https://s1enna.verc
             return 'Are you sure you want to leave? Any unsaved changes will be lost.';
         });
     </script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-WX5VS54ZDW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-WX5VS54ZDW');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gn-math</title>
@@ -765,7 +775,7 @@ footer {
             </div>
             <div class="zone-controls">
                 <button onclick="fullscreenZone()">Fullscreen</button>
-                <button onclick="openInNewTab()">Open in New Tab</button>
+                <button onclick="aboutBlank()">Open in New Tab</button>
                 <button onclick="downloadZone()">Download</button>
                 <button onclick="closeZone()">Close</button>
             </div>
@@ -785,7 +795,6 @@ footer {
         </div>
     </div>
 
-    <footer id="mainFooter">
     <div class="footer-links">
             <a href="#" onclick="loadDMCA(); return false;">DMCA</a>
             <a href="#" onclick="showContact(); return false;">Contact</a>
@@ -855,10 +864,6 @@ async function listZones() {
         zones[0].featured = true; // always gonna be the discord
         await Promise.all([fetchPopularity("year"), fetchPopularity("month"), fetchPopularity("week"), fetchPopularity("day")]);
         sortZones();
-        
-        // SHOW STARTUP NOTICE HERE
-        showInitialNotice();
-
         try {
         const search = new URLSearchParams(window.location.search);
         const id = search.get('id');
@@ -941,29 +946,6 @@ async function listZones() {
         container.innerHTML = `Error loading zones: ${error}`;
     }
 }
-
-// Function to show the required notice on load
-function showInitialNotice() {
-    document.getElementById('popupTitle').innerHTML = "<strong>NOTE:</strong>";
-    const popupBody = document.getElementById('popupBody');
-    popupBody.innerHTML = `
-        <div style="font-size: 1.1rem; line-height: 1.6;">
-            <div>gn-math, last updated 4/10/26 on sienna. | gn-math fix</div>
-            <br>
-            <div>Hello, you're welcome to trying the beta of sienna. at the link below</div>
-            <br>
-            <div>Please refer to: <a href="https://usenight.vercel.app" target="_blank" rel="noopener" style="color: var(--primary); font-weight: bold;">usenight.vercel.app</a></div>
-            <div>Or: <a href="https://s1enna.vercel.app" target="_blank" rel="noopener" style="color: var(--primary); font-weight: bold;">s1enna.vercel.app</a></div>
-            <div>Note: <a href="#" target="_blank" rel="noopener" style="color: var(--primary); font-weight: bold;">You don't have to use sienna. you're free to stay here so click Ok</a></div>
-            <br>
-            <div><a href="https://discord.gg/9KJqrngQ" target="_blank" rel="noopener" style="color: var(--primary);">https://discord.gg/9KJqrngQ <-- gn-math discord</a></div>
-            <br>
-            <button class="settings-button notice-close" onclick="closePopup()">OK</button>
-        </div>
-    `;
-    document.getElementById('popupOverlay').style.display = "flex";
-}
-
 async function fetchPopularity(duration) {
     try {
         if (!popularityData[duration]) {
@@ -1158,14 +1140,16 @@ function openZone(file) {
     }
 }
 
-// Updated to open in a direct new tab instead of about:blank
-function openInNewTab() {
-    let currentId = document.getElementById('zoneId').textContent;
-    let zoneData = zones.find(zone => zone.id + '' === currentId);
-    if (zoneData) {
-        let finalUrl = zoneData.url.replace("{COVER_URL}", coverURL).replace("{HTML_URL}", htmlURL);
-        window.open(finalUrl, "_blank");
-    }
+function aboutBlank() {
+    const newWindow = window.open("about:blank", "_blank");
+    let zone = zones.find(zone => zone.id + '' === document.getElementById('zoneId').textContent).url.replace("{COVER_URL}", coverURL).replace("{HTML_URL}", htmlURL);
+    fetch(zone+"?t="+Date.now()).then(response => response.text()).then(html => {
+        if (newWindow) {
+            newWindow.document.open();
+            newWindow.document.write(html);
+            newWindow.document.close();
+        }
+    })
 }
 
 function closeZone() {

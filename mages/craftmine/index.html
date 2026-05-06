@@ -36,6 +36,13 @@
                 touch-action: none;
                 -ms-touch-action: none;
             }
+            /* Fixed loading GIF scale: ensuring it is not squeezed or shrunken */
+            img[src*="loading"], .loading-spinner, #loading-logo {
+                width: 120px !important; /* Specific OG scale if auto fails */
+                height: 120px !important;
+                max-width: none !important;
+                object-fit: contain;
+            }
         </style>
     </head>
 
