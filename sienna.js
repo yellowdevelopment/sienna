@@ -113,7 +113,7 @@
         id: "gamesProvider",
         section: "Games",
         label: "Games provider",
-        desc: "Choose your games source: sienna's built-in list, Lumin, or gn-math.",
+        desc: "Choose your games source: sienna's built-in list, Lumin, or gn-math. (Relays coming soon)",
 
         type: "choice",
         options: ["night.", "Lumin", "gn-math"],

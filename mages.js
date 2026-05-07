@@ -25,9 +25,8 @@ window.MAGES_GAMES = [
     "image": "icons/1v1lol.webp",
     "url": "1v1lol/index.html",
     "section": "Unity",
-    "author": "JustPlay.LOL",
+    "author": "KJustPlay.LOL"
   },
-
   {
     "name": "BuildNow.gg",
     "image": "icons/buildnowgg.webp",
@@ -554,6 +553,13 @@ window.MAGES_GAMES = [
     "author": "Team Salvato"
   },
   {
+    "name": "Yandere Simulator",
+    "image": "icons/yanderesim.webp",
+    "url": "yanderesimulator/index.html",
+    "section": "Port",
+    "author": "YandereDev"
+  },
+  {
     "name": "I Hate My Waifu Streamer",
     "image": "icons/ihatemywaifustreamer.webp",
     "url": "ihatemywaifustreamer/index.html",
@@ -691,6 +697,13 @@ window.MAGES_GAMES = [
     "image": "icons/karlson.webp",
     "url": "karlson/index.html",
     "section": "Port",
+    "author": "Dani"
+  },
+  {
+    "name": "Karlson 2D",
+    "image": "icons/karlson2d.webp",
+    "url": "karlson2d/index.html",
+    "section": "",
     "author": "Dani"
   },
   {
