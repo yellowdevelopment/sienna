@@ -1199,6 +1199,21 @@
       return tab;
     },
 
+    getGameHtmlBlobUrl(gameData) {
+      if (!gameData || !gameData.html) return null;
+      try {
+        // Inject a style to force black background so white text doesn't clash
+        const html = gameData.html;
+        const forcedBg = '<style>html, body { background: #000 !important; }</style>';
+        const modifiedHtml = html.replace('<head>', '<head>' + forcedBg);
+        const blob = new Blob([modifiedHtml], { type: 'text/html' });
+        return URL.createObjectURL(blob);
+      } catch (e) {
+        console.error('gameVisor: failed to create blob URL from embedded HTML', e);
+        return null;
+      }
+    },
+
     openSettings() {
       this.open('internal:settings', 'Settings');
     },
@@ -1210,8 +1225,12 @@
       }
       if (!this.container || !this.iframe) return;
       const isSettings = url === 'internal:settings';
-      const resolvedUrl = isSettings ? url : util.resolveUrl(url);
+
+      // Check if game has embedded HTML — use blob URL instead of file path
+      const blobUrl = this.getGameHtmlBlobUrl(gameData);
+      const resolvedUrl = isSettings ? url : (blobUrl || util.resolveUrl(url));
       const tab = this.addTab(resolvedUrl, name, gameData);
+
 
       // If settings, we track the ID manually but don't save to array
       this.activeTabId = isSettings ? 'internal:settings' : (tab ? tab.id : null);
@@ -1400,6 +1419,8 @@
       this.loader.classList.add('hidden');
       this.progressBar.style.width = '0%';
     },
+
+
 
     toggleFullscreen() {
       if (!this.container) return;

@@ -52,7 +52,7 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -3;
-  background: var(--theme-image), #050505;
+  background: var(--theme-image),  	#0313299a;
   background-size: cover, auto;
   background-position: center, center;
   background-repeat: no-repeat;
@@ -1220,6 +1220,8 @@ body.legacy-library .browse-grid {
 }
 
 .game-visor-loader {
+
+
   position: absolute;
   inset: 42px 0 0;
   z-index: 2;

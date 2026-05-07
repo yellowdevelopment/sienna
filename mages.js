@@ -25,8 +25,9 @@ window.MAGES_GAMES = [
     "image": "icons/1v1lol.webp",
     "url": "1v1lol/index.html",
     "section": "Unity",
-    "author": "KJustPlay.LOL"
+    "author": "JustPlay.LOL",
   },
+
   {
     "name": "BuildNow.gg",
     "image": "icons/buildnowgg.webp",

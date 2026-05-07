@@ -37,8 +37,8 @@
     },
 
     updates: {
-      title: "v0.8",
-      description: "Design overhaul. New features like custom games, more accessibility options. Legacy card view. Numerous bug fixes and performance optimizations targeted for lower end devices. Removed some games but added a few.",
+      title: "v0.8.5",
+      description: "New games, bug fixes, added gn-math as a provider (still working on it) | night. should work with html runners now",
     },
 
     themes: [
@@ -113,16 +113,19 @@
         id: "gamesProvider",
         section: "Games",
         label: "Games provider",
-        desc: "Use the built-in sienna list or switch to the Lumin provider.",
+        desc: "Choose your games source: sienna's built-in list, Lumin, or gn-math.",
+
         type: "choice",
-        options: ["night.", "Lumin"],
+        options: ["night.", "Lumin", "gn-math"],
         get: () => window.siennaSettings.state.gamesProvider,
         set: (value) => {
-          window.siennaSettings.state.gamesProvider = value === "Lumin" ? "Lumin" : "night.";
+          const valid = ["night.", "Lumin", "gn-math"];
+          window.siennaSettings.state.gamesProvider = valid.includes(value) ? value : "night.";
           storage.set("sienna_games_provider", window.siennaSettings.state.gamesProvider);
           window.siennaSettings.applyGamesProvider(window.siennaSettings.state.gamesProvider);
           window.siennaSettings.renderPanel();
         },
+
       },
       {
         id: "cloakMethod",
@@ -240,7 +243,10 @@
       this.state.rememberTabs = storage.get("sienna_remember_tabs", "true") !== "false";
       this.state.cloakMethod = storage.get("sienna_cloak_method", "about:blank") === "blob:null" ? "blob:null" : "about:blank";
       this.state.autoOpen = ["about:blank", "blob:null"].includes(storage.get("sienna_auto_open", "Disabled")) ? storage.get("sienna_auto_open", "Disabled") : "Disabled";
-      this.state.gamesProvider = storage.get("sienna_games_provider", "night.") === "Lumin" ? "Lumin" : "night.";
+      const savedProvider = storage.get("sienna_games_provider", "night.");
+      const validProviders = ["night.", "Lumin", "gn-math"];
+      this.state.gamesProvider = validProviders.includes(savedProvider) ? savedProvider : "night.";
+
       this.state.activeThemeId = storage.get("sienna_theme_id", "none");
 
       this.loadCustomThemes();
@@ -281,25 +287,52 @@
       const featured = document.getElementById("featured");
       const featuredDots = document.getElementById("featuredDots");
       const labels = document.querySelectorAll(".grid-section-label");
+      const browseTop = document.querySelector(".browse-top");
       const host = document.getElementById("page-browse") || document.body;
       let lumin = document.getElementById("lumin-section");
+      let gnmath = document.getElementById("gnmath-section");
 
+      // Remove provider-specific sections when switching away
       if (provider !== "Lumin") {
+        lumin?.remove();
+      }
+      if (provider !== "gn-math") {
+        gnmath?.remove();
+      }
+
+      if (provider === "night.") {
         if (browseGrid) browseGrid.style.display = "";
         if (favoritesSection) favoritesSection.style.display = "";
         if (featured) featured.style.display = "";
         if (featuredDots) featuredDots.style.display = "";
+        if (browseTop) browseTop.style.display = "";
         labels.forEach((label) => { label.style.display = ""; });
-        lumin?.remove();
         return;
       }
 
+      // Hide native sienna elements for all non-default providers
       if (browseGrid) browseGrid.style.display = "none";
       if (favoritesSection) favoritesSection.style.display = "none";
       if (featured) featured.style.display = "none";
       if (featuredDots) featuredDots.style.display = "none";
+      if (browseTop) browseTop.style.display = "none";
       labels.forEach((label) => { label.style.display = "none"; });
 
+      if (provider === "gn-math") {
+        if (!gnmath) {
+          gnmath = document.createElement("section");
+          gnmath.id = "gnmath-section";
+          gnmath.style.cssText = "position:absolute;inset:0;z-index:10;background:#000;margin:24px;border-radius:18px;overflow:hidden;";
+          gnmath.innerHTML = '<iframe src="mages/gnmath/index.html" style="width:100%;height:100%;border:0;background:#000;"></iframe>';
+          host.appendChild(gnmath);
+        }
+        return;
+      }
+
+
+
+
+      // Lumin provider
       if (!lumin) {
         lumin = document.createElement("section");
         lumin.id = "lumin-section";
@@ -328,6 +361,7 @@
         document.head.appendChild(script);
       }
     },
+
 
     maybeAutoOpen() {
       if (this.state.autoOpen === "Disabled") return;

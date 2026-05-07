@@ -114,13 +114,14 @@
       border-color: #555;
     }
 
-    /* OG Loading GIF Size Fix */
+    /* Loading GIF - smaller size */
     .game-visor-loader-img {
       width: auto !important;
       height: auto !important;
       max-width: none !important;
-      transform: scale(1.5);
+      transform: scale(0.7);
     }
+
   </style>
 </head>
 <body>
@@ -211,7 +212,7 @@
     <div class="popup-header">
       <div>
         <div class="popup-name">sienna.</div>
-        <div class="popup-version">v0.8.0</div>
+        <div class="popup-version">v0.8.5</div>
       </div>
       <div class="popup-badge">BETA</div>
     </div>
@@ -222,7 +223,7 @@
     </div>
     <div class="popup-row">
       <span>Build</span>
-      <strong>016</strong>
+      <strong>017</strong>
     </div>
     <div class="popup-divider"></div>
     <div class="popup-credits">
@@ -262,6 +263,8 @@
     </div>
     <iframe id="gameVisorIframe" class="game-visor-iframe" src="" allow="autoplay; picture-in-picture; fullscreen; clipboard-write"></iframe>
   </div>
+
+
 
   <div id="gameVisorDock" class="game-visor-dock hidden" aria-label="Game tabs">
     <button id="gameVisorDockToggle" class="game-visor-dock-toggle" type="button" aria-label="Toggle game tabs">&lt;&lt;</button>
