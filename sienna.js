@@ -37,8 +37,8 @@
     },
 
     updates: {
-      title: "v0.8.5",
-      description: "New games, bug fixes, added gn-math as a provider (still working on it) | night. should work with html runners now",
+      title: "v0.8.6",
+      description: "Small Update | Resized LuminSDK and updated gn-math provider",
     },
 
     themes: [
@@ -332,18 +332,21 @@
 
 
 
+
+
       // Lumin provider
       if (!lumin) {
         lumin = document.createElement("section");
         lumin.id = "lumin-section";
-        lumin.className = "lumin-section";
-        lumin.innerHTML = '<div id="games" class="lumin-games"></div>';
+        lumin.style.cssText = "position:absolute;inset:0;z-index:10;background:#000;margin:24px;border-radius:18px;overflow:hidden;";
+        lumin.innerHTML = '<div id="games" class="lumin-games" style="width:100%;height:100%;min-height:680px;"></div>';
         host.appendChild(lumin);
       }
 
+
       const initLumin = () => {
         if (window.Lumin?.init) {
-          window.Lumin.init({ container: "#games", theme: "dark" });
+          window.Lumin.init({ container: "#games", theme: "dark", columns: 12, gamesPerPage: 60 });
         }
       };
 

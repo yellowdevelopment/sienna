@@ -1677,19 +1677,6 @@ body.legacy-library .browse-grid {
   border-color: rgba(255, 95, 87, 0.6);
 }
 
-.lumin-section {
-  width: min(1180px, calc(100% - 48px));
-  min-height: 680px;
-  margin: 24px auto 80px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  background: rgba(0, 0, 0, 0.42);
-  overflow: hidden;
-}
-
-.lumin-games {
-  min-height: 680px;
-}
 
 body.reduce-motion *,
 body.reduce-motion *::before,
