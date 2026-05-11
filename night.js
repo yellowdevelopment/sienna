@@ -158,7 +158,17 @@
         let url = g.url || '';
         if (g.html && !url) {
           try {
-            const blob = new Blob([g.html], { type: 'text/html' });
+            let html = g.html;
+            // Fix: ensure <base href> works correctly with blob URLs
+            html = html.replace(
+              /<base\s+href=["']([^"']*)["']\s*\/?>/gi,
+              (match, href) => {
+                if (/^(https?:)?\/\//i.test(href)) return match;
+                const resolved = new URL(href, window.location.origin).href;
+                return `<base href="${resolved}">`;
+              }
+            );
+            const blob = new Blob([html], { type: 'text/html' });
             url = URL.createObjectURL(blob);
           } catch (e) {
             url = '';
@@ -571,6 +581,7 @@
       if (rect.top <= window.innerHeight * 0.6) this.revealBrowse();
     },
     bind() {
+      // Scroll button snaps down to the browse section
       document.getElementById('scrollBtn')?.addEventListener('click', () => scroll.toBrowseSection());
       // Throttle scroll event to avoid excessive getBoundingClientRect calls
       let ticking = false;
@@ -1203,10 +1214,26 @@
       if (!gameData || !gameData.html) return null;
       try {
         // Inject a style to force black background so white text doesn't clash
-        const html = gameData.html;
+        let html = gameData.html;
         const forcedBg = '<style>html, body { background: #000 !important; }</style>';
-        const modifiedHtml = html.replace('<head>', '<head>' + forcedBg);
-        const blob = new Blob([modifiedHtml], { type: 'text/html' });
+        html = html.replace('<head>', '<head>' + forcedBg);
+
+        // Fix: ensure <base href> works correctly with blob URLs
+        // When HTML is loaded from a blob URL, relative <base href> paths
+        // resolve relative to the blob URL, not the intended CDN.
+        // We need to make sure the base href is absolute.
+        html = html.replace(
+          /<base\s+href=["']([^"']*)["']\s*\/?>/gi,
+          (match, href) => {
+            // If it's already absolute (http://, https://, //), keep it
+            if (/^(https?:)?\/\//i.test(href)) return match;
+            // If it's relative, resolve it against the current page origin
+            const resolved = new URL(href, window.location.origin).href;
+            return `<base href="${resolved}">`;
+          }
+        );
+
+        const blob = new Blob([html], { type: 'text/html' });
         return URL.createObjectURL(blob);
       } catch (e) {
         console.error('gameVisor: failed to create blob URL from embedded HTML', e);

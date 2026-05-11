@@ -1540,6 +1540,20 @@ window.MAGES_GAMES = [
     "author": "Basically Games"
   },
   {
+    "name": "-3",
+    "image": "icons/-3.webp",
+    "url": "-3/index.html",
+    "section": "Port",
+    "author": "Basically Games"
+  },
+  {
+    "name": "-b",
+    "image": "icons/-b.webp",
+    "url": "-b/index.html",
+    "section": "Port",
+    "author": "Basically Games"
+  },
+  {
     "name": "CaseOh's Basics in Eating and Fast Food",
     "image": "icons/caseohsbasicsineatingandfastfood.webp",
     "url": "caseohsbasicsineatingandfastfood/index.html",
@@ -3731,7 +3745,7 @@ window.MAGES_GAMES = [
     "author": "John Cooney"
   },
   {
-    "name": "Throw Rocks At Shit",
+    "name": "Throw Rocks At Stuff",
     "image": "icons/throwrocks.webp",
     "url": "throwrocks/index.html",
     "section": "",

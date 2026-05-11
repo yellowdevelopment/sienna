@@ -1,786 +1,903 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>gn-math · clean game hub</title>
-    <meta name="description" content="Unblocked games, minimal design, fast and lightweight.">
-    <link rel="icon" type="image/x-icon" href="favicon.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>gn-math · game hub</title>
+<meta name="description" content="Unblocked games, minimal design, fast and lightweight.">
+<link rel="icon" type="image/x-icon" href="favicon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
 
-        body {
-            background: #0b0f18;
-            font-family: 'Inter', sans-serif;
-            color: #e6edf5;
-            line-height: 1.4;
-            padding-bottom: 2rem;
-        }
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 40%, rgba(30, 50, 80, 0.2), transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
+:root{
+  --bg:        #0b0e17;
+  --surface:   #10151f;
+  --card:      #131924;
+  --card-hov:  #18212e;
+  --border:    #1e2d3d;
+  --border-hi: #2a4060;
+  --accent:    #2878a8;
+  --accent-hi: #3a9acc;
+  --text-1:    #dde8f5;
+  --text-2:    #7a9ab8;
+  --text-3:    #3d5a72;
+  --section-bar:#3a6a9a;
+  --r: 10px;
+  --r-pill: 30px;
+  --ease: 0.17s ease;
+}
 
-        .chip-strip {
-            display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            padding: 0.8rem 1.5rem;
-            max-width: 1440px;
-            margin: 0 auto;
-            scrollbar-width: thin;
-            position: sticky;
-            top: 0;
-            background: rgba(11, 15, 24, 0.92);
-            backdrop-filter: blur(8px);
-            z-index: 90;
-            border-bottom: 1px solid #1f2a3a;
-        }
+html,body{height:100%}
 
-        .chip {
-            background: #141c2c;
-            border: 1px solid #2a3a50;
-            padding: 0.4rem 1.2rem;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #b9c7d9;
-        }
+body{
+  background:var(--bg);
+  font-family:'Inter',sans-serif;
+  color:var(--text-1);
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:4rem;
+  overflow-x:hidden;
+}
 
-        .chip.active, .chip:hover {
-            background: #2c3e5c;
-            border-color: #4a6a8e;
-            color: white;
-        }
+::-webkit-scrollbar{width:4px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:4px}
 
-        .search-wrap {
-            max-width: 380px;
-            margin: 1.2rem auto 0.8rem;
-            position: relative;
-            padding: 0 1rem;
-        }
+/* ── Top nav ── */
+.topnav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(11,14,23,0.93);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:0.55rem 2rem;
+  display:flex;gap:0.25rem;align-items:center;
+  overflow-x:auto;scrollbar-width:none;
+}
+.topnav::-webkit-scrollbar{display:none}
 
-        #searchBar {
-            width: 100%;
-            padding: 0.65rem 1rem 0.65rem 2.5rem;
-            background: #0f1622;
-            border: 1px solid #252f3f;
-            border-radius: 40px;
-            color: #eef4ff;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
+.chip{
+  flex-shrink:0;
+  padding:0.3rem 0.95rem;
+  border-radius:var(--r-pill);
+  font-size:0.77rem;font-weight:500;
+  color:var(--text-2);
+  cursor:pointer;border:1px solid transparent;
+  background:transparent;
+  transition:var(--ease);white-space:nowrap;
+  font-family:inherit;
+}
+.chip:hover{color:var(--text-1);background:var(--surface);}
+.chip.active{
+  background:var(--surface);
+  border-color:var(--border-hi);
+  color:var(--text-1);
+}
 
-        #searchBar:focus {
-            outline: none;
-            border-color: #4a7c9c;
-            background: #121a2a;
-        }
+/* ── Search ── */
+.search-row{
+  display:flex;justify-content:center;
+  padding:1.1rem 1.5rem 0;
+  position:relative;z-index:2;
+}
+.search-wrap{position:relative;width:100%;max-width:350px}
+.search-ico{
+  position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);
+  width:13px;color:var(--text-3);pointer-events:none;
+}
+#searchBar{
+  width:100%;
+  padding:0.5rem 1rem 0.5rem 2.2rem;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-pill);
+  color:var(--text-1);
+  font-family:inherit;font-size:0.8rem;
+  transition:var(--ease);
+}
+#searchBar::placeholder{color:var(--text-3)}
+#searchBar:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(40,120,168,0.12)}
 
-        .search-icon {
-            position: absolute;
-            left: 1.8rem;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.6;
-            width: 15px;
-            color: #a0b4d0;
-        }
+/* ── Page ── */
+.page{max-width:1280px;margin:0 auto;padding:0 2rem;position:relative;z-index:2}
 
-        main {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0.5rem 1.5rem 2rem;
-            position: relative;
-            z-index: 2;
-        }
+/* ── Hero ── */
+.hero-wrap{
+  margin:1.4rem 0 0;
+  position:relative;
+}
+/* Clip layer: hides slides bleeding outside the viewport edge */
+.hero-clip{
+  overflow:hidden;
+  position:relative;
+}
+/* Swiper itself must be overflow:visible so adjacent slides peek through */
+.hero-swiper{overflow:visible}
 
-        .section-header {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            margin: 1.5rem 0 0.8rem;
-        }
+.hero-swiper .swiper-slide{
+  width:56%;max-width:680px;
+  border-radius:14px;
+  transition:opacity 0.42s ease,transform 0.42s ease,filter 0.42s ease;
+  will-change:transform,opacity;
+}
+.hero-swiper .swiper-slide:not(.swiper-slide-active){
+  opacity:0.3;transform:scale(0.93);filter:blur(3px);
+}
+.hero-swiper .swiper-slide-active{
+  opacity:1;transform:scale(1);filter:none;
+}
 
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #e2edff;
-            letter-spacing: -0.2px;
-        }
+.slide-inner{
+  display:flex;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  height:256px;overflow:hidden;
+}
+.slide-img{
+  width:48%;flex-shrink:0;
+  object-fit:cover;
+  background:var(--surface);display:block;
+}
+.slide-info{
+  flex:1;padding:1.7rem 1.6rem;
+  display:flex;flex-direction:column;justify-content:center;gap:0.5rem;
+}
+.s-title{
+  font-size:1.55rem;font-weight:700;
+  color:var(--text-1);line-height:1.2;letter-spacing:-0.3px;
+}
+.s-tags{display:flex;gap:0.4rem;flex-wrap:wrap}
+.s-tag{
+  background:rgba(40,120,168,0.14);
+  border:1px solid rgba(40,120,168,0.25);
+  padding:0.17rem 0.65rem;
+  border-radius:var(--r-pill);
+  font-size:0.63rem;font-weight:600;
+  color:var(--accent-hi);
+  letter-spacing:0.04em;text-transform:uppercase;
+}
+.s-author{font-size:0.7rem;color:var(--text-3)}
+.s-play{
+  display:inline-flex;align-items:center;gap:0.4rem;
+  padding:0.42rem 1.2rem;
+  border-radius:var(--r-pill);
+  background:rgba(40,120,168,0.16);
+  border:1px solid rgba(40,120,168,0.3);
+  color:var(--text-1);
+  font-size:0.78rem;font-weight:600;
+  cursor:pointer;width:fit-content;margin-top:0.15rem;
+  font-family:inherit;transition:var(--ease);
+}
+.s-play:hover{background:rgba(40,120,168,0.28);border-color:var(--accent)}
 
-        .section-sub {
-            font-size: 0.7rem;
-            color: #7e8da0;
-            cursor: default;
-        }
+/* Hero nav arrows — sit on hero-wrap (outside clip layer so they're not cropped) */
+.h-prev,.h-next{
+  position:absolute;top:calc(50% - 1rem);transform:translateY(-50%);
+  z-index:10;
+  width:32px;height:32px;
+  background:var(--surface);
+  border:1px solid var(--border-hi);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:var(--ease);
+  color:var(--text-2);font-size:14px;font-weight:700;
+  user-select:none;
+}
+.h-prev{left:0}.h-next{right:0}
+.h-prev:hover,.h-next:hover{background:var(--card-hov);border-color:var(--accent);color:var(--text-1)}
 
-        .hero-spotlight {
-            margin: 0.5rem 0 1rem;
-        }
+/* Pagination dots */
+.hero-dots{
+  display:flex;justify-content:center;gap:6px;margin-top:0.9rem;
+}
+.hero-dots .swiper-pagination-bullet{
+  width:7px;height:7px;
+  background:var(--text-3);opacity:1;
+  border-radius:50%;transition:var(--ease);
+}
+.hero-dots .swiper-pagination-bullet-active{
+  background:var(--accent-hi);
+  width:22px;border-radius:4px;
+}
 
-        .swiper.featured-slider {
-            overflow: visible;
-        }
+/* ── Section headers ── */
+.section-block{margin-top:2rem}
+.section-head{
+  display:flex;align-items:center;gap:0.7rem;
+  margin-bottom:0.85rem;
+}
+.s-bar{
+  width:3px;height:15px;
+  background:var(--section-bar);
+  border-radius:2px;flex-shrink:0;
+}
+.s-label{
+  font-size:0.7rem;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-2);
+}
 
-        .featured-slider .swiper-slide {
-            width: 86%;
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
+/* ── Row swipers ── */
+.row-wrap{
+  position:relative;
+  /* Fade right edge */
+}
+.row-wrap::after{
+  content:'';
+  position:absolute;right:0;top:0;
+  width:70px;height:100%;
+  background:linear-gradient(to right,transparent,var(--bg));
+  pointer-events:none;z-index:5;
+}
 
-        .featured-slider .swiper-slide-prev,
-        .featured-slider .swiper-slide-next {
-            opacity: 0.5;
-            transform: scale(0.94);
-            filter: blur(2px);
-            pointer-events: none;
-        }
+/* Row scroll arrows */
+.r-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:10;
+  width:28px;height:28px;
+  background:var(--surface);
+  border:1px solid var(--border-hi);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:var(--ease);
+  color:var(--text-2);font-size:16px;font-weight:700;
+  user-select:none;
+  box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+.r-btn:hover{background:var(--card-hov);border-color:var(--accent);color:var(--text-1)}
+.r-btn.swiper-button-disabled{opacity:0;pointer-events:none;}
+.r-prev{left:-14px}
+.r-next{right:-14px}
 
-        .featured-slider .swiper-slide-active {
-            opacity: 1;
-            transform: scale(1);
-            filter: blur(0);
-            z-index: 2;
-        }
+.row-sw{overflow:hidden}
+.row-sw .swiper-slide{width:auto}
 
-        .slide-content {
-            display: flex;
-            background: #111927;
-            border: 1px solid #283544;
-            border-radius: 16px;
-            height: 340px;
-            overflow: hidden;
-        }
+/* ── Cards ── */
+.gcard{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  cursor:pointer;
+  position:relative;
+  transition:var(--ease);
+  width:155px;flex-shrink:0;
+}
+.gcard:hover{
+  transform:translateY(-3px);
+  border-color:var(--border-hi);
+  background:var(--card-hov);
+}
+.gc-img{
+  width:100%;aspect-ratio:1;
+  object-fit:cover;background:var(--surface);display:block;
+}
+.gc-body{padding:0.52rem 0.6rem 0.58rem}
+.gc-name{
+  font-size:0.79rem;font-weight:600;
+  color:var(--text-1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:-0.1px;
+}
+.gc-tags{
+  font-size:0.65rem;color:var(--text-3);
+  margin-top:0.15rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.gc-plays{
+  display:flex;align-items:center;gap:0.28rem;
+  font-size:0.64rem;color:var(--text-3);margin-top:0.3rem;
+}
+.gc-plays::before{content:'▶';font-size:0.48rem}
 
-        .slide-img {
-            width: 55%;
-            object-fit: contain;
-            padding: 1.6rem;
-            background: #0c111c;
-        }
+/* Favorite star */
+.gc-star{
+  position:absolute;top:7px;right:8px;
+  font-size:0.95rem;color:var(--text-3);
+  cursor:pointer;z-index:3;line-height:1;
+  transition:var(--ease);
+}
+.gc-star:hover{color:rgba(240,195,50,0.65)}
+.gc-star.starred{color:#f0c332}
 
-        .slide-info {
-            width: 45%;
-            padding: 2rem 1.8rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0.6rem;
-        }
+/* Larger cards for category rows */
+.cat-card{width:170px}
 
-        .hero-title {
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: #f0f6ff;
-            letter-spacing: -0.3px;
-        }
+/* ── Grid view (search/filter) ── */
+.grid-view{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:0.9rem;
+}
+.grid-view .gcard{width:100%}
 
-        .hero-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 0.2rem 0;
-        }
+.empty{text-align:center;padding:3rem 1rem;font-size:0.84rem;color:var(--text-3)}
 
-        .hero-tag {
-            background: #1f2a3a;
-            padding: 0.2rem 0.9rem;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: #bcd0f0;
-        }
+/* ── Zone viewer ── */
+.zone-viewer{
+  position:fixed;inset:0;background:var(--bg);
+  z-index:9999;display:none;flex-direction:column;
+}
+.zone-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;padding:0.62rem 1.4rem;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  flex-wrap:wrap;flex-shrink:0;
+}
+.zone-bar-l{display:flex;align-items:baseline;gap:0.5rem}
+.z-title{font-size:0.88rem;font-weight:600;color:var(--text-1)}
+.z-by{font-size:0.68rem;color:var(--text-3)}
+.zone-btns{display:flex;gap:0.4rem}
+.zbtn{
+  padding:0.3rem 0.82rem;
+  border-radius:var(--r-pill);
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-2);
+  font-family:inherit;font-size:0.74rem;font-weight:500;
+  cursor:pointer;transition:var(--ease);
+}
+.zbtn:hover{background:var(--card);border-color:var(--border-hi);color:var(--text-1)}
+.zbtn.x:hover{border-color:#6a2828;color:#c06060}
 
-        .hero-btn {
-            background: #2c3e5c;
-            border: none;
-            padding: 0.5rem 1.4rem;
-            border-radius: 40px;
-            color: white;
-            font-weight: 500;
-            width: fit-content;
-            margin-top: 0.4rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+/* Frame + loading overlay */
+.zone-frame-wrap{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  background:var(--bg);
+}
+#zoneFrame{
+  position:absolute;
+  inset:0;
+  border:none;
+  width:100%;
+  height:100%;
+  display:block;
+}
+.zone-loading{
+  position:absolute;inset:0;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1rem;
+  transition:opacity 0.3s ease;
+  z-index:5;
+  pointer-events:all;
+}
+.zone-loading.done{opacity:0;pointer-events:none}
+.spin{
+  width:36px;height:36px;
+  border:3px solid var(--border);
+  border-top-color:var(--accent-hi);
+  border-radius:50%;
+  animation:spin 0.75s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.zone-loading p{font-size:0.78rem;color:var(--text-3)}
 
-        .hero-btn:hover {
-            background: #3c5a7c;
-        }
+/* ── Modal ── */
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(10px);
+  display:none;align-items:center;justify-content:center;
+  z-index:10001;
+}
+.mbox{
+  background:var(--card);border:1px solid var(--border-hi);
+  border-radius:14px;max-width:380px;width:90%;
+}
+.mhead{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0.85rem 1.2rem;border-bottom:1px solid var(--border);
+}
+.mhead h3{font-size:0.88rem;font-weight:600;color:var(--text-1)}
+.mclose{background:none;border:none;font-size:1.2rem;color:var(--text-3);cursor:pointer;line-height:1;transition:var(--ease)}
+.mclose:hover{color:var(--text-1)}
+.mbody{padding:1.1rem 1.2rem}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 1.2rem;
-        }
+.hidden{display:none!important}
 
-        .game-card {
-            background: #111722;
-            border: 1px solid #242e3c;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: 0.2s ease;
-            cursor: pointer;
-            position: relative;
-        }
+footer{
+  text-align:center;padding:1rem;
+  font-size:0.67rem;color:var(--text-3);
+  border-top:1px solid var(--border);
+  margin-top:2.5rem;letter-spacing:0.05em;
+}
 
-        .game-card:hover {
-            transform: translateY(-3px);
-            background: #161e2c;
-            border-color: #3a5070;
-        }
-
-        .card-img {
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            background: #0a101c;
-        }
-
-        .star {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            font-size: 1.4rem;
-            color: rgba(210, 180, 80, 0.6);
-            cursor: pointer;
-            z-index: 3;
-            transition: 0.1s;
-        }
-
-        .star.starred {
-            color: #f5c542;
-        }
-
-        .card-info {
-            padding: 0.7rem;
-        }
-
-        .game-name {
-            font-weight: 600;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .game-badge {
-            font-size: 0.65rem;
-            color: #8a9bc0;
-            margin-top: 0.2rem;
-            display: inline-block;
-            background: #1a2332;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-        }
-
-        .horizontal-list .swiper-slide {
-            width: 180px;
-        }
-
-        .swiper-button-next, .swiper-button-prev {
-            width: 36px;
-            height: 36px;
-            background: #0f1622;
-            border: 1px solid #2a3a50;
-            border-radius: 50%;
-            transition: 0.2s;
-        }
-
-        .swiper-button-next:after, .swiper-button-prev:after {
-            font-size: 14px;
-            font-weight: bold;
-            color: #c0d0e8;
-        }
-
-        .swiper-button-next:hover, .swiper-button-prev:hover {
-            background: #1f2e42;
-        }
-
-        .zone-viewer {
-            position: fixed;
-            inset: 0;
-            background: #070b12f2;
-            backdrop-filter: blur(12px);
-            z-index: 10000;
-            display: none;
-            flex-direction: column;
-        }
-
-        .zone-header {
-            background: #0f1622;
-            padding: 0.9rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #2a3a50;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-
-        .zone-controls {
-            display: flex;
-            gap: 0.8rem;
-        }
-
-        .zone-controls button {
-            background: #1f2a3a;
-            border: 1px solid #3a5a7a;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            color: white;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: 0.2s;
-        }
-
-        .zone-controls button:hover {
-            background: #2c3e5c;
-            transform: translateY(-1px);
-        }
-
-        #zoneFrame {
-            flex: 1;
-            border: none;
-            background: white;
-            width: 100%;
-            height: 100%;
-        }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 11000;
-        }
-
-        .modal-card {
-            background: #121a28;
-            border-radius: 20px;
-            max-width: 420px;
-            width: 90%;
-            border: 1px solid #2e4058;
-        }
-
-        .modal-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #232e3e;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .modal-body {
-            padding: 1.2rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.2rem;
-            font-size: 0.7rem;
-            color: #5f6f88;
-            border-top: 1px solid #1f2a38;
-            margin-top: 2.5rem;
-        }
-
-        @media (max-width: 700px) {
-            .grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
-            .horizontal-list .swiper-slide { width: 150px; }
-            .slide-info { padding: 1rem; }
-            .hero-title { font-size: 1.2rem; }
-            .slide-content { height: 260px; }
-            .section-title { font-size: 1rem; }
-            .zone-controls button { padding: 0.35rem 0.9rem; font-size: 0.75rem; }
-        }
-    </style>
+@media(max-width:700px){
+  .topnav{padding:0.45rem 1rem}
+  .page{padding:0 1rem}
+  .hero-swiper .swiper-slide{width:84%}
+  .slide-inner{height:200px}
+  .s-title{font-size:1.05rem}
+  .slide-info{padding:0.9rem 1rem;gap:0.38rem}
+  .gcard{width:138px}.cat-card{width:150px}
+  .grid-view{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
+  /* Hide side scroll buttons on mobile where touch works natively */
+  .r-btn{display:none}
+}
+</style>
 </head>
 <body>
 
-<div class="chip-strip" id="catStrip"></div>
+<nav class="topnav" id="catStrip" aria-label="Categories"></nav>
 
-<div class="search-wrap">
-    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-    <input type="text" id="searchBar" placeholder="Search games...">
+<div class="search-row">
+  <div class="search-wrap">
+    <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input type="text" id="searchBar" placeholder="Search games…" aria-label="Search games">
+  </div>
 </div>
 
-<main>
-    <div id="modernView">
-        <div class="hero-spotlight">
-            <div class="swiper featured-slider">
-                <div class="swiper-wrapper" id="heroSlider"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
+<div class="page">
 
-        <div class="section-header">
-            <div class="section-title">Trending this week</div>
-            <div class="section-sub"></div>
+  <div id="mainView">
+    <!-- Hero -->
+    <div class="hero-wrap">
+      <div class="hero-clip">
+        <div class="swiper hero-swiper" id="heroEl">
+          <div class="swiper-wrapper" id="heroSlides"></div>
         </div>
-        <div class="swiper horizontal-list" id="trendingSwiper">
-            <div class="swiper-wrapper" id="trendingWrapper"></div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-
-        <div class="section-header">
-            <div class="section-title">Featured</div>
-        </div>
-        <div class="grid" id="featuredGrid"></div>
-
-        <div class="section-header">
-            <div class="section-title">All games</div>
-            <select id="sortSelect" style="background:#111722; border:1px solid #2a3a50; border-radius:30px; padding:0.3rem 0.8rem; font-size:0.75rem; color:#eef;">
-                <option value="name">Name A-Z</option>
-                <option value="id">Newest first</option>
-            </select>
-        </div>
-        <div class="grid" id="allGamesGrid"></div>
+      </div>
+      <div class="h-prev" id="heroPrev">‹</div>
+      <div class="h-next" id="heroNext">›</div>
+      <div class="hero-dots swiper-pagination" id="heroDots"></div>
     </div>
 
-    <div id="searchView" class="hidden">
-        <div class="section-header"><div class="section-title">Search results</div></div>
-        <div class="grid" id="searchResults"></div>
+    <!-- Category sections injected here -->
+    <div id="sectionsWrap"></div>
+  </div>
+
+  <!-- Filter / search view -->
+  <div id="filterView" class="hidden">
+    <div class="section-block">
+      <div class="section-head">
+        <div class="s-bar"></div>
+        <div class="s-label" id="filterTitle">Results</div>
+      </div>
+      <div class="grid-view" id="filterGrid"></div>
     </div>
-</main>
+  </div>
+
+</div>
 
 <footer>powered by gn-math</footer>
 
-<div id="zoneViewer" class="zone-viewer">
-    <div class="zone-header">
-        <div><strong id="zoneName" style="font-size:1rem;">Game</strong> <span id="zoneAuthor" style="font-size:0.75rem;"></span></div>
-        <div class="zone-controls">
-            <button onclick="fullscreenFrame()">Fullscreen</button>
-            <button onclick="openInAboutBlank()">New tab</button>
-            <button onclick="downloadGame()">Download</button>
-            <button onclick="closeZone()">Close</button>
-        </div>
+<!-- Zone viewer -->
+<div class="zone-viewer" id="zoneViewer" role="dialog" aria-modal="true">
+  <div class="zone-bar">
+    <div class="zone-bar-l">
+      <span class="z-title" id="zoneName"></span>
+      <span class="z-by" id="zoneAuthor"></span>
     </div>
-    <iframe id="zoneFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"></iframe>
+    <div class="zone-btns">
+      <button class="zbtn" onclick="fullscreenFrame()">Fullscreen</button>
+      <button class="zbtn" onclick="openInNewTab()">New tab</button>
+      <button class="zbtn" onclick="downloadGame()">Download</button>
+      <button class="zbtn x" onclick="closeZone()">✕ Close</button>
+    </div>
+  </div>
+  <div class="zone-frame-wrap">
+    <div class="zone-loading" id="zoneLoading">
+      <div class="spin"></div>
+      <p>Loading game…</p>
+    </div>
+    <iframe id="zoneFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals" title="Game"></iframe>
+  </div>
 </div>
 
-<div id="globalModal" class="modal"><div class="modal-card"><div class="modal-header"><h3 id="modalTitle">Settings</h3><button onclick="closeModal()" style="background:none; border:none; font-size:1.5rem; color:#ccc;">×</button></div><div class="modal-body" id="modalContent"></div></div></div>
+<!-- Modal -->
+<div class="modal" id="globalModal" role="dialog" aria-modal="true">
+  <div class="mbox">
+    <div class="mhead">
+      <h3 id="modalTitle"></h3>
+      <button class="mclose" onclick="closeModal()" aria-label="Close">×</button>
+    </div>
+    <div class="mbody" id="modalContent"></div>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept=".json" style="display:none" aria-hidden="true">
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    // ---------- STORAGE SAFETY ----------
-    (function() {
-        const mem = {};
-        const safe = {
-            getItem: k => { try { return localStorage.getItem(k); } catch(e) { return mem[k] || null; } },
-            setItem: (k,v) => { try { localStorage.setItem(k,v); } catch(e) { mem[k]=String(v); } },
-            removeItem: k => { try { localStorage.removeItem(k); } catch(e) { delete mem[k]; } }
-        };
-        try { localStorage.setItem('test','test'); localStorage.removeItem('test'); }
-        catch(e) { Object.defineProperty(window,'localStorage',{ value:safe, writable:false, configurable:false }); }
-        try { document.cookie = 'test=test'; } catch(e) { Object.defineProperty(document,'cookie',{ get:()=>'', set:()=>true }); }
-    })();
+/* ── Storage safety ── */
+(function(){
+  const m={};
+  const s={
+    getItem:k=>{try{return localStorage.getItem(k)}catch(e){return m[k]??null}},
+    setItem:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){m[k]=String(v)}},
+    removeItem:k=>{try{localStorage.removeItem(k)}catch(e){delete m[k]}}
+  };
+  try{localStorage.setItem('_t','1');localStorage.removeItem('_t')}
+  catch(e){Object.defineProperty(window,'localStorage',{value:s})}
+})();
 
-    // ---------- CONFIG ----------
-    const CONFIG = {
-        zones: "https://cdn.jsdelivr.net/gh/freebuisness/assets@latest/zones.json",
-        zonesFallback: "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json",
-        covers: "https://cdn.jsdelivr.net/gh/freebuisness/covers@main",
-        coversFallback: "https://cdn.jsdelivr.net/gh/gn-math/covers@main",
-        html: "https://cdn.jsdelivr.net/gh/freebuisness/html@main",
-        htmlFallback: "https://cdn.jsdelivr.net/gh/gn-math/html@main"
+/* ── Config ── */
+const C={
+  zones:         'https://cdn.jsdelivr.net/gh/freebuisness/assets@latest/zones.json',
+  zonesFallback: 'https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json',
+  covers:        'https://cdn.jsdelivr.net/gh/freebuisness/covers@main',
+  coversFallback:'https://cdn.jsdelivr.net/gh/gn-math/covers@main',
+  html:          'https://cdn.jsdelivr.net/gh/freebuisness/html@main',
+  htmlFallback:  'https://cdn.jsdelivr.net/gh/gn-math/html@main',
+};
+
+/* ── State ── */
+let games=[], categories=[], heroSw=null, rowSws=[], currentGame=null;
+
+/* ── Helpers ── */
+const $=id=>document.getElementById(id);
+const esc=s=>s?.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))||'';
+const getFavs=()=>JSON.parse(localStorage.getItem('favorites')||'[]');
+const setFavs=a=>localStorage.setItem('favorites',JSON.stringify(a));
+const resolveUrl=u=>u.replace('{COVER_URL}',C.covers).replace('{HTML_URL}',C.html);
+const resolveFb=u=>u.replace('{COVER_URL}',C.coversFallback).replace('{HTML_URL}',C.htmlFallback);
+
+async function fetchHtml(url){
+  let r=await fetch(resolveUrl(url)+'?t='+Date.now());
+  let h=await r.text();
+  if(h.includes("Couldn't find")){
+    r=await fetch(resolveFb(url)+'?t='+Date.now());
+    h=await r.text();
+  }
+  return h;
+}
+
+/* ── Load games ── */
+async function fetchGames(){
+  try{
+    let url=C.zones;
+    try{
+      const r=await fetch('https://api.github.com/repos/freebuisness/assets/commits?per_page=1&t='+Date.now());
+      if(r.ok){const d=await r.json();if(d[0]?.sha)url=`https://cdn.jsdelivr.net/gh/freebuisness/assets@${d[0].sha}/zones.json`;}
+    }catch(_){}
+    const r=await fetch(url+'?t='+Date.now());
+    if(!r.ok)throw 0;
+    return r.json();
+  }catch(_){
+    const r=await fetch(C.zonesFallback+'?t='+Date.now());
+    if(!r.ok)throw new Error('Failed');
+    return r.json();
+  }
+}
+
+/* ── Card HTML ── */
+function card(g, extraClass=''){
+  const f=getFavs();
+  const tags=(g.special||[]).slice(0,2).join(' · ');
+  return `<div class="gcard ${extraClass}" onclick="openGame(${g.id})" role="button" tabindex="0" aria-label="${esc(g.name)}">
+    <span class="gc-star ${f.includes(g.id)?'starred':''}"
+          onclick="event.stopPropagation();toggleFav(${g.id},this)" title="Favourite">★</span>
+    <img class="gc-img" src="${resolveUrl(g.cover)}" loading="lazy" alt="${esc(g.name)}"
+         onerror="this.src='https://placehold.co/200x200/10151f/3d5a72?text=?'">
+    <div class="gc-body">
+      <div class="gc-name">${esc(g.name)}</div>
+      ${tags?`<div class="gc-tags">${esc(tags)}</div>`:''}
+      <div class="gc-plays">0 plays</div>
+    </div>
+  </div>`;
+}
+
+/* ── Hero ── */
+function buildHero(){
+  const picks=[...games].sort(()=>Math.random()-0.5).slice(0,6);
+  $('heroSlides').innerHTML=picks.map(g=>`
+    <div class="swiper-slide">
+      <div class="slide-inner">
+        <img class="slide-img" src="${resolveUrl(g.cover)}" alt="${esc(g.name)}" loading="lazy"
+             onerror="this.src='https://placehold.co/380x256/10151f/3d5a72?text=?'">
+        <div class="slide-info">
+          <div class="s-title">${esc(g.name)}</div>
+          <div class="s-tags">${(g.special||[]).slice(0,2).map(t=>`<span class="s-tag">${esc(t)}</span>`).join('')}</div>
+          ${g.author?`<div class="s-author">by ${esc(g.author)}</div>`:''}
+          <button class="s-play" onclick="openGame(${g.id})">▶ Play now</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function initHero(){
+  if(heroSw){heroSw.destroy(true,true);heroSw=null;}
+  heroSw=new Swiper('#heroEl',{
+    loop:true,
+    loopAdditionalSlides:2,
+    centeredSlides:true,
+    slidesPerView:'auto',
+    speed:460,
+    autoplay:{delay:5000,disableOnInteraction:false,pauseOnMouseEnter:true},
+    navigation:{nextEl:'#heroNext',prevEl:'#heroPrev'},
+    pagination:{el:'#heroDots',clickable:true,dynamicBullets:false},
+  });
+}
+
+/* ── Sections ── */
+function buildSections(){
+  rowSws.forEach(sw=>sw.destroy(true,true));
+  rowSws=[];
+  const wrap=$('sectionsWrap');
+  wrap.innerHTML='';
+
+  // Trending
+  const trending=[...games].sort(()=>Math.random()-0.5).slice(0,16);
+  wrap.appendChild(makeSection('Trending This Week', trending, false));
+
+  // Per-category rows
+  categories.forEach(cat=>{
+    const list=games.filter(g=>g.special?.includes(cat));
+    if(list.length<2) return;
+    wrap.appendChild(makeSection(cat, list, true));
+  });
+
+  // All Games grid
+  const allSec=document.createElement('div');
+  allSec.className='section-block';
+  allSec.innerHTML=`
+    <div class="section-head" style="justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:0.7rem;">
+        <div class="s-bar"></div>
+        <div class="s-label">All Games</div>
+      </div>
+      <select id="sortSelect" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-pill);padding:0.25rem 0.75rem;font-size:0.72rem;color:var(--text-2);font-family:inherit;cursor:pointer;">
+        <option value="name">A – Z</option>
+        <option value="newest">Newest</option>
+      </select>
+    </div>
+    <div class="grid-view" id="allGamesGrid"></div>`;
+  wrap.appendChild(allSec);
+
+  // Init row swipers after DOM is appended
+  wrap.querySelectorAll('.row-sw').forEach(el=>{
+    rowSws.push(new Swiper(el,{
+      slidesPerView:'auto',
+      spaceBetween:10,
+      freeMode:true,
+      mousewheel:{forceToAxis:true},
+      navigation: {
+        prevEl: el.parentElement.querySelector('.r-prev'),
+        nextEl: el.parentElement.querySelector('.r-next')
+      }
+    }));
+  });
+
+  // Populate all games and wire sort
+  renderAllGames();
+  $('sortSelect').addEventListener('change', renderAllGames);
+}
+
+function renderAllGames(){
+  const sel=$('sortSelect');
+  if(!sel) return;
+  const sorted=[...games].sort(sel.value==='name'
+    ?(a,b)=>a.name.localeCompare(b.name)
+    :(a,b)=>b.id-a.id);
+  $('allGamesGrid').innerHTML=sorted.map(g=>card(g)).join('');
+}
+
+let _secIdx=0;
+function makeSection(label, list, isCat){
+  const id='rs'+(_secIdx++);
+  const cls=isCat?'cat-card':'';
+  const sec=document.createElement('div');
+  sec.className='section-block';
+  sec.innerHTML=`
+    <div class="section-head">
+      <div class="s-bar"></div>
+      <div class="s-label">${esc(label)}</div>
+    </div>
+    <div class="row-wrap">
+      <div class="r-btn r-prev">‹</div>
+      <div class="swiper row-sw" id="${id}">
+        <div class="swiper-wrapper">
+          ${list.map(g=>`<div class="swiper-slide" style="width:auto">${card(g,cls)}</div>`).join('')}
+        </div>
+      </div>
+      <div class="r-btn r-next">›</div>
+    </div>`;
+  return sec;
+}
+
+/* ── Categories ── */
+function buildCats(){
+  const set=new Set();
+  games.forEach(g=>g.special?.forEach(t=>set.add(t)));
+  categories=[...set].slice(0,14);
+
+  const strip=$('catStrip');
+  strip.innerHTML=
+    `<button class="chip active" data-f="all">All Games</button>`+
+    `<button class="chip" data-f="favs">★ Favorites</button>`+
+    categories.map(c=>`<button class="chip" data-f="${esc(c)}">${esc(c)}</button>`).join('');
+
+  strip.querySelectorAll('.chip').forEach(b=>{
+    b.addEventListener('click',()=>{
+      strip.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const f=b.dataset.f;
+      if(f==='all') showMain();
+      else if(f==='favs') showFavs();
+      else showCat(f);
+    });
+  });
+}
+
+/* ── Views ── */
+function showMain(){
+  $('mainView').classList.remove('hidden');
+  $('filterView').classList.add('hidden');
+  $('searchBar').value='';
+}
+function showFavs(){
+  const f=getFavs();
+  const list=games.filter(g=>f.includes(g.id));
+  showFilter('Favorites',
+    list.length?list.map(g=>card(g)).join(''):'<div class="empty">No favorites yet.</div>');
+}
+function showCat(cat){
+  const list=games.filter(g=>g.special?.includes(cat));
+  showFilter(cat, list.map(g=>card(g)).join(''));
+}
+function handleSearch(){
+  const q=$('searchBar').value.trim().toLowerCase();
+  if(!q){showMain();return;}
+  const list=games.filter(g=>g.name.toLowerCase().includes(q));
+  showFilter(`Results for "${esc(q)}"`,
+    list.length?list.map(g=>card(g)).join(''):`<div class="empty">No results.</div>`);
+}
+function showFilter(title,html){
+  $('mainView').classList.add('hidden');
+  $('filterView').classList.remove('hidden');
+  $('filterTitle').textContent=title;
+  $('filterGrid').innerHTML=html;
+}
+
+/* ── Favorites toggle ── */
+function toggleFav(id,el){
+  let f=getFavs();
+  if(f.includes(id)) f=f.filter(x=>x!==id);
+  else f.push(id);
+  setFavs(f);
+  // Update all stars for this game on the page
+  document.querySelectorAll('.gc-star').forEach(s=>{
+    if(s.getAttribute('onclick')?.includes(`toggleFav(${id},`)){
+      s.className='gc-star'+(f.includes(id)?' starred':'');
+    }
+  });
+}
+
+/* ── Shell show/hide ── */
+function hideShell(){
+  document.querySelector('.topnav').style.display='none';
+  document.querySelector('.search-row').style.display='none';
+  document.querySelector('.page').style.display='none';
+  document.querySelector('footer').style.display='none';
+}
+function showShell(){
+  document.querySelector('.topnav').style.display='';
+  document.querySelector('.search-row').style.display='';
+  document.querySelector('.page').style.display='';
+  document.querySelector('footer').style.display='';
+}
+
+/* ── Game viewer ── */
+async function openGame(id){
+  const g=games.find(x=>x.id===id);
+  if(!g) return;
+  currentGame=g;
+  $('zoneName').textContent=g.name;
+  $('zoneAuthor').textContent=g.author?`by ${g.author}`:'';
+
+  const viewer=$('zoneViewer');
+  const frame=$('zoneFrame');
+  const loader=$('zoneLoading');
+
+  // Reset loader state, show viewer
+  loader.classList.remove('done');
+  viewer.style.display='flex';
+  hideShell();
+
+  // Clear previous content
+  frame.removeAttribute('src');
+
+  try{
+    const html=await fetchHtml(g.url);
+    // Blob URL is far more reliable than document.write for full HTML docs
+    const blob=new Blob([html],{type:'text/html'});
+    const url=URL.createObjectURL(blob);
+
+    frame.onload=()=>{
+      URL.revokeObjectURL(url);
+      loader.classList.add('done');
     };
-    let state = { games: [], categories: [], heroSwiper: null, trendingSwiper: null };
+    frame.src=url;
+  }catch(e){
+    alert('Failed to load game. The game may be unavailable.');
+    closeZone();
+  }
+}
+function closeZone(){
+  $('zoneViewer').style.display='none';
+  $('zoneLoading').classList.remove('done');
+  const f=$('zoneFrame');
+  f.onload=null;
+  f.src='about:blank';
+  showShell();
+  currentGame=null;
+}
+function fullscreenFrame(){
+  const f=$('zoneFrame');
+  (f.requestFullscreen||f.webkitRequestFullscreen||f.mozRequestFullScreen)?.call(f);
+}
+async function openInNewTab(){
+  if(!currentGame) return;
+  const w=window.open('about:blank','_blank');
+  if(!w){alert('Popup blocked. Allow popups for this site.');return;}
+  try{
+    const html=await fetchHtml(currentGame.url);
+    const blob=new Blob([html],{type:'text/html'});
+    const url=URL.createObjectURL(blob);
+    w.location.href=url;
+    // Revoke after a delay to let the new tab load
+    setTimeout(()=>URL.revokeObjectURL(url),5000);
+  }catch(e){alert('Failed to open.');}
+}
+async function downloadGame(){
+  if(!currentGame) return;
+  try{
+    const html=await fetchHtml(currentGame.url);
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+    a.download=`${currentGame.name.replace(/[^a-z0-9]/gi,'_')}.html`;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  }catch(e){alert('Download failed.');}
+}
 
-    async function fetchGames() {
-        try {
-            let url = CONFIG.zones;
-            const commitRes = await fetch("https://api.github.com/repos/freebuisness/assets/commits?t="+Date.now());
-            if (commitRes.ok) {
-                const shaData = await commitRes.json();
-                if (shaData[0]?.sha) url = `https://cdn.jsdelivr.net/gh/freebuisness/assets@${shaData[0].sha}/zones.json`;
-            }
-            const res = await fetch(url + "?t="+Date.now());
-            if (!res.ok) throw new Error();
-            return await res.json();
-        } catch(e) {
-            const fallbackRes = await fetch(CONFIG.zonesFallback + "?t="+Date.now());
-            if (!fallbackRes.ok) throw new Error("Failed to load games");
-            return await fallbackRes.json();
-        }
-    }
+/* ── Modal ── */
+function openModal(t,b){$('modalTitle').textContent=t;$('modalContent').innerHTML=b;$('globalModal').style.display='flex';}
+function closeModal(){$('globalModal').style.display='none';}
 
-    function resolveUrl(u) { return u.replace("{COVER_URL}", CONFIG.covers).replace("{HTML_URL}", CONFIG.html); }
-    function escapeHtml(str) { return str?.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;') || ''; }
+/* ── Import/Export ── */
+$('importFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d.favorites)setFavs(d.favorites);location.reload();}catch(_){alert('Invalid file.');}};
+  r.readAsText(f);
+});
 
-    function renderGameCard(game, favs) {
-        const tag = (game.special && game.special[0]) || '';
-        return `<div class="game-card" onclick="openGame(${game.id})">
-            <div class="star ${favs.includes(game.id) ? 'starred' : ''}" onclick="event.stopPropagation(); toggleFavorite(${game.id}, this)">★</div>
-            <img class="card-img" src="${resolveUrl(game.cover)}" loading="lazy" onerror="this.src='https://placehold.co/200x200?text=No+Cover'">
-            <div class="card-info">
-                <div class="game-name">${escapeHtml(game.name)}</div>
-                ${tag ? `<div class="game-badge">${escapeHtml(tag)}</div>` : ''}
-            </div>
-        </div>`;
-    }
+/* ── Keyboard ── */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if($('zoneViewer').style.display==='flex') closeZone();
+    if($('globalModal').style.display==='flex') closeModal();
+  }
+});
 
-    function buildCategories() {
-        const cats = new Set();
-        state.games.forEach(g => { if(g.special) g.special.forEach(t => cats.add(t)); });
-        state.categories = Array.from(cats).slice(0, 14);
-        const strip = document.getElementById('catStrip');
-        strip.innerHTML = `<button class="chip active" data-filter="all">All Games</button><button class="chip" data-filter="favs">★ Favorites</button>`;
-        state.categories.forEach(c => { strip.innerHTML += `<button class="chip" data-filter="${c}">${c}</button>`; });
-        strip.querySelectorAll('.chip').forEach(btn => {
-            btn.onclick = () => {
-                strip.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.getAttribute('data-filter');
-                if(filter === 'all') showAll();
-                else if(filter === 'favs') showFavorites();
-                else filterByCategory(filter);
-            };
-        });
-    }
+/* ── Boot ── */
+(async()=>{
+  try{
+    games=await fetchGames();
+    games.forEach(g=>{if(!g.special)g.special=[];});
 
-    function showAll() {
-        document.getElementById('modernView').classList.remove('hidden');
-        document.getElementById('searchView').classList.add('hidden');
-        document.getElementById('searchBar').value = '';
-        renderAllGames();
-    }
+    buildCats();
 
-    function showFavorites() {
-        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        const filtered = state.games.filter(g => favs.includes(g.id));
-        document.getElementById('modernView').classList.add('hidden');
-        document.getElementById('searchView').classList.remove('hidden');
-        const container = document.getElementById('searchResults');
-        container.innerHTML = filtered.length ? filtered.map(g => renderGameCard(g, favs)).join('') : '<div style="text-align:center; padding:2rem;">⭐ No favorites yet</div>';
-    }
+    // Build content, THEN init swipers
+    buildHero();
+    buildSections();
+    initHero();
 
-    function filterByCategory(cat) {
-        const filtered = state.games.filter(g => g.special?.includes(cat));
-        document.getElementById('modernView').classList.add('hidden');
-        document.getElementById('searchView').classList.remove('hidden');
-        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        document.getElementById('searchResults').innerHTML = filtered.map(g => renderGameCard(g, favs)).join('');
-    }
-
-    function handleSearch() {
-        const q = document.getElementById('searchBar').value.trim().toLowerCase();
-        if(!q) { showAll(); return; }
-        const results = state.games.filter(g => g.name.toLowerCase().includes(q));
-        document.getElementById('modernView').classList.add('hidden');
-        document.getElementById('searchView').classList.remove('hidden');
-        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        document.getElementById('searchResults').innerHTML = results.length ? results.map(g => renderGameCard(g, favs)).join('') : `<div style="text-align:center; padding:2rem;">No results for "${escapeHtml(q)}"</div>`;
-    }
-
-    function renderAllGames() {
-        const sortBy = document.getElementById('sortSelect').value;
-        let games = [...state.games];
-        if(sortBy === 'name') games.sort((a,b)=> a.name.localeCompare(b.name));
-        else games.sort((a,b)=> b.id - a.id);
-        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        document.getElementById('allGamesGrid').innerHTML = games.map(g => renderGameCard(g, favs)).join('');
-    }
-
-    function renderFeatured() {
-        const featured = state.games.filter(g => g.featured || g.id % 7 === 0).slice(0, 8);
-        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        document.getElementById('featuredGrid').innerHTML = featured.map(g => renderGameCard(g, favs)).join('');
-    }
-
-    function renderTrending() {
-        const trending = [...state.games].sort(() => Math.random() - 0.5).slice(0, 14);
-        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        document.getElementById('trendingWrapper').innerHTML = trending.map(g => `<div class="swiper-slide">${renderGameCard(g, favs)}</div>`).join('');
-        if(state.trendingSwiper) state.trendingSwiper.update();
-    }
-
-    function renderHero() {
-        const heroGames = [...state.games].sort(() => Math.random() - 0.5).slice(0, 5);
-        document.getElementById('heroSlider').innerHTML = heroGames.map(g => `
-            <div class="swiper-slide">
-                <div class="slide-content">
-                    <img class="slide-img" src="${resolveUrl(g.cover)}" loading="lazy">
-                    <div class="slide-info">
-                        <div class="hero-title">${escapeHtml(g.name)}</div>
-                        <div class="hero-meta">${(g.special || []).slice(0,2).map(t => `<span class="hero-tag">${escapeHtml(t)}</span>`).join('')}</div>
-                        <div style="font-size:0.75rem; color:#9bb0cc;">${g.author ? `by ${escapeHtml(g.author)}` : ''}</div>
-                        <button class="hero-btn" onclick="openGame(${g.id})">Play now →</button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-        // reinit swiper after content update to avoid stuck
-        if(state.heroSwiper) {
-            state.heroSwiper.update();
-            state.heroSwiper.autoplay.start();
-        }
-    }
-
-    function toggleFavorite(id, starEl) {
-        let favs = JSON.parse(localStorage.getItem('favorites') || '[]');
-        if(favs.includes(id)) favs = favs.filter(f => f !== id);
-        else favs.push(id);
-        localStorage.setItem('favorites', JSON.stringify(favs));
-        if(starEl) starEl.classList.toggle('starred');
-        renderAllGames(); renderFeatured(); renderTrending();
-        if(!document.getElementById('modernView').classList.contains('hidden')) showAll();
-    }
-
-    let currentGameObject = null;
-
-    async function openGame(id) {
-        const game = state.games.find(g => g.id === id);
-        if(!game) return;
-        currentGameObject = game;
-        document.getElementById('zoneName').innerText = game.name;
-        document.getElementById('zoneAuthor').innerText = game.author ? `by ${game.author}` : '';
-        const viewer = document.getElementById('zoneViewer');
-        const frame = document.getElementById('zoneFrame');
-        viewer.style.display = 'flex';
-        document.querySelector('.chip-strip').style.display = 'none';
-        document.querySelector('.search-wrap').style.display = 'none';
-        document.querySelector('main').style.display = 'none';
-        document.querySelector('footer').style.display = 'none';
-        let url = resolveUrl(game.url);
-        try {
-            let resp = await fetch(url + "?t=" + Date.now());
-            let html = await resp.text();
-            if(html.includes("Couldn't find")) {
-                const fallbackUrl = game.url.replace("{COVER_URL}", CONFIG.coversFallback).replace("{HTML_URL}", CONFIG.htmlFallback);
-                resp = await fetch(fallbackUrl + "?t=" + Date.now());
-                html = await resp.text();
-            }
-            frame.contentWindow.document.open();
-            frame.contentWindow.document.write(html);
-            frame.contentWindow.document.close();
-        } catch(e) { alert("Failed to load game"); closeZone(); }
-    }
-
-    function closeZone() {
-        document.getElementById('zoneViewer').style.display = 'none';
-        document.getElementById('zoneFrame').src = 'about:blank';
-        document.querySelector('.chip-strip').style.display = '';
-        document.querySelector('.search-wrap').style.display = '';
-        document.querySelector('main').style.display = '';
-        document.querySelector('footer').style.display = '';
-        currentGameObject = null;
-    }
-
-    function fullscreenFrame() { 
-        const iframe = document.getElementById('zoneFrame');
-        if(iframe.requestFullscreen) iframe.requestFullscreen();
-    }
-
-    async function openInAboutBlank() {
-        if(!currentGameObject) {
-            const name = document.getElementById('zoneName').innerText;
-            const game = state.games.find(g => g.name === name);
-            if(game) currentGameObject = game;
-            else return;
-        }
-        const win = window.open('about:blank', '_blank');
-        if(!win) { alert("Popup blocked. Allow popups for this site."); return; }
-        const url = resolveUrl(currentGameObject.url);
-        try {
-            let resp = await fetch(url + "?t=" + Date.now());
-            let html = await resp.text();
-            if(html.includes("Couldn't find")) {
-                const fallbackUrl = currentGameObject.url.replace("{COVER_URL}", CONFIG.coversFallback).replace("{HTML_URL}", CONFIG.htmlFallback);
-                resp = await fetch(fallbackUrl + "?t=" + Date.now());
-                html = await resp.text();
-            }
-            win.document.write(html);
-            win.document.close();
-        } catch(e) { alert("Failed to open in new tab"); }
-    }
-
-    async function downloadGame() {
-        if(!currentGameObject) {
-            const name = document.getElementById('zoneName').innerText;
-            const game = state.games.find(g => g.name === name);
-            if(game) currentGameObject = game;
-            else return;
-        }
-        const url = resolveUrl(currentGameObject.url);
-        try {
-            let resp = await fetch(url + "?t=" + Date.now());
-            let html = await resp.text();
-            if(html.includes("Couldn't find")) {
-                const fallbackUrl = currentGameObject.url.replace("{COVER_URL}", CONFIG.coversFallback).replace("{HTML_URL}", CONFIG.htmlFallback);
-                resp = await fetch(fallbackUrl + "?t=" + Date.now());
-                html = await resp.text();
-            }
-            const blob = new Blob([html], {type: 'text/html'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `${currentGameObject.name.replace(/[^a-z0-9]/gi, '_')}.html`;
-            a.click();
-            URL.revokeObjectURL(a.href);
-        } catch(e) { alert("Download failed"); }
-    }
-
-    function openModal(title, content) { document.getElementById('modalTitle').innerText = title; document.getElementById('modalContent').innerHTML = content; document.getElementById('globalModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('globalModal').style.display = 'none'; }
-    function openSettings() { openModal("Preferences", `<button class="hero-btn" style="margin:0.5rem 0;" onclick="exportData()">Export save data</button><br><button class="hero-btn" onclick="document.getElementById('importFile').click()">Import save data</button><input type="file" id="importFile" style="display:none">`); }
-    function exportData() { const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify({favorites:localStorage.getItem('favorites')})],{type:'application/json'})); a.download='gnmath_save.json'; a.click(); }
-    document.getElementById('importFile')?.addEventListener('change', e => { const file=e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ try{ const data=JSON.parse(ev.target.result); if(data.favorites) localStorage.setItem('favorites',JSON.stringify(data.favorites)); location.reload(); }catch(e){ alert("Invalid file"); } }; reader.readAsText(file); });
-
-    function initSwipers() {
-        if(state.heroSwiper) state.heroSwiper.destroy();
-        state.heroSwiper = new Swiper('.featured-slider', { 
-            loop: true, 
-            autoplay: { delay: 5000, disableOnInteraction: false }, 
-            centeredSlides: true, 
-            slidesPerView: 'auto', 
-            navigation: { nextEl: '.featured-slider .swiper-button-next', prevEl: '.featured-slider .swiper-button-prev' }, 
-            speed: 550,
-            watchOverflow: true
-        });
-        if(state.trendingSwiper) state.trendingSwiper.destroy();
-        state.trendingSwiper = new Swiper('#trendingSwiper', { slidesPerView: 'auto', spaceBetween: 14, navigation: { nextEl: '#trendingSwiper .swiper-button-next', prevEl: '#trendingSwiper .swiper-button-prev' } });
-    }
-
-    (async () => {
-        try {
-            state.games = await fetchGames();
-            state.games.forEach(g => { if(!g.special) g.special = []; if(g.id===1 || g.id===42) g.featured = true; });
-            buildCategories();
-            renderHero();
-            renderTrending();
-            renderFeatured();
-            renderAllGames();
-            initSwipers();
-            document.getElementById('sortSelect').addEventListener('change', () => renderAllGames());
-            document.getElementById('searchBar').addEventListener('input', handleSearch);
-        } catch(e) { document.getElementById('allGamesGrid').innerHTML = `<div style="text-align:center; padding:2rem;">⚠️ Failed to load games. Refresh.</div>`; }
-    })();
+    $('searchBar').addEventListener('input',handleSearch);
+  }catch(e){
+    $('sectionsWrap')?.insertAdjacentHTML('beforeend','<div class="empty">⚠ Failed to load games. Please refresh.</div>');
+    console.error(e);
+  }
+})();
 </script>
 </body>
 </html>
