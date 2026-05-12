@@ -31,21 +31,21 @@ window.MAGES_GAMES = [
     "name": "BuildNow.gg",
     "image": "icons/buildnowgg.webp",
     "url": "buildnowgg/index.html",
-    "section": "",
+    "section": "Unity",
     "author": "BattleLab"
   },
   {
     "name": "Call Of Battle",
     "image": "icons/callofbattle.webp",
     "url": "callofbattle/index.html",
-    "section": "",
+    "section": "Unity",
     "author": "KolesoDobrogo"
   },
   {
     "name": "Justfall.lol",
     "image": "icons/justfalllol.webp",
     "url": "justfalllol/index.html",
-    "section": "",
+    "section": "Unity",
     "author": "JustPlay.LOL"
   },
   {
@@ -192,7 +192,7 @@ window.MAGES_GAMES = [
     "name": "Core Ball",
     "image": "icons/coreball.webp",
     "url": "coreball/index.html",
-    "section": "",
+    "section": "Html5",
     "author": "Ben Vinegar"
   },
   {
@@ -353,7 +353,7 @@ window.MAGES_GAMES = [
     "name": "A Dark Room",
     "image": "icons/adarkroom.webp",
     "url": "adarkroom/index.html",
-    "section": "",
+    "section": "Html5",
     "author": "Michael Townsend"
   },
   {
@@ -381,14 +381,14 @@ window.MAGES_GAMES = [
     "name": "Amidst the Sky",
     "image": "icons/amidstthesky.webp",
     "url": "amidstthesky/index.html",
-    "section": "",
+    "section": "Html5",
     "author": "Ferociter"
   },
   {
     "name": "Among Us",
     "image": "icons/amongus.webp",
     "url": "amongus/index.html",
-    "section": "",
+    "section": "Html5",
     "author": "Innersloth"
   },
   {
@@ -402,35 +402,35 @@ window.MAGES_GAMES = [
     "name": "Awesome Tanks",
     "image": "icons/awesometanks.webp",
     "url": "awesometanks/index.html",
-    "section": "",
+    "section": "Flash",
     "author": "Alexander Naumov"
   },
   {
     "name": "Bacon May Die",
     "image": "icons/baconmaydie.webp",
     "url": "baconmaydie/index.html",
-    "section": "",
+    "section": "Html5",
     "author": "SnoutUp"
   },
   {
     "name": "Bad Ice Cream",
     "image": "icons/badicecream.webp",
     "url": "badicecream/index.html",
-    "section": "",
+    "section": "Flash",
     "author": "Nitrome"
   },
   {
     "name": "Bad Ice Cream 2",
     "image": "icons/badicecream2.webp",
     "url": "badicecream2/index.html",
-    "section": "",
+    "section": "Flash",
     "author": "Nitrome"
   },
   {
     "name": "Bad Ice Cream 3",
     "image": "icons/badicecream3.webp",
     "url": "badicecream3/index.html",
-    "section": "",
+    "section": "Flash",
     "author": "Nitrome"
   },
   {

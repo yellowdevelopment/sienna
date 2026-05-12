@@ -1,3 +1,23 @@
+/*
+
+           /$$           /$$         /$$       
+          |__/          | $$        | $$       
+ /$$$$$$$  /$$  /$$$$$$ | $$$$$$$  /$$$$$$     
+| $$__  $$| $$ /$$__  $$| $$__  $$|_  $$_/     
+| $$  \ $$| $$| $$  \ $$| $$  \ $$  | $$       
+| $$  | $$| $$| $$  | $$| $$  | $$  | $$ /$$   
+| $$  | $$| $$|  $$$$$$$| $$  | $$  |  $$$$//$$
+|__/  |__/|__/ \____  $$|__/  |__/   \___/ |__/
+               /$$  \ $$                       
+              |  $$$$$$/                       
+               \______/                        
+                                                          
+                                                          
+What you're seeing is night. (A tribute to my previous website)
+made by yellowdevelopment
+
+*/
+
 /**
  * Browse / opening flow, games & apps grid, dropdown, info popup.
  * Data: mages.js (window.MAGES_GAMES), apps.js (window.APPS_ITEMS).
