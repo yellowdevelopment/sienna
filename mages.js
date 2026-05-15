@@ -2,7 +2,7 @@ window.MAGES_GAMES = [
   {
     "name": "sienna. is in BETA, Expect Bugs and Changes",
     "image": "icons/thisisinbeta.webp",
-    "url": "https://usesienna.vercel.app",
+    "url": "link/index.html",
     "section": "website",
     "author": "yellowdevelopment"
   },
