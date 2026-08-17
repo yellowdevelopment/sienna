@@ -34,12 +34,13 @@ made by yellowdevelopment
   const STAGGER_CAP_MS = 480;
   const STAGGER_STEP_MS = 10;
   const GRID_FADE_MS = 200;
-  const SCROLL_DURATION_MS = 950;
+  const SCROLL_DURATION_MS = 600;
+  const SCROLL_MIN_MS = 280;
 
   const util = {
     escapeHtml(s) {
       return String(s).replace(/[&<>"']/g, (c) => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+        '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#39;',
       }[c]));
     },
     slugFromUrl(item) {
@@ -142,18 +143,11 @@ made by yellowdevelopment
     items: [],
 
     load() {
-      try {
-        const stored = localStorage.getItem(this.storageKey);
-        this.items = stored ? JSON.parse(stored) : [];
-      } catch (e) {
-        this.items = [];
-      }
+      this.items = window.siennaSave.loadCustomGames(this.storageKey);
     },
 
     save() {
-      try {
-        localStorage.setItem(this.storageKey, JSON.stringify(this.items));
-      } catch (e) {}
+      window.siennaSave.saveCustomGames(this.storageKey, this.items);
     },
 
     add(name, html) {
@@ -392,55 +386,45 @@ made by yellowdevelopment
   };
 
   const iconLazyLoader = {
-    observer: null,
+    loadObserver: null,
+    unloadObserver: null,
     loaded: new Set(),
-    releaseCheckRaf: null,
-    listenersBound: false,
-    releaseHandler: null,
-    loadMargin: 220,
-    releaseMargin: 1800,
+    loadMargin: "220px",
+    releaseMargin: "1800px",
 
     init() {
       if (!document.querySelectorAll) return;
       if (!('IntersectionObserver' in window)) {
         document.querySelectorAll('img.browse-card-icon').forEach((img) => {
-          if (this.isWithinMargin(img, this.loadMargin)) this.loadImage(img);
+          this.loadImage(img);
         });
         return;
       }
-      this.ensureObserver();
+      this.ensureObservers();
       this.observeAll();
-      this.scheduleReleaseCheck();
     },
 
-    ensureObserver() {
-      if (!('IntersectionObserver' in window)) return;
-      if (this.observer) {
-        this.observer.disconnect();
-      }
+    ensureObservers() {
+      if (this.loadObserver) this.loadObserver.disconnect();
+      if (this.unloadObserver) this.unloadObserver.disconnect();
 
-      this.observer = new IntersectionObserver((entries) => {
+      this.loadObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          const img = entry.target;
-          if (entry.isIntersecting || this.isWithinMargin(img, this.loadMargin)) {
+          if (entry.isIntersecting) {
+            const img = entry.target;
             this.loadImage(img);
-            return;
           }
-          if (this.isOutsideMargin(img, this.releaseMargin)) {
+        });
+      }, { rootMargin: `${this.loadMargin} 0px`, threshold: 0.01 });
+
+      this.unloadObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            const img = entry.target;
             this.unloadImage(img);
           }
         });
-      }, {
-        rootMargin: `${this.loadMargin}px 0px`,
-        threshold: 0.01,
-      });
-
-      if (!this.listenersBound) {
-        this.releaseHandler = () => this.scheduleReleaseCheck();
-        window.addEventListener('scroll', this.releaseHandler, { passive: true });
-        window.addEventListener('resize', this.releaseHandler, { passive: true });
-        this.listenersBound = true;
-      }
+      }, { rootMargin: `${this.releaseMargin} 0px`, threshold: 0.01 });
     },
 
     observeAll() {
@@ -448,48 +432,12 @@ made by yellowdevelopment
         if (!img.isConnected) this.loaded.delete(img);
       });
       document.querySelectorAll('img.browse-card-icon').forEach((img) => {
-        this.observer?.observe(img);
-      });
-    },
-
-    scheduleReleaseCheck() {
-      if (this.releaseCheckRaf) return;
-      this.releaseCheckRaf = requestAnimationFrame(() => {
-        this.releaseCheckRaf = null;
-        this.releaseFarImages();
-      });
-    },
-
-    releaseFarImages() {
-      this.loaded.forEach((img) => {
-        if (!img.isConnected || this.isOutsideMargin(img, this.releaseMargin)) {
-          this.unloadImage(img);
+        if (img.dataset.loaded !== 'true') {
+          this.loadObserver?.observe(img);
+        } else {
+          this.unloadObserver?.observe(img);
         }
       });
-    },
-
-    isWithinMargin(el, margin) {
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-      return (
-        rect.bottom >= -margin &&
-        rect.right >= -margin &&
-        rect.top <= windowHeight + margin &&
-        rect.left <= windowWidth + margin
-      );
-    },
-
-    isOutsideMargin(el, margin) {
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-      return (
-        rect.bottom < -margin ||
-        rect.right < -margin ||
-        rect.top > windowHeight + margin ||
-        rect.left > windowWidth + margin
-      );
     },
 
     loadImage(img) {
@@ -507,6 +455,9 @@ made by yellowdevelopment
       img.dataset.loaded = 'true';
       this.loaded.add(img);
       img.style.display = '';
+      
+      this.loadObserver?.unobserve(img);
+      this.unloadObserver?.observe(img);
     },
 
     unloadImage(img) {
@@ -514,23 +465,18 @@ made by yellowdevelopment
       img.removeAttribute('src');
       img.dataset.loaded = 'false';
       this.loaded.delete(img);
+
+      this.unloadObserver?.unobserve(img);
+      this.loadObserver?.observe(img);
     },
 
     teardown() {
-      this.observer?.disconnect();
-      this.observer = null;
+      this.loadObserver?.disconnect();
+      this.unloadObserver?.disconnect();
+      this.loadObserver = null;
+      this.unloadObserver = null;
       this.loaded.forEach((img) => this.unloadImage(img));
       this.loaded.clear();
-      if (this.listenersBound && this.releaseHandler) {
-        window.removeEventListener('scroll', this.releaseHandler);
-        window.removeEventListener('resize', this.releaseHandler);
-        this.listenersBound = false;
-        this.releaseHandler = null;
-      }
-      if (this.releaseCheckRaf) {
-        cancelAnimationFrame(this.releaseCheckRaf);
-        this.releaseCheckRaf = null;
-      }
     },
   };
 
@@ -554,13 +500,42 @@ made by yellowdevelopment
     toBrowseSection() {
       const target = document.getElementById('page-browse');
       if (!target) return;
+      opening.revealBrowse();
       const y = target.getBoundingClientRect().top + window.scrollY;
-      this.animateTo(y, SCROLL_DURATION_MS, () => opening.revealBrowse());
+      const dist = Math.abs(y - window.scrollY);
+      if (dist < 8) return;
+      const duration = Math.min(SCROLL_DURATION_MS, Math.max(SCROLL_MIN_MS, dist * 0.55));
+      opening.lockNav(duration + 80);
+      this.animateTo(y, duration);
     },
   };
 
   const opening = {
     staggerTimers: [],
+    navActivePage: null,
+    navLockUntil: 0,
+    lockNav(ms) {
+      this.navLockUntil = Math.max(this.navLockUntil, Date.now() + ms);
+    },
+    setNavActive(page) {
+      if (this.navActivePage === page) return;
+      this.navActivePage = page;
+      document.querySelectorAll('.site-nav-link').forEach((link) => {
+        link.classList.toggle('active', link.dataset.pageLink === page);
+      });
+    },
+    updateNavFromScroll() {
+      if (Date.now() < this.navLockUntil) return;
+      const landing = document.getElementById('page-landing');
+      const browse = document.getElementById('page-browse');
+      if (!landing || !browse) return;
+
+      const vh = window.innerHeight;
+      const visibleHeight = (rect) => Math.max(0, Math.min(rect.bottom, vh) - Math.max(rect.top, 0));
+      const landingVisible = visibleHeight(landing.getBoundingClientRect());
+      const browseVisible = visibleHeight(browse.getBoundingClientRect());
+      this.setNavActive(browseVisible > landingVisible ? 'games' : 'home');
+    },
     clearStaggerTimers() {
       this.staggerTimers.forEach((timerId) => clearTimeout(timerId));
       this.staggerTimers = [];
@@ -568,12 +543,17 @@ made by yellowdevelopment
     revealBrowse() {
       const inner = document.getElementById('browseInner');
       const browseGrid = document.getElementById('browseGrid');
+      const alreadyRevealed = inner?.classList.contains('revealed');
       if (browseGrid && !browseGrid.childElementCount) {
         grid.render(activeCategory);
       }
-      if (inner) requestAnimationFrame(() => inner.classList.add('revealed'));
+      if (inner && !alreadyRevealed) {
+        requestAnimationFrame(() => inner.classList.add('revealed'));
+      }
       featured.ensureStarted();
-      this.staggerCards(document.querySelectorAll('.browse-card'), 60, 10);
+      if (!alreadyRevealed) {
+        this.staggerCards(document.querySelectorAll('.browse-card'), 60, 10);
+      }
     },
     staggerCards(cards, baseDelay, step) {
       const items = Array.from(cards);
@@ -603,18 +583,42 @@ made by yellowdevelopment
     bind() {
       // Scroll button snaps down to the browse section
       document.getElementById('scrollBtn')?.addEventListener('click', () => scroll.toBrowseSection());
+      // Nav link click handlers (no hash URLs)
+      document.querySelectorAll('.site-nav-link').forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const page = link.dataset.pageLink;
+          if (page === 'home') {
+            this.lockNav(700);
+            this.setNavActive('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else if (page === 'games') {
+            this.setNavActive('games');
+            scroll.toBrowseSection();
+          }
+        });
+      });
+      // Brand link (sienna.) also navigates to home
+      document.querySelector('.top-nav-brand')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.lockNav(700);
+        this.setNavActive('home');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
       // Throttle scroll event to avoid excessive getBoundingClientRect calls
       let ticking = false;
       const scrollHandler = () => {
         if (!ticking) {
           requestAnimationFrame(() => {
             this.ensureBrowseVisible();
+            this.updateNavFromScroll();
             ticking = false;
           });
           ticking = true;
         }
       };
       window.addEventListener('scroll', scrollHandler, { passive: true });
+      this.updateNavFromScroll();
     },
   };
 
@@ -699,7 +703,7 @@ made by yellowdevelopment
 
         iconLazyLoader.init();
         search.apply();
-      }, GRID_FADE_MS);
+      }, el.childElementCount ? GRID_FADE_MS : 0);
     },
   };
 
@@ -814,38 +818,8 @@ made by yellowdevelopment
     },
   };
 
-  const infoPopup = {
-    popup: null,
-    unloadTimer: null,
-    show() {
-      if (!this.popup) return;
-      this.popup.classList.add('visible');
-      clearTimeout(this.unloadTimer);
-    },
-    hide() {
-      if (!this.popup) return;
-      this.popup.classList.remove('visible');
-      clearTimeout(this.unloadTimer);
-    },
-    init() {
-      const btn = document.getElementById('infoBtn');
-      const popup = document.getElementById('infoPopup');
-      this.popup = popup;
-      if (!btn || !popup) return;
-      btn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        this.popup.classList.toggle('visible');
-      });
-      btn.addEventListener('mouseenter', () => this.show());
-      btn.addEventListener('mouseleave', () => this.hide());
-      btn.addEventListener('focus', () => this.show());
-      btn.addEventListener('blur', () => this.hide());
-      popup.addEventListener('mouseenter', () => this.show());
-      popup.addEventListener('mouseleave', () => this.hide());
-      popup.addEventListener('click', (event) => event.stopPropagation());
-      document.addEventListener('click', () => this.hide());
-    },
-  };
+  // infoPopup removed — credits moved to settings
+
 
   const search = {
     input: null,
@@ -900,6 +874,7 @@ made by yellowdevelopment
       const section = util.escapeHtml(item.section || 'N/A');
       const author = util.escapeHtml(item.author || 'N/A');
       const gameDataAttr = `data-game-data="${encodeURIComponent(JSON.stringify(item))}"`;
+      const isFav = favorites.has(href);
       
       return `
         <div class="featured-slide" ${gameDataAttr}>
@@ -912,7 +887,12 @@ made by yellowdevelopment
                 <span class="featured-section">${section}</span>
                 <span class="featured-author">By: ${author}</span>
               </div>
-              <a class="featured-play" href="${util.escapeHtml(href)}" data-game-url="${util.escapeHtml(href)}">Play</a>
+              <div class="featured-actions">
+                <a class="featured-play" href="${util.escapeHtml(href)}" data-game-url="${util.escapeHtml(href)}">Play</a>
+                <button class="favorite-btn${isFav ? ' active' : ''}" data-fav-url="${util.escapeHtml(href)}" aria-label="Favorite ${name}">
+                  <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>`;
@@ -1159,6 +1139,14 @@ made by yellowdevelopment
         this.fullscreenBtn.classList.add('active');
       });
 
+      // When the browser tab becomes hidden, stop iframe content to save resources
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && this.iframe && !this.container.classList.contains('open')) {
+          // If the game visor is not open (minimized or background), stop the iframe content
+          this.stopIframeContent();
+        }
+      });
+
       this.loadTabsFromStorage();
       this.renderDock();
     },
@@ -1177,8 +1165,23 @@ made by yellowdevelopment
       this.iframe.addEventListener('error', this.iframeErrorHandler);
     },
 
+    /** Stop any running content in the current iframe */
+    stopIframeContent() {
+      if (!this.iframe) return;
+      try {
+        // Stop all media, scripts, and animations in the iframe
+        if (this.iframe.contentWindow) {
+          this.iframe.contentWindow.stop();
+        }
+      } catch (e) {
+        // Cross-origin iframes will throw, which is fine - the src change handles it
+      }
+    },
+
     replaceIframe(nextSrc = 'about:blank') {
       if (!this.iframe) return null;
+      // Stop any running content before replacing
+      this.stopIframeContent();
       const replacement = this.iframe.cloneNode(false);
       replacement.src = nextSrc;
       this.iframe.replaceWith(replacement);
@@ -1371,9 +1374,21 @@ made by yellowdevelopment
       this.hideInfoModal();
       if (!this.activeTabId) return;
 
+      // Save the current iframe URL before replacing with about:blank
+      // so we can restore it later
+      const currentTab = this.tabs.find((t) => t.id === this.activeTabId);
+      if (currentTab) {
+        currentTab._savedUrl = this.iframe ? this.iframe.src : currentTab.url;
+      }
+
       this.container.classList.remove('open');
       this.container.classList.add('minimized');
       this.overlay.classList.remove('visible');
+
+      // Replace iframe with about:blank to stop the game from running
+      // (audio, animations, network requests, etc.)
+      this.replaceIframe('about:blank');
+
       this.showDock();
       this.renderDock();
       document.body.classList.remove('game-visor-open');
@@ -1405,11 +1420,13 @@ made by yellowdevelopment
         this.iframe.style.display = 'block';
         const panel = document.getElementById('settingsPanel');
         if (panel) panel.style.display = 'none';
-        if (this.iframe.src !== tab.url) {
+        // Use the saved URL if available (from minimize), otherwise use the tab's original URL
+        const restoreUrl = tab._savedUrl || tab.url;
+        if (this.iframe.src !== restoreUrl) {
           this.startLoading();
           this.replaceIframe('about:blank');
           requestAnimationFrame(() => {
-            if (this.iframe) this.iframe.src = tab.url;
+            if (this.iframe) this.iframe.src = restoreUrl;
           });
           tab.loaded = true;
         }
@@ -1572,33 +1589,13 @@ made by yellowdevelopment
     },
 
     saveTabsToStorage() {
-      if (!window.siennaSettings?.shouldRememberTabs?.()) return;
-      try {
-        localStorage.setItem('gameVisorTabs', JSON.stringify(this.tabs.map((t) => ({ id: t.id, url: t.url, name: t.name, loaded: false, gameData: t.gameData }))));
-        localStorage.setItem('gameVisorActiveTabId', this.activeTabId ?? '');
-      } catch (e) {
-        // localStorage may not be available
-      }
+      window.siennaSave.saveTabsToStorage(this.tabs, this.activeTabId);
     },
 
     loadTabsFromStorage() {
-      if (!window.siennaSettings?.shouldRememberTabs?.()) {
-        this.tabs = [];
-        this.activeTabId = null;
-        return;
-      }
-      try {
-        const saved = localStorage.getItem('gameVisorTabs');
-        const activeId = localStorage.getItem('gameVisorActiveTabId');
-        if (saved) {
-          this.tabs = JSON.parse(saved) || [];
-          this.activeTabId = activeId || (this.tabs.length ? this.tabs[this.tabs.length - 1].id : null);
-          this.tabs = this.tabs.map((t) => ({ ...t, loaded: false }));
-        }
-      } catch (e) {
-        this.tabs = [];
-        this.activeTabId = null;
-      }
+      var result = window.siennaSave.loadTabsFromStorage();
+      this.tabs = result.tabs;
+      this.activeTabId = result.activeTabId;
       if (this.tabs.length) {
         this.dock.classList.add('visible');
         this.dock.classList.remove('hidden');
@@ -1669,6 +1666,43 @@ made by yellowdevelopment
     },
   };
 
+  // ═══════════════════════════════════════════════════════
+  //  ACCOUNT SYSTEM (moved to js/siennadb.js)
+  //  Initialized via window.siennaAccount.init()
+  // ═══════════════════════════════════════════════════════
+
+  function initShareBanner() {
+    const subtitle = document.getElementById('shareBannerSubtitle');
+    if (!subtitle) return;
+
+    const phrases = [
+      "Share it with your friends!",
+      "Don't get this blocked",
+    ];
+    let idx = 0;
+
+    setInterval(() => {
+      idx = (idx + 1) % phrases.length;
+      subtitle.classList.add('switching');
+      setTimeout(() => {
+        subtitle.textContent = phrases[idx];
+        subtitle.classList.remove('switching');
+      }, 300);
+    }, 4000);
+
+    const shareUrl = 'https://ubghub.org/?utm_source=usesienna.vercel.app';
+    const siteUrl = encodeURIComponent(window.location.origin);
+
+    document.querySelectorAll('[data-share="reddit"]').forEach(el => {
+      el.href = `https://www.reddit.com/submit?url=${siteUrl}&title=sienna.`;
+    });
+    document.querySelectorAll('[data-share="x"]').forEach(el => {
+      el.href = `https://x.com/intent/post?text=${encodeURIComponent('Check out sienna!')}&url=${siteUrl}`;
+    });
+    document.querySelectorAll('[data-share="discord"]').forEach(el => {
+      el.href = '#';
+    });
+  }
 
   function boot() {
     customGames.load();
@@ -1676,9 +1710,11 @@ made by yellowdevelopment
     opening.bind();
     dropdown.init();
     search.init();
-    infoPopup.init();
     gameVisor.init();
+
     favorites.init();
+    window.siennaAccount?.init();
+    initShareBanner();
 
     const browseGridElement = document.getElementById('browseGrid');
     const favoritesGridElement = document.getElementById('favoritesGrid');
@@ -1732,6 +1768,14 @@ made by yellowdevelopment
     if (favoritesGridElement) favoritesGridElement.addEventListener('click', handleGridClick);
 
     document.body.addEventListener('click', (event) => {
+      const featuredFav = event.target.closest('.featured-slide .favorite-btn');
+      if (featuredFav) {
+        event.preventDefault();
+        event.stopPropagation();
+        favorites.toggle(featuredFav.dataset.favUrl, featuredFav);
+        return;
+      }
+
       const featuredPlay = event.target.closest('.featured-play');
       if (!featuredPlay) return;
       event.preventDefault();

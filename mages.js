@@ -1,7 +1,7 @@
 window.MAGES_GAMES = [
   {
-    "name": "sienna. is in BETA, Expect Bugs and Changes",
-    "image": "icons/thisisinbeta.webp",
+    "name": "Contact/Request",
+    "image": "icons/avatars/yellowdevelopment.png",
     "url": "link/index.html",
     "section": "website",
     "author": "yellowdevelopment"
@@ -175,7 +175,7 @@ window.MAGES_GAMES = [
     "author": "Mr. Red Face"
   },
   {
-    "name": "Darkbound",
+    "name": "Darkbound Demo",
     "image": "icons/darkbound.webp",
     "url": "darkboundwebport/index.html",
     "section": "Port",

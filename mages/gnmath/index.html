@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>gn-math · game hub</title>
+<title>gn-math</title>
 <meta name="description" content="Unblocked games, minimal design, fast and lightweight.">
 <link rel="icon" type="image/x-icon" href="favicon.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -287,11 +287,6 @@ body{
   margin-top:0.15rem;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.gc-plays{
-  display:flex;align-items:center;gap:0.28rem;
-  font-size:0.64rem;color:var(--text-3);margin-top:0.3rem;
-}
-.gc-plays::before{content:'▶';font-size:0.48rem}
 
 /* Favorite star */
 .gc-star{
@@ -322,10 +317,17 @@ body{
   z-index:9999;display:none;flex-direction:column;
 }
 .zone-bar{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:1rem;padding:0.62rem 1.4rem;
-  background:var(--surface);border-bottom:1px solid var(--border);
-  flex-wrap:wrap;flex-shrink:0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1.8rem 1.4rem; /* was 0.62rem 1.4rem */
+
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  flex-shrink: 0;
 }
 .zone-bar-l{display:flex;align-items:baseline;gap:0.5rem}
 .z-title{font-size:0.88rem;font-weight:600;color:var(--text-1)}
@@ -580,7 +582,6 @@ function card(g, extraClass=''){
     <div class="gc-body">
       <div class="gc-name">${esc(g.name)}</div>
       ${tags?`<div class="gc-tags">${esc(tags)}</div>`:''}
-      <div class="gc-plays">0 plays</div>
     </div>
   </div>`;
 }
