@@ -154,11 +154,32 @@ window.MAGES_GAMES = [
     "author": "Flanne"
   },
   {
+    "name": "20 Minutes Till Dawn",
+    "image": "icons/20minutestilldawn.webp",
+    "url": "20minutestilldawn/index.html",
+    "section": "Unity",
+    "author": "Flanne"
+  },
+  {
     "name": "Bendy and the Ink Machine",
     "image": "icons/bendyink.webp",
     "url": "bendyink/index.html",
     "section": "Port",
     "author": "Joey Drew Studios"
+  },
+  {
+    "name": "How to Fish",
+    "image": "icons/howtofish.webp",
+    "url": "howtofish/index.html",
+    "section": "Port",
+    "author": "Dazed Games"
+  },
+  {
+    "name": "Trombone Champ",
+    "image": "icons/trombonechamp.webp",
+    "url": "trombonechamp/index.html",
+    "section": "Port",
+    "author": "Holy Wow Studios"
   },
   {
     "name": "Gorilla Tag",
@@ -579,6 +600,13 @@ window.MAGES_GAMES = [
     "url": "classof09/index.html",
     "section": "Port",
     "author": "SBN3"
+  },
+  {
+    "name": "Miside",
+    "image": "icons/miside.webp",
+    "url": "miside/index.html",
+    "section": "",
+    "author": "AIHASTO"
   },
   {
     "name": "Miss Inconspicuous Maid Girl Cleaning Co",
@@ -1512,6 +1540,20 @@ window.MAGES_GAMES = [
     "author": "AZ games"
   },
   {
+    "name": "Half-Life",
+    "image": "icons/halflife.webp",
+    "url": "halflife/index.html",
+    "section": "Port",
+    "author": "Valve"
+  },
+  {
+    "name": "Half-Life: Opposing Force",
+    "image": "icons/halflifeopposingforce.webp",
+    "url": "halflifeopposingforce/index.html",
+    "section": "Port",
+    "author": "Valve"
+  },
+  {
     "name": "Baldi's Basic's",
     "image": "icons/baldisbasics.webp",
     "url": "baldisbasics/index.html",
@@ -1594,6 +1636,13 @@ window.MAGES_GAMES = [
     "url": "fivenightswithvoxelswebport/index.html",
     "section": "Port",
     "author": "Caique007"
+  },
+  {
+    "name": "Five Nights At Frickbear's 3",
+    "image": "icons/fivenightsatfrickbears3.webp",
+    "url": "fivenightsatfrickbears3/index.html",
+    "section": "Port",
+    "author": "SpookyRick"
   },
   {
     "name": "Five Nights at Candy's",
@@ -2035,13 +2084,6 @@ window.MAGES_GAMES = [
     "url": "hackertype/index.html",
     "section": "",
     "author": "Dušan Popović"
-  },
-  {
-    "name": "Half life 2",
-    "image": "icons/halflife2.webp",
-    "url": "halflife2/index.html",
-    "section": "",
-    "author": "Valve"
   },
   {
     "name": "Halloween 2016",
