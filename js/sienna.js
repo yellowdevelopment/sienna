@@ -1,6 +1,6 @@
 (function () {
-  const SIENNA_VERSION = "1.0.0";
-  const SIENNA_BUILD = "20";
+  const SIENNA_VERSION = "1.1.0";
+  const SIENNA_BUILD = "21";
   const CLASSIC_LOGO = String.raw`           /$$
           |__/
   /$$$$$$$ /$$  /$$$$$$  /$$$$$$$  /$$$$$$$   /$$$$$$
@@ -80,26 +80,22 @@
     // Add or edit update cards here. Change storageKey when you want everyone to
     // see the panel again after a new release.
     updates: {
-      storageKey: "sienna_updates_seen_v0_9",
+      storageKey: "sienna_updates_seen_v1_01",
       showOnFirstVisit: true,
       title: "What's new",
-      version: "v1.0",
+      version: "v1.1",
       sections: [
         {
-          title: "looks",
-          description: "Changed the theme to a cool black theme (legacy blue available in settings). Changed all buttons to match an glass theme.",
+          title: "Games",
+          description: "Added Trombone Champ, Added How To Fish, Added 20 Minutes till Dawn, Added Miside, Added Half-Life, Added Half-Life: Opposing Force, Added GTA 3, Added Granny 3, Added Peak, Updated Bendy and the Ink --> Complete Edition, Updated Brotato --> Paws & Claws Update, Fixed Monster Tracks, Removed Speed Stars (Due to Glitch), Removed Base Eaglercraft 1.12.2 , Removed GTA 1 & 2 (Didn't Work), Removed Half-Life 2 (Flash)",
         },
         {
-          title: "Accounts w/ Cloud saves",
-          description: "Added an account feature where a majority of data can be saved and synced automatically across devices. Still in beta so it's highly recomended to still manually backup your data in settings and if any games provide the option.",
+          title: "New Alternative Domains",
+          description: "ixl-recommendations.vercel.app, usesienna.pages.dev, sienna.yellowdevelopment.workers.dev",
         },
         {
-          title: "Game Hacks?",
-          description: "Added small hacks for games like Drift boss & Monkey mart where you can choose vehicles & edit coins. You can find these in settings --> games | Inspired by Phantom Games",
-        },
-        {
-          title: "beta",
-          description: "I just say everythings beta because it's not even done yet and i dont wanna fix it but v1.0 beta",
+          title: "Minor Patches",
+          description: "",
         },
       ],
     },
@@ -378,7 +374,7 @@
                 <div class="ubghub-feature-desc">Sienna is listed in UBGHub's game site directory.</div>
               </div>
             </div>
-            <a href="https://ubghub.org/?utm_source=usesienna.vercel.app" target="_blank" rel="noopener" class="ubghub-visit-btn">Visit UBGHub</a>
+            <a href="https://ubghub.org/?utm_source=usesienna.vercel.app&site=sienna." target="_blank" rel="noopener" class="ubghub-visit-btn">Visit UBGHub</a>
           </div>
         `,
         type: "info",

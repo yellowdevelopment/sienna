@@ -112,6 +112,13 @@ window.MAGES_GAMES = [
     "author": "Maddy Makes Games"
   },
   {
+    "name": "Peak",
+    "image": "icons/peak.webp",
+    "url": "peak/index.html",
+    "section": "Port",
+    "author": "Aggro Crab and Landfall Games"
+  },
+  {
     "name": "Terra",
     "image": "icons/terra.webp",
     "url": "terra/index.html",
@@ -161,9 +168,9 @@ window.MAGES_GAMES = [
     "author": "Flanne"
   },
   {
-    "name": "Bendy and the Ink Machine",
+    "name": "Bendy and the Ink Machine: Complete Edition",
     "image": "icons/bendyink.webp",
-    "url": "bendyink/index.html",
+    "url": "batimfull/index.html",
     "section": "Port",
     "author": "Joey Drew Studios"
   },
@@ -1526,6 +1533,13 @@ window.MAGES_GAMES = [
     "author": "DVloper"
   },
   {
+    "name": "Granny 3",
+    "image": "icons/granny3.webp",
+    "url": "granny3/index.html",
+    "section": "Port",
+    "author": "DVloper"
+  },
+  {
     "name": "Granny Online",
     "image": "icons/grannyonline.webp",
     "url": "grannyonline/index.html",
@@ -1946,24 +1960,10 @@ window.MAGES_GAMES = [
     "author": "Google"
   },
   {
-    "name": "Grand theft auto",
-    "image": "icons/grandtheftauto.webp",
-    "url": "grandtheftauto/index.html",
-    "section": "PSX",
-    "author": "Rockstar Games"
-  },
-  {
-    "name": "Grand theft auto 2",
-    "image": "icons/grandtheftauto2.webp",
-    "url": "grandtheftauto2/index.html",
-    "section": "",
-    "author": "Rockstar Games"
-  },
-  {
-    "name": "Grand theft auto 3",
-    "image": "icons/grandtheftauto3.webp",
-    "url": "grandtheftauto3/index.html",
-    "section": "",
+    "name": "Grand Theft Auto 3",
+    "image": "icons/gta3.webp",
+    "url": "gta3/index.html",
+    "section": "Port",
     "author": "Rockstar Games"
   },
   {
@@ -2142,13 +2142,6 @@ window.MAGES_GAMES = [
     "author": "Logan Engstrom"
   },
   {
-    "name": "Hill Climb Racing",
-    "image": "icons/hillclimbracing.webp",
-    "url": "hillclimbracing/index.html",
-    "section": "",
-    "author": "Fingersoft"
-  },
-  {
     "name": "Hobo",
     "image": "icons/hobo.webp",
     "url": "hobo/index.html",
@@ -2264,13 +2257,6 @@ window.MAGES_GAMES = [
     "name": "Minecraft 1.8.8 WASM",
     "image": "icons/eaglercraft188wasm.webp",
     "url": "eaglercraft188wasm/index.html",
-    "section": "",
-    "author": "Mojang"
-  },
-  {
-    "name": "Minecraft 1.12.2 u2",
-    "image": "icons/eaglercraft1122.webp",
-    "url": "eaglercraft1122/index.html",
     "section": "",
     "author": "Mojang"
   },
@@ -2770,6 +2756,13 @@ window.MAGES_GAMES = [
     "url": "eggycar/index.html",
     "section": "",
     "author": "Wix Games"
+  },
+  {
+    "name": "Hill Climb Racing",
+    "image": "icons/hillclimbracing.webp",
+    "url": "hillclimbracing/index.html",
+    "section": "",
+    "author": "Fingersoft"
   },
   {
     "name": "Madalin Cars",
@@ -3414,13 +3407,6 @@ window.MAGES_GAMES = [
     "url": "slopecity/index.html",
     "section": "",
     "author": "Rob Kay"
-  },
-  {
-    "name": "Snake",
-    "image": "icons/snake.webp",
-    "url": "snake/index.html",
-    "section": "",
-    "author": "Nokia"
   },
   {
     "name": "Snotout",

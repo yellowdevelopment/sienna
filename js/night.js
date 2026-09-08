@@ -36,6 +36,7 @@ made by yellowdevelopment
   const GRID_FADE_MS = 200;
   const SCROLL_DURATION_MS = 600;
   const SCROLL_MIN_MS = 280;
+  const FALLBACK_ICON = 'icons/assets/imagenotfound.png';
 
   const util = {
     escapeHtml(s) {
@@ -102,8 +103,7 @@ made by yellowdevelopment
     },
     iconPathFor(item) {
       if (item?.image) return item.image;
-      const slug = this.slugFromUrl(item);
-      return slug ? `icons/${slug}.webp` : '';
+      return FALLBACK_ICON;
     },
     resolveUrl(path) {
       if (!path) return '';
@@ -445,6 +445,13 @@ made by yellowdevelopment
       if (!url || img.dataset.broken === 'true' || img.dataset.loaded === 'true') return;
       if (img.dataset.errorBound !== 'true') {
         img.addEventListener('error', () => {
+          if (img.dataset.fallbackApplied !== 'true') {
+            const fallbackUrl = util.resolveUrl(FALLBACK_ICON);
+            img.dataset.src = fallbackUrl;
+            img.dataset.fallbackApplied = 'true';
+            img.src = fallbackUrl;
+            return;
+          }
           img.dataset.broken = 'true';
           img.style.display = 'none';
           img.parentElement?.classList.add('icon-missing');
@@ -1671,39 +1678,6 @@ made by yellowdevelopment
   //  Initialized via window.siennaAccount.init()
   // ═══════════════════════════════════════════════════════
 
-  function initShareBanner() {
-    const subtitle = document.getElementById('shareBannerSubtitle');
-    if (!subtitle) return;
-
-    const phrases = [
-      "Share it with your friends!",
-      "Don't get this blocked",
-    ];
-    let idx = 0;
-
-    setInterval(() => {
-      idx = (idx + 1) % phrases.length;
-      subtitle.classList.add('switching');
-      setTimeout(() => {
-        subtitle.textContent = phrases[idx];
-        subtitle.classList.remove('switching');
-      }, 300);
-    }, 4000);
-
-    const shareUrl = 'https://ubghub.org/?utm_source=usesienna.vercel.app';
-    const siteUrl = encodeURIComponent(window.location.origin);
-
-    document.querySelectorAll('[data-share="reddit"]').forEach(el => {
-      el.href = `https://www.reddit.com/submit?url=${siteUrl}&title=sienna.`;
-    });
-    document.querySelectorAll('[data-share="x"]').forEach(el => {
-      el.href = `https://x.com/intent/post?text=${encodeURIComponent('Check out sienna!')}&url=${siteUrl}`;
-    });
-    document.querySelectorAll('[data-share="discord"]').forEach(el => {
-      el.href = '#';
-    });
-  }
-
   function boot() {
     customGames.load();
     customGames.initModal();
@@ -1714,7 +1688,6 @@ made by yellowdevelopment
 
     favorites.init();
     window.siennaAccount?.init();
-    initShareBanner();
 
     const browseGridElement = document.getElementById('browseGrid');
     const favoritesGridElement = document.getElementById('favoritesGrid');
