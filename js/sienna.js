@@ -1,6 +1,6 @@
 (function () {
-  const SIENNA_VERSION = "1.1.0";
-  const SIENNA_BUILD = "21";
+  const SIENNA_VERSION = "1.1.1";
+  const SIENNA_BUILD = "22";
   const CLASSIC_LOGO = String.raw`           /$$
           |__/
   /$$$$$$$ /$$  /$$$$$$  /$$$$$$$  /$$$$$$$   /$$$$$$
@@ -45,7 +45,7 @@
       { previewTitle:"CodeHS Sandbox", realTitle:"Sandbox | CodeHS", favicon:"icons/favicons/codehs.ico" },
       { previewTitle:"Classlink", realTitle:"My Apps", favicon:"icons/favicons/classlink.ico" },
       { previewTitle:"Gmail", realTitle:"Inbox", favicon:"icons/favicons/gmail.ico" },
-      { previewTitle:"Google Classroom", realTitle:"Home", favicon:"icons/favicons/googleclassroom.ico" },
+      { previewTitle:"Google Classroom", realTitle:"Home - Classroom", favicon:"icons/favicons/googleclassroom.ico" },
       { previewTitle:"Google Drive", realTitle:"My Drive", favicon:"icons/favicons/googledrive.ico" },
       { previewTitle:"Google Docs", realTitle:"Google Docs", favicon:"icons/favicons/googledocs.ico" },
       { previewTitle:"Google Forms", realTitle:"Google Forms", favicon:"icons/favicons/googleforms.ico" },
@@ -80,10 +80,10 @@
     // Add or edit update cards here. Change storageKey when you want everyone to
     // see the panel again after a new release.
     updates: {
-      storageKey: "sienna_updates_seen_v1_01",
+      storageKey: "sienna_updates_seen_v1_01_01",
       showOnFirstVisit: true,
       title: "What's new",
-      version: "v1.1",
+      version: "v1.1 (.1)",
       sections: [
         {
           title: "Games",
@@ -95,7 +95,7 @@
         },
         {
           title: "Minor Patches",
-          description: "",
+          description: "Deleted Speedstars and Five Night's at Frickbears 3 Gamecards. Renamed Google Classroom prenamed cloak to include the - Classroom.",
         },
       ],
     },

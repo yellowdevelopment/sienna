@@ -707,13 +707,6 @@ window.MAGES_GAMES = [
     "author": "Dreamon Studios"
   },
   {
-    "name": "Speed Stars",
-    "image": "icons/speedstars.webp",
-    "url": "speedstars/index.html",
-    "section": "",
-    "author": "Luke Allen"
-  },
-  {
     "name": "Bee Swarm Simulator",
     "image": "icons/bss.webp",
     "url": "bss/index.html",
@@ -1652,13 +1645,6 @@ window.MAGES_GAMES = [
     "author": "Caique007"
   },
   {
-    "name": "Five Nights At Frickbear's 3",
-    "image": "icons/fivenightsatfrickbears3.webp",
-    "url": "fivenightsatfrickbears3/index.html",
-    "section": "Port",
-    "author": "SpookyRick"
-  },
-  {
     "name": "Five Nights at Candy's",
     "image": "icons/fnac.webp",
     "url": "fnac/index.html",
@@ -2295,6 +2281,7 @@ window.MAGES_GAMES = [
     "section": "",
     "author": "Mojang"
   },
+  /*
   {
     "name": "Pokémon Client",
     "image": "icons/pokemon.webp",
@@ -2302,6 +2289,7 @@ window.MAGES_GAMES = [
     "section": "",
     "author": "Nintendo"
   },
+  */
   {
     "name": "Pokemon Blue",
     "image": "icons/pokemonblue.webp",
