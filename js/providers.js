@@ -54,20 +54,37 @@
     cover: (game) => assetUrl(game?.img, CKV.base),
     unwrapFrames: true,
   };
+  
+  const PROVIDER_LABELS = Object.freeze({
+    night: NIGHT.label,
+    'gn-math': GN_MATH.label,
+    ugs: UGS.label,
+    seraph: SERAPH.label,
+    ckv: CKV.label,
+    Lumin: LUMIN.label,
+  });
+
+  const LABELS_BY_KEY = Object.freeze(Object.fromEntries(
+    Object.entries(PROVIDER_LABELS).map(([key, label]) => [key.toLowerCase(), label]),
+  ));
+
+
+  function providerLabel(value) {
+    const key = String(value ?? '');
+    return PROVIDER_LABELS[key] || LABELS_BY_KEY[key.toLowerCase()] || key;
+  }
 
   let activeProvider = 'night';
   const htmlCache = new Map();
   const libraries = { night: null, 'gn-math': null, ugs: null, Lumin: null, seraph: null, ckv: null };
 
-  // Catalogs are fetched once per page load; a failure is not cached, so the next
-  // provider switch retries it.
+
   async function loadLibrary(key, factory) {
     if (!libraries[key]) libraries[key] = await factory();
     return libraries[key];
   }
 
-  // The same game can appear twice in a catalog (and a game can appear in more
-  // than one of them).
+
   function dedupeByUrl(games) {
     const seen = new Set();
     return games.filter((game) => {
@@ -531,16 +548,12 @@
     return html || '';
   }
 
-  async function download(game) {
+  // HTML to hand to the runner when a user downloads a game: the pasted HTML of a
+  // custom game, or the provider's HTML exactly as it plays. js/night.js puts the
+  // Sienna header on top and saves the file, so nothing here touches the DOM.
+  async function downloadHtml(game) {
     const html = game?.html || (await gameHtml(game));
-    if (!html) return false;
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
-    link.download = `${String(game.name || 'game').replace(/[^\w-]+/g, '_')}.html`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    return true;
+    return html || '';
   }
 
   // Bring night's own grid back after another provider's view was shown.
@@ -608,7 +621,9 @@
           const categories = result && Array.isArray(result.categories)
             ? result.categories
             : [{ label: 'All Games', games: Array.isArray(result) ? result : [] }];
-          window.nightLibrary.setLibrary(categories, { label: config.label });
+          // `key` lets the provider picker highlight the right entry; `label` is
+          // the name shown to users.
+          window.nightLibrary.setLibrary(categories, { label: providerLabel(request), key: request });
         })
         .catch((error) => {
           console.error(`providers: failed to load ${config.label} games`, error);
@@ -621,11 +636,15 @@
 
   window.siennaProviders = {
     apply,
+    // Provider key → display name, plus the lookup used to resolve either one.
+    labels: PROVIDER_LABELS,
+    labelFor: providerLabel,
     // Game HTML to run from a blob URL (empty string when not a provider game).
     gameHtml,
     // Playable iframe URL for a Lumin game (empty otherwise).
     gameUrl,
+    // Which games the titlebar's Download button applies to, and the HTML it saves.
     supportsDownload: (game) => Boolean(game?._provider && game._provider !== 'lumin') || typeof game?.html === 'string',
-    download,
+    downloadHtml,
   };
 })();

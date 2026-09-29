@@ -29,21 +29,21 @@
     tabCloakCustomFavicon: 'sienna_tab_cloak_custom_favicon',
     updatesSeen: 'sienna_updates_seen_v1_01_02',
     tutorialSeen: 'sienna_tutorial_seen',
-    // Games
+
     customGames: 'sienna_custom_games',
     favorites: 'sienna_favs',
-    // Appearance
+
     customThemes: 'sienna_custom_themes',
     profilePicture: 'sienna_pfp',
-    // Account
+
     token: 'sienna_token',
     username: 'sienna_username',
     lastSyncAt: 'sienna_last_sync_at',
     lastSyncHash: 'sienna_last_sync_hash',
-    // Game window tabs
+
     gameVisorTabs: 'gameVisorTabs',
     gameVisorActiveTabId: 'gameVisorActiveTabId',
-    // Plugins
+
     pluginsEnabled: 'plugins.enabled',
     hackStates: 'sienna.hackStates',
   });
@@ -60,6 +60,12 @@
 
   const KEYS = window.SiennaStorageKeys;
   const CONST = window.SiennaConstants;
+  // Provider display names live in js/providers.js (the provider registry), so a
+  // provider renamed there is renamed everywhere it is shown. Falls back to the
+  // provider key when the registry is unavailable.
+  function providerLabel(key) {
+    return window.siennaProviders?.labelFor?.(key) || String(key ?? "");
+  }
 
   // persistToggle() is shared by the boolean settings below: normalise the
   // value, persist it, then re-apply. `reRender` refreshes the settings panel
@@ -147,7 +153,7 @@
     // Add or edit update cards here. Change storageKey when you want everyone to
     // see the panel again after a new release.
     updates: {
-      storageKey: KEYS.updatesSeen1,
+      storageKey: KEYS.updatesSeen2,
       showOnFirstVisit: true,
       previousLogsUrl: "updatelogs.json",
       title: "What's new",
@@ -160,6 +166,9 @@
         {
           title: "Note:",
           description: "Due to vercel's edge transfers limit, I'm now delivering night. through jsdelivr which could cause slower loading times",
+        },
+        {
+          title: "Added Soflo Wheelie Life, Find the Needle. Fixed all Scratch Games (Appel etc)",
         },
       ],
     },
@@ -263,7 +272,9 @@
         desc: "Choose different providers for games",
 
         type: "choice",
-        options: CONST.PROVIDER_OPTIONS,
+        // Values are the provider keys (what gets stored); the buttons show the
+        // provider's display name from js/providers.js.
+        options: CONST.PROVIDER_OPTIONS.map((key) => ({ value: key, label: providerLabel(key) })),
         get: () => window.siennaSettings.state.gamesProvider,
         set: (value) => {
           window.siennaSettings.setGamesProvider(value);
@@ -1440,11 +1451,18 @@
       }
 
       if (item.type === "choice") {
+        // Options are plain values, or { value, label } pairs when the value
+        // differs from the text to show (provider keys vs their names).
         return `
           <div class="choice-grp">
-            ${item.options.map((option) => `
-              <button class="choice-btn ${item.get() === option ? "active" : ""}" type="button" data-setting-id="${this.escapeHtml(item.id)}" data-value="${this.escapeHtml(option)}" ${isDisabled ? "disabled" : ""}>${this.escapeHtml(option)}</button>
-            `).join("")}
+            ${item.options.map((option) => {
+              const pair = option !== null && typeof option === "object";
+              const value = pair ? option.value : option;
+              const label = pair ? (option.label ?? option.value) : option;
+              return `
+              <button class="choice-btn${item.get() === value ? " active" : ""}" type="button" data-setting-id="${this.escapeHtml(item.id)}" data-value="${this.escapeHtml(value)}" ${isDisabled ? "disabled" : ""}>${this.escapeHtml(label)}</button>
+            `;
+            }).join("")}
           </div>
         `;
       }
@@ -2054,7 +2072,7 @@
       {
         image: "tutorial/providers.png",
         title: "Not the games you want?",
-        desc: 'You can use other providers such as <strong>gn-math</strong>, <strong>seraph</strong>, <strong>ckv</strong> and <strong>Lumin</strong> if we don\'t have the games you want.',
+        desc: `You can use other providers such as <strong>${providerLabel("gn-math")}</strong>, <strong>${providerLabel("seraph")}</strong>, <strong>${providerLabel("ckv")}</strong> and <strong>${providerLabel("Lumin")}</strong> if we don't have the games you want.`,
       },
       {
         image: "tutorial/account.png",

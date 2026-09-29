@@ -113,19 +113,14 @@ made by yellowdevelopment
             <span class="browse-heading-static">Viewing</span>
             <div class="browse-dropdown" id="browseProviderDropdown">
               <button class="browse-dropdown-btn" id="browseProviderBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
-                <span class="browse-dropdown-label" id="browseProviderLabel">night</span>
+                <!-- Name injected by providerPicker.update() in js/night.js, from the
+                     provider registry (js/providers.js) - never written here. -->
+                <span class="browse-dropdown-label" id="browseProviderLabel"></span>
                 <svg class="browse-dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M6 9l6 6 6-6"></path>
                 </svg>
               </button>
-              <div class="browse-dropdown-menu" role="listbox" id="browseProviderMenu">
-                <div class="browse-dropdown-item active" role="option" data-value="night" aria-selected="true">Night</div>
-                <div class="browse-dropdown-item" role="option" data-value="gn-math" aria-selected="false">gn-math</div>
-                <div class="browse-dropdown-item" role="option" data-value="ugs" aria-selected="false">ugs</div>
-                <div class="browse-dropdown-item" role="option" data-value="seraph" aria-selected="false">Seraph</div>
-                <div class="browse-dropdown-item" role="option" data-value="ckv" aria-selected="false">ChickenKingsVault (ckv)</div>
-                <div class="browse-dropdown-item" role="option" data-value="Lumin" aria-selected="false">Lumin</div>
-              </div>
+              <div class="browse-dropdown-menu" role="listbox" id="browseProviderMenu"></div>
             </div>
             <span class="browse-heading-divider" id="browseHeadingDivider" aria-hidden="true">|</span>
             <div class="browse-dropdown" id="browseDropdown">

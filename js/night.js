@@ -17,18 +17,9 @@ What you're seeing is night. (A tribute to my previous website)
 made by yellowdevelopment
 
 */
-
-/**
- * Browse / opening flow, games & apps grid, dropdown, info popup.
- * Game data is supplied by the active provider (js/providers.js); the default
- * "night" provider fetches its catalog from the night CDN.
- */
 (function () {
   const KEYS = window.SiennaStorageKeys;
 
-  // The active provider's catalogs (set via window.nightLibrary.setLibrary).
-  // Providers with a single catalog expose one entry; multi-catalog providers
-  // (night and seraph: Games + Apps) expose several, each with its own label.
   let libraryCategories = [];
 
   function categoryGames(category) {
@@ -109,7 +100,7 @@ made by yellowdevelopment
     },
     resolveUrl(path) {
       if (!path) return '';
-      // Keep absolute URLs (http(s), protocol-relative, data:, about:, etc.) untouched.
+
       if (path.startsWith('internal:')) return path;
       if (/^(?:[a-zA-Z][a-zA-Z\d+\-.]*:|\/\/)/.test(path)) {
         return path;
@@ -141,6 +132,69 @@ made by yellowdevelopment
           return `<base href="${resolved}">`;
         }
       );
+    },
+    // for turbowarp
+    packagerChunkCompat() {
+      return `<script>
+  (function () {
+    var Native = window.DataView;
+    if (!Native || !Native.prototype.setUint32 || Native.prototype.__siennaChunkCompat) return;
+    var nativeSetUint32 = Native.prototype.setUint32;
+    Native.prototype.setUint32 = function (offset, value, littleEndian) {
+      if (offset < 0 || offset + 4 > this.byteLength) return;
+      return nativeSetUint32.call(this, offset, value, littleEndian);
+    };
+    Native.prototype.__siennaChunkCompat = true;
+  })();
+<\/script>`;
+    },
+    pinPackagerChunkCompat(html) {
+      if (!html) return html;
+      // Same HTML can come back around (a fetched game, then its tab), so never
+      // stack a second copy of the patch.
+      if (html.includes('__siennaChunkCompat')) return html;
+      // One decodeChunk(<bytes>) call per payload, each decoded through a DataView.
+      // The DataView test is loose so aliased constructors (window.DataView) still match.
+      if (!/decodeChunk\s*\(\s*\d+\s*\)/.test(html) || !/DataView/.test(html)) return html;
+      const tag = this.packagerChunkCompat();
+      if (/<base\b[^>]*>/i.test(html)) return html.replace(/<base\b[^>]*>/i, (match) => `${match}${tag}`);
+      if (/<head[^>]*>/i.test(html)) return html.replace(/<head[^>]*>/i, (match) => `${match}\n    ${tag}`);
+      if (/<html[^>]*>/i.test(html)) return html.replace(/<html[^>]*>/i, (match) => `${match}<head>${tag}</head>`);
+      return `${tag}${html}`;
+    },
+    // Header every HTML file saved from Sienna is written with, so a file that gets
+    // re-uploaded or re-shared still says where it came from.
+    downloadHeader() {
+      return [
+        ' ',
+        '<!-- This file was downloaded from sienna. -->',
+        '<!-- Use sienna. at https://usenight.vercel.app or https://usesienna.vercel.app -->',
+        ' ',
+      ].join('\n');
+    },
+    // Puts that header above everything else, doctype included - comments before a
+    // doctype are valid and leave the document in standards mode. HTML that already
+    // carries the header (a Sienna download someone pasted back in) is returned
+    // untouched, even if its line endings were rewritten in between.
+    withDownloadHeader(html) {
+      const source = String(html ?? '');
+      if (/^\s*<!--\s*This file was downloaded from sienna/i.test(source)) return source;
+      return `${this.downloadHeader()}\n${source}`;
+    },
+    // Save it the way the browser's own download button does.
+    saveHtmlFile(name, html) {
+      try {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(new Blob([this.withDownloadHeader(html)], { type: 'text/html' }));
+        link.download = `${String(name || 'game').replace(/[^\w-]+/g, '_')}.html`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        return true;
+      } catch (error) {
+        console.error('night: could not save the downloaded game HTML', error);
+        return false;
+      }
     },
     isDisplayable() {
       return true;
@@ -177,11 +231,12 @@ made by yellowdevelopment
 
     toGameItems() {
       return this.items.map((g) => {
-        // Generate a blob URL from the stored HTML
+
         let url = g.url || '';
         if (g.html && !url) {
           try {
-            let html = g.html;
+
+            let html = util.pinPackagerChunkCompat(g.html);
             html = util.absolutizeBaseHref(html);
             const blob = new Blob([html], { type: 'text/html' });
             url = URL.createObjectURL(blob);
@@ -839,6 +894,11 @@ made by yellowdevelopment
       const menu = document.getElementById('browseProviderMenu');
       if (!rootEl || !btn || !menu) return;
 
+      // Rebuild the list from the provider registry (js/providers.js) so the names
+      // shown here always match the settings panel. index.html holds no provider
+      // names of its own, so nothing there can go stale.
+      this.renderMenu();
+
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         rootEl.classList.toggle('open');
@@ -856,10 +916,33 @@ made by yellowdevelopment
 
       document.addEventListener('click', () => rootEl.classList.remove('open'));
     },
+    // One entry per provider, in the registry's order, with the active provider
+    // highlighted and `data-value` left as the provider key. The names come from
+    // the registry too, so index.html holds no provider names to go stale; without
+    // the registry the keys stand in for the names, the same fallback the settings
+    // panel uses via providerLabel().
+    renderMenu() {
+      const menu = document.getElementById('browseProviderMenu');
+      if (!menu) return;
+      const labels = window.siennaProviders?.labels || Object.fromEntries(
+        (window.SiennaConstants?.PROVIDER_OPTIONS || []).map((key) => [key, key]),
+      );
+      const keys = Object.keys(labels);
+      if (!keys.length) return;
+      const stored = window.siennaSettings?.state?.gamesProvider;
+      const active = keys.includes(stored) ? stored : keys[0];
+      menu.innerHTML = keys.map((key) => `
+        <div class="browse-dropdown-item${key === active ? ' active' : ''}" role="option" data-value="${util.escapeHtml(key)}" aria-selected="${key === active}">${util.escapeHtml(labels[key])}</div>
+      `).join('');
+      // The collapsed label shows the stored provider's name, not a hardcoded default.
+      this.update(active);
+    },
+    // `provider` is a provider key ('night', 'seraph', 'ckv'); the name shown to
+    // users comes from the provider registry.
     update(provider) {
       const label = document.getElementById('browseProviderLabel');
       const menu = document.getElementById('browseProviderMenu');
-      if (label) label.textContent = provider;
+      if (label) label.textContent = window.siennaProviders?.labelFor?.(provider) || provider;
       if (menu) {
         menu.querySelectorAll('.browse-dropdown-item').forEach((el) => {
           el.classList.toggle('active', el.dataset.value === provider);
@@ -1092,6 +1175,8 @@ made by yellowdevelopment
   // swap the grid contents while keeping search, favorites and the game window.
   window.nightLibrary = {
     providerLabel: '',
+    // Provider key ('night', 'seraph', …) behind `providerLabel`.
+    providerKey: '',
 
     label() {
       return this.providerLabel;
@@ -1099,6 +1184,7 @@ made by yellowdevelopment
 
     setLibrary(categories, options = {}) {
       this.providerLabel = options.label || '';
+      this.providerKey = options.key || '';
       libraryCategories = Array.isArray(categories) ? categories : [];
       activeCategory = libraryCategories[0]?.label || 'All Games';
 
@@ -1107,8 +1193,11 @@ made by yellowdevelopment
       const dropdownLabel = document.getElementById('browseDropdownLabel');
       const menu = document.getElementById('browseDropdownMenu');
 
-      // Reflect the active provider in the provider picker.
-      if (this.providerLabel) providerPicker.update(this.providerLabel);
+      // Reflect the active provider in the provider picker (by key, so the right
+      // entry is highlighted).
+      if (this.providerKey || this.providerLabel) {
+        providerPicker.update(this.providerKey || this.providerLabel);
+      }
 
       // Show the catalog picker (and its divider) only when there is more than one catalog.
       const hasMultiple = libraryCategories.length > 1;
@@ -1364,7 +1453,10 @@ made by yellowdevelopment
     getGameHtmlBlobUrl(gameData) {
       if (!gameData || !gameData.html) return null;
       try {
-        const html = util.absolutizeBaseHref(gameData.html);
+        // Chunked packager exports only decode when their out-of-range DataView
+        // writes are dropped; every game document is prepared here.
+        const compat = util.pinPackagerChunkCompat(gameData.html);
+        const html = util.absolutizeBaseHref(compat);
 
         const blob = new Blob([html], { type: 'text/html' });
         return URL.createObjectURL(blob);
@@ -1681,20 +1773,25 @@ made by yellowdevelopment
       }
       const section = this.currentGameData.section || 'N/A';
       const author = this.currentGameData.author || 'N/A';
-      const provider = this.currentGameData._provider || '';
+      // The game carries the provider key; show its name from the registry.
+      const providerKey = this.currentGameData._provider || '';
+      const provider = providerKey ? (window.siennaProviders?.labelFor?.(providerKey) || providerKey) : '';
       const providerLine = provider ? `<br>Provider: ${util.escapeHtml(provider)}` : '';
       const content = this.infoModal.querySelector('.game-visor-info-modal-content');
       content.innerHTML = `Section: ${util.escapeHtml(section)}<br>Author: ${util.escapeHtml(author)}${providerLine}`;
       this.infoModalOverlay.style.display = 'flex';
     },
 
-    // Titlebar action, delegated to js/providers.js so providers can save their games.
+    // Titlebar action. js/providers.js only fetches and adapts the game HTML; the
+    // runner puts the Sienna header on top of it and saves the file, so every HTML
+    // file downloaded from Sienna says where it came from.
     async downloadCurrentGame() {
       const button = this.downloadBtn;
-      if (!button || !this.currentGameData || !window.siennaProviders?.download) return;
+      if (!button || !this.currentGameData || !window.siennaProviders?.downloadHtml) return;
       button.disabled = true;
       button.title = 'Preparing download…';
-      const saved = await window.siennaProviders.download(this.currentGameData);
+      const html = await window.siennaProviders.downloadHtml(this.currentGameData);
+      const saved = html ? util.saveHtmlFile(this.currentGameData.name, html) : false;
       button.disabled = false;
       button.title = saved ? 'Downloaded' : 'Download failed';
       setTimeout(() => {
