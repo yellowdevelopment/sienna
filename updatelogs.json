@@ -140,6 +140,23 @@
           "description": "Thank you for using sienna."
         }
       ]
+    },
+    {
+      "title": "Sienna v1.1.4 | Build 24",
+      "sections": [
+      {
+      "title": "Added 3 new providers",
+      "description": "Added ugs (Ultimate Game Stash), Seraph, and ChickenKingsVault (ckv) integrated into the original layout"
+    },
+    {
+      "title": "Note:",
+      "description": "Due to vercel's edge transfers limit, I'm now delivering night. through jsdelivr which could cause slower loading times"
+    },
+    {
+      "title": "Added Soflo Wheelie Life, Find the Needle. Fixed all Scratch Games (Appel etc)",
+      "description": ""
+    }
+      ]
     }
   ]
 }

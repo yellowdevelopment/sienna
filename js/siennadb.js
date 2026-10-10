@@ -1,48 +1,28 @@
 /**
- * siennadb.js — Account / Login / Cloud Sync System
+ * siennadb.js — Account / Login System (cloud backend removed)
  *
  * Extracted from night.js and sienna.js for better organization.
  * Provides the account object (window.siennaAccount) and the login modal logic.
  *
- * Dependencies:
- *   - window.siennaSettings (for createDataBackup, getDataBackupPayload, applyDataBackup)
- *   - window.gameVisor (optional, for settings panel)
- *
- * Changes in this revision:
- *   - fetch() calls now use an AbortController timeout so the UI never hangs
- *     forever if the API is unreachable.
- *   - res.json() parsing is now guarded so a non-JSON response (e.g. a 502
- *     from a proxy, an HTML error page) doesn't get misreported as "network error".
- *   - Failed login/register attempts are tracked client-side with an
- *     increasing cooldown, to avoid hammering the auth endpoint.
- *   - Submit is now re-entrancy safe (a stray double-click can't fire twice).
+ * NOTE: The cloud-sync backend (auth + /data/backup API calls, request
+ * timeouts, and login rate-limiting) has been removed. Login/register and
+ * cloud save/restore are now silent no-op stubs, so the UI stays functional
+ * without ever contacting a server.
  */
 
 (function () {
   'use strict';
 
-  // How long to wait before giving up on a request to the API.
-  const FETCH_TIMEOUT_MS = 10000;
-
-  // Client-side login attempt backoff. Purely a UX/abuse-reduction measure —
-  // does not replace server-side rate limiting, which should also exist.
-  const MAX_FREE_ATTEMPTS = 5; // this many attempts before any cooldown kicks in
-  const BASE_COOLDOWN_MS = 2000; // cooldown grows from here, doubling each extra attempt
+  // NOTE: The cloud backend is gone, so there is no API request to time out
+  // and no login/register endpoint to rate-limit client-side. The constants
+  // that used to live here (FETCH_TIMEOUT_MS / MAX_FREE_ATTEMPTS /
+  // BASE_COOLDOWN_MS) were removed along with the networking code.
 
   const account = {
     token: null,
     username: null,
     activeLoginTab: 'login',
-    _autoSyncInterval: null,
-    _autoSyncEnabled: false,
     _lastSyncAt: 0,
-    _lastSyncWasManual: false,
-    _syncStatusInterval: null,
-
-    // Internal state for this revision's fixes
-    _submitting: false,
-    _failedAttempts: 0,
-    _lockoutUntil: 0,
 
     // ── Sync status ──
 
@@ -58,67 +38,7 @@
       return window.siennaSave.stopAutoSync();
     },
 
-    // ── Networking helpers (new) ──
-
-    /**
-     * fetch() wrapped with a timeout so a dead/unreachable API can't hang
-     * the UI indefinitely. Rejects with an Error whose `.code` is 'timeout',
-     * 'network', or left unset for other failures.
-     */
-    async _fetchWithTimeout(url, options, timeoutMs) {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), timeoutMs || FETCH_TIMEOUT_MS);
-      try {
-        const res = await fetch(url, { ...options, signal: controller.signal });
-        return res;
-      } catch (e) {
-        if (e && e.name === 'AbortError') {
-          const err = new Error('Request timed out.');
-          err.code = 'timeout';
-          throw err;
-        }
-        const err = new Error('Network error.');
-        err.code = 'network';
-        throw err;
-      } finally {
-        clearTimeout(timeoutId);
-      }
-    },
-
-    /**
-     * Safely parse a Response as JSON. Returns null (not a throw) if the
-     * body isn't valid JSON, so callers can distinguish "server responded
-     * with something we can't parse" from "request outright failed".
-     */
-    async _safeParseJSON(res) {
-      try {
-        return await res.json();
-      } catch (e) {
-        return null;
-      }
-    },
-
-    /** Is a login/register attempt currently locked out? Returns ms remaining, or 0. */
-    _lockoutRemaining() {
-      const remaining = this._lockoutUntil - Date.now();
-      return remaining > 0 ? remaining : 0;
-    },
-
-    /** Record a failed attempt and set/extend the cooldown if needed. */
-    _registerFailedAttempt() {
-      this._failedAttempts += 1;
-      if (this._failedAttempts > MAX_FREE_ATTEMPTS) {
-        const extra = this._failedAttempts - MAX_FREE_ATTEMPTS;
-        const cooldown = Math.min(BASE_COOLDOWN_MS * Math.pow(2, extra - 1), 60000);
-        this._lockoutUntil = Date.now() + cooldown;
-      }
-    },
-
-    /** Reset attempt tracking after a success. */
-    _resetAttempts() {
-      this._failedAttempts = 0;
-      this._lockoutUntil = 0;
-    },
+    // ── Networking helpers removed (the cloud API is gone) ──
 
     // ── Session management ──
 
@@ -354,158 +274,21 @@
       this._shakeModal();
     },
 
-    /** Attempt login or register */
+    /** Attempt login or register — no-op (cloud backend removed). */
     async submit() {
-      // Guard against double-submission (double-click, double Enter, etc.)
-      if (this._submitting) return;
-
-      const lockoutMs = this._lockoutRemaining();
-      if (lockoutMs > 0) {
-        const seconds = Math.ceil(lockoutMs / 1000);
-        this._showError(`Too many attempts. Try again in ${seconds}s.`);
-        return;
-      }
-
-      const username = document.getElementById('loginModalUsername').value.trim();
-      const password = document.getElementById('loginModalPassword').value.trim();
-      const mode = this._getActiveTab();
-
-      if (!username || !password) {
-        this._showError('Please fill in all fields.');
-        return;
-      }
-      if (mode === 'login') {
-        if (username.length < 3 || username.length > 20 || !/^[a-zA-Z0-9]+$/.test(username)) {
-          this._showError('Wrong Password/Username');
-          return;
-        }
-        if (password.length < 8) {
-          this._showError('Wrong Password/Username');
-          return;
-        }
-      } else {
-        if (username.length < 3) {
-          this._showError('Username must be at least 3 characters.');
-          return;
-        }
-        if (username.length > 20 || !/^[a-zA-Z0-9]+$/.test(username)) {
-          this._showError('Username must be 3-20 letters or numbers only.');
-          return;
-        }
-        if (password.length < 8) {
-          this._showError('Password must be at least 8 characters.');
-          return;
-        }
-      }
-
-      const submitBtn = document.getElementById('loginModalSubmit');
-      this._submitting = true;
-      submitBtn.disabled = true;
-      submitBtn.textContent = mode === 'login' ? 'Logging in...' : 'Registering...';
-
-      const resetButton = () => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = mode === 'login' ? 'Log In' : 'Sign up';
-        this._submitting = false;
-      };
-
-      try {
-        const endpoint = mode === 'login' ? '/auth/login' : '/auth/register';
-        if (mode === 'register') {
-          const usernameValid = username.length >= 3 && username.length <= 20 && /^[a-zA-Z0-9]+$/.test(username);
-          const passwordValid = password.length >= 8;
-          if (!usernameValid || !passwordValid) {
-            if (!usernameValid) {
-              this._showError('Username must be 3-20 letters or numbers only.');
-            } else {
-              this._showError('Password must be at least 8 characters.');
-            }
-            resetButton();
-            return;
-          }
-        }
-
-        let res;
-        try {
-          res = await this._fetchWithTimeout(
-            window.siennaSave.API_BASE + endpoint,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ username, password }),
-            }
-          );
-        } catch (fetchErr) {
-          if (fetchErr && fetchErr.code === 'timeout') {
-            this._showError('Server took too long to respond. Please try again.');
-          } else {
-            this._showError('Network error. Server down or unreachable. Please try again later.');
-          }
-          this._registerFailedAttempt();
-          resetButton();
-          return;
-        }
-
-        const data = await this._safeParseJSON(res);
-
-        if (data === null) {
-          // Server responded, but not with valid JSON (proxy error page, etc.)
-          this._showError(`Unexpected response from server (status ${res.status}). Please try again.`);
-          this._registerFailedAttempt();
-          resetButton();
-          return;
-        }
-
-        if (!res.ok) {
-          const errorMessage = mode === 'login'
-            ? 'Wrong Password/Username'
-            : data.error || data.message || 'Something went wrong.';
-          this._showError(errorMessage);
-          this._registerFailedAttempt();
-          resetButton();
-          return;
-        }
-
-        const token = data.token || data.access_token;
-        if (token) {
-          this._resetAttempts();
-          this.saveSession(token, username);
-          this.updateUI();
-          this.hideLoginModal();
-          try {
-            await window.siennaSave.autoRestore({ force: true });
-          } catch (restoreErr) {
-            // Login succeeded even if restore failed — don't block the user,
-            // but don't hide the problem either.
-            console.error('siennaAccount: autoRestore failed after login', restoreErr);
-          }
-          window.location.reload();
-          return;
-        } else {
-          this._showError('No token received from server.');
-          this._registerFailedAttempt();
-        }
-      } catch (e) {
-        // Catch-all for anything unexpected above (shouldn't normally hit this
-        // since fetch and JSON parsing are already guarded).
-        console.error('siennaAccount: unexpected error during submit', e);
-        this._showError('Something went wrong. Please try again.');
-        this._registerFailedAttempt();
-      }
-
-      resetButton();
+      // The auth API has been removed, so there is nothing to submit to.
+      // Kept as a silent stub so the login modal's listeners stay valid.
     },
 
     /** Log out */
     logout() {
-      window.siennaSave.stopAutoSync();
       this.clearSession();
       this.updateUI();
       const dropdown = document.getElementById('accountDropdown');
       if (dropdown) dropdown.classList.remove('open');
     },
 
-    // ── Cloud save / restore (delegated to siennaSave) ──
+    // ── Cloud save / restore (backend removed — no-op stubs in siennaSave) ──
 
     async saveToCloud() {
       return window.siennaSave.saveToCloud();
@@ -526,12 +309,7 @@
       this.loadSession();
       this.updateUI();
 
-      // If already logged in (session restored), auto-restore from the cloud.
-      // (Auto-sync has been removed — syncing is manual-only now, see
-      // window.siennaSave.saveToCloud().)
-      if (this.isLoggedIn()) {
-        window.siennaSave.autoRestore();
-      }
+      // Cloud restore on login has been removed along with the backend.
 
       // Account button and dropdown are now handled by sienna.js's _setupAccountDropdown()
 

@@ -1,6 +1,6 @@
 (function () {
-  const SIENNA_VERSION = "1.2.0";
-  const SIENNA_BUILD = "24";
+  const SIENNA_VERSION = "1.2.1";
+  const SIENNA_BUILD = "25";
   const CLASSIC_LOGO = String.raw`           /$$
           |__/
   /$$$$$$$ /$$  /$$$$$$  /$$$$$$$  /$$$$$$$   /$$$$$$
@@ -153,22 +153,15 @@
     // Add or edit update cards here. Change storageKey when you want everyone to
     // see the panel again after a new release.
     updates: {
-      storageKey: KEYS.updatesSeen2,
+      storageKey: KEYS.updatesSeen3,
       showOnFirstVisit: true,
       previousLogsUrl: "updatelogs.json",
       title: "What's new",
-      version: "v1.2",
+      version: "v1.2.1",
       sections: [
         {
-          title: "Added 3 new providers",
-          description: "Added ugs (Ultimate Game Stash), Seraph, and ChickenKingsVault (ckv) integrated into the original layout",
-        },
-        {
-          title: "Note:",
-          description: "Due to vercel's edge transfers limit, I'm now delivering night. through jsdelivr which could cause slower loading times",
-        },
-        {
-          title: "Added Soflo Wheelie Life, Find the Needle. Fixed all Scratch Games (Appel etc)",
+          title: "Added 404 page",
+          description: "",
         },
       ],
     },

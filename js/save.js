@@ -1,9 +1,9 @@
 /**
- * save.js — Consolidated Save / Backup / Cloud Sync System
+ * save.js — Consolidated Save / Backup System
  *
  * Brings together save functions previously spread across:
  *   - sienna.js  (data backup, download/upload, wipe, themes, profile picture)
- *   - siennadb.js (cloud save/restore, auto-sync, IndexedDB helpers)
+ *   - siennadb.js (account UI helpers — cloud sync backend removed)
  *   - night.js   (custom games save/load, game visor tabs save/load)
  *
  * Load order: after sienna.js, before siennadb.js
@@ -27,8 +27,7 @@
  *    "storage": {                     ← everything else
  *      "localStorage":  { … },       ← non-sienna localStorage keys
  *      "sessionStorage":{ … },       ← sessionStorage keys
- *      "cookies":        "…",        ← raw cookie string
- *      "indexedDB":     { … }        ← IndexedDB databases (cloud save only)
+ *      "cookies":        "…"         ← raw cookie string
  *    }
  *  }
  *
@@ -43,12 +42,11 @@
   var KEYS = window.SiennaStorageKeys;
 
   // ── Shared constants ──────────────────────────────────────────────────────
-  var API_BASE        = 'https://sienna-db.vercel.app/api';
+  // The cloud-sync backend (API base URL, auth + backup endpoints) has been
+  // removed. These account/session keys are still used by the login UI.
   var TOKEN_KEY       = KEYS.token;
   var USERNAME_KEY    = KEYS.username;
   var LAST_SYNC_KEY   = KEYS.lastSyncAt;
-  // Hash of the last payload actually sent to the server — lets a manual
-  // backup skip the network request entirely when nothing has changed.
   var LAST_SYNC_HASH_KEY = KEYS.lastSyncHash;
 
   // ── v4 key categorisation ─────────────────────────────────────────────────
@@ -648,9 +646,7 @@
   /**
    * createDataBackup
    * Gathers localStorage + sessionStorage + cookies and returns a structured
-   * v4 backup object.  This is the "light" path used for manual file downloads
-   * (no IndexedDB, so it stays fast).  Cloud sync uses gatherFullSaveData
-   * instead, which adds storage.indexedDB.
+   * v4 backup object for manual file downloads.
    */
   async function createDataBackup() {
     var settings = window.siennaSettings;
@@ -681,7 +677,6 @@
         localStorage:  categorized.other,
         sessionStorage: rawSS,
         cookies:        document.cookie || '',
-        // indexedDB is omitted here; gatherFullSaveData adds it for cloud sync
       },
     };
   }
@@ -734,10 +729,6 @@
       _applyFlatLocalStorage(data.localStorage);
       _applyFlatSessionStorage(data.sessionStorage);
       _applyCookies(data.cookies);
-      // v3 may include indexedDB
-      if (data.indexedDB && typeof data.indexedDB === 'object') {
-        restoreIndexedDB(data.indexedDB);
-      }
 
     } else if (data._sienna === 'sienna-backup-v4') {
       // v4 — structured siennaData sections + storage bucket
@@ -746,9 +737,6 @@
       _applyFlatLocalStorage(stor.localStorage);
       _applyFlatSessionStorage(stor.sessionStorage);
       _applyCookies(stor.cookies);
-      if (stor.indexedDB && typeof stor.indexedDB === 'object') {
-        restoreIndexedDB(stor.indexedDB);
-      }
 
     } else {
       throw new Error('Unsupported backup version: ' + data._sienna);
@@ -1044,277 +1032,27 @@
     }
   }
 
-  // ═══════════════════════════════════════════════════════════
-  //  INDEXED DB HELPERS (from siennadb.js)
-  // ═══════════════════════════════════════════════════════════
+  // ── IndexedDB helpers removed (were used only by the cloud-sync backend).
+  //    Re-add dumpIndexedDB / restoreIndexedDB / populateIndexedDB when the
+  //    cloud backend is rebuilt. ──
 
-  function dumpIndexedDB(dbName) {
-    return new Promise(function (resolve, reject) {
-      var req = indexedDB.open(dbName);
-      req.onsuccess = function () {
-        var db         = req.result;
-        var storeNames = Array.from(db.objectStoreNames);
-        if (storeNames.length === 0) { db.close(); resolve({}); return; }
+  // ── gatherFullSaveData (the cloud-sync data gatherer) removed. ──
 
-        var result    = {};
-        var completed = 0;
-        var hasError  = false;
-
-        storeNames.forEach(function (storeName) {
-          try {
-            var tx          = db.transaction(storeName, 'readonly');
-            var store       = tx.objectStore(storeName);
-            var getAllReq   = store.getAll();
-            var getKeysReq = store.getAllKeys();
-
-            getAllReq.onsuccess = function () {
-              getKeysReq.onsuccess = function () {
-                var values = getAllReq.result;
-                var keys   = getKeysReq.result;
-                var pairs  = {};
-                for (var i = 0; i < keys.length; i++) {
-                  var k = keys[i];
-                  var v = values[i];
-                  try {
-                    JSON.stringify(v);
-                    pairs[k instanceof Date ? k.toISOString() : String(k)] = v;
-                  } catch (e2) {
-                    pairs[k instanceof Date ? k.toISOString() : String(k)] = null;
-                  }
-                }
-                result[storeName] = pairs;
-                completed++;
-                if (completed === storeNames.length && !hasError) { db.close(); resolve(result); }
-              };
-              getKeysReq.onerror = function () {
-                completed++;
-                if (completed === storeNames.length && !hasError) { db.close(); resolve(result); }
-              };
-            };
-            getAllReq.onerror = function () {
-              completed++;
-              if (completed === storeNames.length && !hasError) { db.close(); resolve(result); }
-            };
-          } catch (e) {
-            completed++;
-            if (completed === storeNames.length && !hasError) { db.close(); resolve(result); }
-          }
-        });
-
-        setTimeout(function () {
-          if (!hasError) { hasError = true; db.close(); resolve(result); }
-        }, 5000);
-      };
-      req.onerror   = function () { reject(req.error); };
-      req.onblocked = function () { reject(new Error('Database blocked')); };
-    });
-  }
-
-  function gatherIndexedDBFallback(data) {
-    var commonNames = [
-      'keyval-store', 'games', 'game-data', 'save-data',
-      'app-data', 'user-data', 'cache', 'sienna', 'sienna-cache',
-    ];
-    var promises = commonNames.map(function (name) {
-      return dumpIndexedDB(name).then(function (dbData) {
-        if (dbData && Object.keys(dbData).length > 0) data.indexedDB[name] = dbData;
-      }).catch(function () { /* skip */ });
-    });
-    return Promise.all(promises);
-  }
-
-  function restoreIndexedDB(dbs) {
-    for (var dbName in dbs) {
-      if (!dbs.hasOwnProperty(dbName)) continue;
-      var stores = dbs[dbName];
-      if (!stores || typeof stores !== 'object') continue;
-      try {
-        var delReq = indexedDB.deleteDatabase(dbName);
-        delReq.onsuccess = function (name, st) { return function () { populateIndexedDB(name, st); }; }(dbName, stores);
-        delReq.onerror   = function (name, st) { return function () { populateIndexedDB(name, st); }; }(dbName, stores);
-      } catch (e) {
-        populateIndexedDB(dbName, stores);
-      }
-    }
-  }
-
-  function populateIndexedDB(dbName, stores) {
-    var openReq = indexedDB.open(dbName);
-    openReq.onupgradeneeded = function () {
-      var db = openReq.result;
-      for (var storeName in stores) {
-        if (stores.hasOwnProperty(storeName) && !db.objectStoreNames.contains(storeName)) {
-          db.createObjectStore(storeName);
-        }
-      }
-    };
-    openReq.onsuccess = function () {
-      var db = openReq.result;
-      for (var storeName in stores) {
-        if (!stores.hasOwnProperty(storeName)) continue;
-        var pairs = stores[storeName];
-        if (!pairs || typeof pairs !== 'object') continue;
-        try {
-          var tx       = db.transaction(storeName, 'readwrite');
-          var store    = tx.objectStore(storeName);
-          var clearReq = store.clear();
-          clearReq.onsuccess = function (p) {
-            return function () {
-              for (var key in p) {
-                if (p.hasOwnProperty(key) && p[key] !== null) {
-                  try { store.put(p[key], key); } catch (e) { /* skip */ }
-                }
-              }
-            };
-          }(pairs);
-        } catch (e) { /* skip */ }
-      }
-      db.close();
-    };
-  }
+  // ── Save-change detection (_computeSaveHash) removed. ──
 
   // ═══════════════════════════════════════════════════════════
-  //  FULL DATA GATHERING for cloud save (from siennadb.js)
-  // ═══════════════════════════════════════════════════════════
-
-  /**
-   * gatherFullSaveData
-   * The "heavy" path used for cloud sync.  Produces a v4 backup that includes
-   * storage.indexedDB in addition to everything createDataBackup captures.
-   */
-  async function gatherFullSaveData() {
-    var rawLS = {};
-    var rawSS = {};
-
-    for (var i = 0; i < localStorage.length; i++) {
-      var key = localStorage.key(i);
-      try { rawLS[key] = localStorage.getItem(key); } catch (e) { /* skip */ }
-    }
-    for (var j = 0; j < sessionStorage.length; j++) {
-      var skey = sessionStorage.key(j);
-      try { rawSS[skey] = sessionStorage.getItem(skey); } catch (e) { /* skip */ }
-    }
-
-    var categorized    = categorizeLocalStorage(rawLS);
-    var indexedDBData  = {};
-
-    try {
-      if (typeof indexedDB === 'undefined' || !indexedDB.databases) {
-        // Fallback: probe a known list of DB names
-        var tempData = { indexedDB: {} };
-        await gatherIndexedDBFallback(tempData);
-        indexedDBData = tempData.indexedDB;
-      } else {
-        var dbs = await indexedDB.databases();
-        for (var k = 0; k < dbs.length; k++) {
-          var dbInfo = dbs[k];
-          if (!dbInfo.name) continue;
-          try {
-            var dbData = await dumpIndexedDB(dbInfo.name);
-            if (dbData && Object.keys(dbData).length > 0) {
-              indexedDBData[dbInfo.name] = dbData;
-            }
-          } catch (e) { /* skip */ }
-        }
-      }
-    } catch (e) { /* IndexedDB gathering failed silently */ }
-
-    return {
-      _sienna:  'sienna-backup-v4',
-      _savedAt: new Date().toISOString(),
-
-      // ── Sienna-owned data, cleanly sectioned ──
-      siennaData: categorized.siennaData,
-
-      // ── Everything else ──
-      storage: {
-        localStorage:   categorized.other,
-        sessionStorage: rawSS,
-        cookies:        document.cookie || '',
-        indexedDB:      indexedDBData,
-      },
-    };
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  //  CHANGE DETECTION (new)
+  //  CLOUD SYNC — BACKEND REMOVED (UI-compatible stubs)
   //
-  //  Hashes a save payload so a manual backup can skip the network call
-  //  entirely when nothing meaningful has changed since the last successful
-  //  sync. Volatile fields that change on *every* gather regardless of real
-  //  data changes (_savedAt timestamp, and the account bookkeeping section
-  //  which holds the token/username/last-sync-time/last-sync-hash) are
-  //  stripped first, or the hash would never match twice in a row.
+  //  The cloud-sync network layer (auth + /data/backup endpoints, backup
+  //  payload extraction, auth-failure handling) has been deleted. The
+  //  functions below are kept as silent no-ops so the account UI keeps
+  //  working without errors.
   // ═══════════════════════════════════════════════════════════
 
-  async function _computeSaveHash(payload) {
-    var copy;
-    try {
-      copy = JSON.parse(JSON.stringify(payload));
-    } catch (e) {
-      return null; // payload wasn't serialisable — skip change detection this time
-    }
-    delete copy._savedAt;
-    if (copy.siennaData && copy.siennaData.account) copy.siennaData.account = {};
-    var json = JSON.stringify(copy);
+  /** Text shown next to the account for the last-sync state. */
+  function formatSyncStatus() { return ''; }
 
-    if (_cryptoAvailable()) {
-      try {
-        var digest = await window.crypto.subtle.digest('SHA-256', _utf8Encode(json));
-        var bytes  = new Uint8Array(digest);
-        var hex    = '';
-        for (var i = 0; i < bytes.length; i++) {
-          var h = bytes[i].toString(16);
-          hex += h.length === 1 ? '0' + h : h;
-        }
-        return 'sha256:' + hex;
-      } catch (e) { /* fall through to non-crypto hash below */ }
-    }
-
-    // Fallback (older browsers / non-secure context): a fast, non-cryptographic
-    // hash. It's only used to detect "did anything change", never for security.
-    var hash = 0;
-    for (var j = 0; j < json.length; j++) {
-      hash = (hash << 5) - hash + json.charCodeAt(j);
-      hash |= 0;
-    }
-    return 'fnv:' + hash + ':' + json.length;
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  //  CLOUD API (from siennadb.js)
-  // ═══════════════════════════════════════════════════════════
-
-  function extractBackupPayload(value) {
-    if (window.siennaSettings && window.siennaSettings.getDataBackupPayload) {
-      return window.siennaSettings.getDataBackupPayload(value);
-    }
-    if (value && typeof value === 'object' && value._sienna) return value;
-    return value && (
-      value.backupData || value.data || value.backup ||
-      value.payload    || value.save || value.saveData || null
-    );
-  }
-
-  function handleAuthFailure() {
-    var account = window.siennaAccount;
-    if (!account) return;
-    if (account._stopAutoSync) account._stopAutoSync();
-    if (account.clearSession)  account.clearSession();
-    if (account.updateUI)      account.updateUI();
-  }
-
-  function formatSyncStatus() {
-    var account = window.siennaAccount;
-    if (!account || !account.isLoggedIn || !account.isLoggedIn()) return 'Not logged in';
-    if (!account._lastSyncAt) return 'Not synced yet';
-    var seconds = Math.max(0, Math.floor((Date.now() - account._lastSyncAt) / 1000));
-    var prefix  = account._lastSyncWasManual ? 'Manually synced' : 'Auto synced';
-    if (seconds < 2)  return prefix + ' Just Now';
-    if (seconds < 60) return prefix + ' ' + seconds + 's ago';
-    return prefix + ' ' + Math.floor(seconds / 60) + 'm ago';
-  }
-
+  /** Refresh the sync-status text in the UI (no-op while sync is disabled). */
   function updateSyncStatus() {
     var status = document.getElementById('accountSyncStatus');
     if (status) status.textContent = formatSyncStatus();
@@ -1322,195 +1060,40 @@
     if (dropdownStatus) dropdownStatus.textContent = formatSyncStatus();
   }
 
-  function markSynced() {
-    var account = window.siennaAccount;
-    if (!account) return;
-    account._lastSyncAt = Date.now();
-    try { localStorage.setItem(LAST_SYNC_KEY, String(account._lastSyncAt)); } catch (e) { /* ignore */ }
-    updateSyncStatus();
-    if (!account._syncStatusInterval) {
-      account._syncStatusInterval = setInterval(function () { updateSyncStatus(); }, 1000);
-    }
-  }
+  /** No-op — cloud sync backend removed. */
+  function markSynced() { /* backend removed */ }
 
+  /** No-op — cloud sync backend removed. */
   function restoreMarker() {
     var account = window.siennaAccount;
     return 'sienna_cloud_restored_' + (account ? (account.token || 'none') : 'none');
   }
 
-  function hasAutoRestored() {
-    try   { return sessionStorage.getItem(restoreMarker()) === '1'; }
-    catch (e) { return false; }
-  }
+  /** No-op — cloud sync backend removed. */
+  function hasAutoRestored() { return false; }
 
-  function markAutoRestored() {
-    try { sessionStorage.setItem(restoreMarker(), '1'); } catch (e) { /* ignore */ }
-  }
-
-  async function sendCloudBackup(payload) {
-    var account = window.siennaAccount;
-    if (!account || !account.token) return null;
-
-    var bodies = [
-      { backupData: payload },
-      payload,
-      { data: payload },
-      { backup: payload },
-    ];
-    var lastResponse = null;
-
-    for (var i = 0; i < bodies.length; i++) {
-      var res = await fetch(API_BASE + '/data/backup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + account.token,
-        },
-        body: JSON.stringify(bodies[i]),
-      });
-      if (res.ok)                                             return res;
-      if (res.status === 401 || res.status === 403 || res.status === 413) return res;
-      lastResponse = res;
-    }
-
-    return lastResponse;
-  }
+  /** No-op — cloud sync backend removed. */
+  function markAutoRestored() { /* backend removed */ }
 
   // ═══════════════════════════════════════════════════════════
-  //  AUTO SYNC (from siennadb.js)
+  //  AUTO SYNC — BACKEND REMOVED
   // ═══════════════════════════════════════════════════════════
 
-  // Auto-sync (periodic setInterval-based background sync) has been removed.
-  // Syncing is now manual-only, triggered by the user via saveToCloud(), which
-  // also skips the network request entirely when nothing has changed
-  // (see _computeSaveHash above). stopAutoSync remains so existing call sites
-  // (e.g. siennadb.js logout()) can still clear the sync-status ticker.
-
-  function stopAutoSync() {
-    var account = window.siennaAccount;
-    if (!account) return;
-    // Still clear the cosmetic 1s UI ticker (started by markSynced) if running.
-    if (account._syncStatusInterval) { clearInterval(account._syncStatusInterval); account._syncStatusInterval = null; }
-    account._autoSyncEnabled = false;
-  }
+  /** No-op — auto-sync and the cloud backend have been removed. */
+  function stopAutoSync() { /* backend removed */ }
 
   // ═══════════════════════════════════════════════════════════
-  //  CLOUD SAVE / RESTORE (from siennadb.js)
+  //  CLOUD SAVE / RESTORE — BACKEND REMOVED (UI-compatible stubs)
   // ═══════════════════════════════════════════════════════════
 
-  async function saveToCloud() {
-    var account = window.siennaAccount;
-    if (!account || !account.isLoggedIn || !account.isLoggedIn()) {
-      if (account && account.showLoginModal) account.showLoginModal();
-      return;
-    }
+  /** No-op — cloud saving has been removed. */
+  async function saveToCloud() { /* backend removed */ }
 
-    var dropdown = document.getElementById('accountDropdown');
-    if (dropdown) dropdown.classList.remove('open');
+  /** No-op — cloud restore has been removed. */
+  async function restoreFromCloud() { return false; }
 
-    var payload = await gatherFullSaveData();
-
-    try {
-      var hash = await _computeSaveHash(payload);
-      var lastHash = null;
-      try { lastHash = localStorage.getItem(LAST_SYNC_HASH_KEY); } catch (e) { /* ignore */ }
-
-      if (hash && lastHash && hash === lastHash) {
-        // Nothing changed since the last successful sync — confirm as synced
-        // without spending a network request / bandwidth on an identical upload.
-        account._lastSyncWasManual = true;
-        markSynced();
-        return;
-      }
-
-      var res = await sendCloudBackup(payload);
-      if (res && !res.ok) {
-        if (res.status === 401 || res.status === 403) handleAuthFailure();
-        return;
-      }
-
-      if (hash) {
-        try { localStorage.setItem(LAST_SYNC_HASH_KEY, hash); } catch (e) { /* ignore */ }
-      }
-      account._lastSyncWasManual = true;
-      markSynced();
-    } catch (e) { /* silently fail */ }
-  }
-
-  async function restoreFromCloud(options) {
-    options = options || {};
-    var account = window.siennaAccount;
-    if (!account || !account.isLoggedIn || !account.isLoggedIn()) {
-      if (!options.silent && account && account.showLoginModal) account.showLoginModal();
-      return false;
-    }
-
-    var dropdown = document.getElementById('accountDropdown');
-    if (dropdown) dropdown.classList.remove('open');
-
-    try {
-      var res = await fetch(API_BASE + '/data/backup', {
-        method: 'GET',
-        headers: { Authorization: 'Bearer ' + account.token },
-      });
-
-      if (res.status === 401 || res.status === 403) { handleAuthFailure(); return false; }
-      if (!res.ok) return false;
-
-      var responseData = await res.json();
-      var data         = extractBackupPayload(responseData);
-      if (!data) return false;
-
-      // ── Preserve current session credentials in the restored payload ──────
-      if (data._sienna === 'sienna-backup-v4') {
-        // v4: credentials live in siennaData.account
-        if (data.siennaData && data.siennaData.account) {
-          data.siennaData.account[TOKEN_KEY]    = account.token;
-          data.siennaData.account[USERNAME_KEY] = account.username;
-        }
-      } else {
-        // v2/v3: credentials live in the flat localStorage map
-        if (data.localStorage && typeof data.localStorage === 'object') {
-          data.localStorage[TOKEN_KEY]    = account.token;
-          data.localStorage[USERNAME_KEY] = account.username;
-        }
-      }
-
-      if (options.mark) markAutoRestored();
-
-      if (window.siennaSettings && window.siennaSettings.applyDataBackup) {
-        // Delegate to the patched applyDataBackup (handles all versions)
-        window.siennaSettings.applyDataBackup(data, { reload: options.reload !== false });
-      } else {
-        // Inline restore (fallback when siennaSettings isn't ready)
-        if (data._sienna === 'sienna-backup-v4') {
-          _applySiennaDataSections(data.siennaData);
-          var stor = data.storage || {};
-          _applyFlatLocalStorage(stor.localStorage);
-          _applyFlatSessionStorage(stor.sessionStorage);
-          _applyCookies(stor.cookies);
-          if (stor.indexedDB && typeof stor.indexedDB === 'object') restoreIndexedDB(stor.indexedDB);
-        } else {
-          // v2 / v3 legacy
-          _applyFlatLocalStorage(data.localStorage);
-          _applyFlatSessionStorage(data.sessionStorage);
-          _applyCookies(data.cookies);
-          if (data.indexedDB && typeof data.indexedDB === 'object') restoreIndexedDB(data.indexedDB);
-        }
-        if (options.reload !== false) location.reload();
-      }
-
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  async function autoRestore(options) {
-    options = options || {};
-    if (!options.force && hasAutoRestored()) return false;
-    return restoreFromCloud({ silent: true, mark: true, reload: true });
-  }
+  /** No-op — auto-restore on load has been removed. */
+  async function autoRestore() { return false; }
 
   // ═══════════════════════════════════════════════════════════
   //  EXPOSE PUBLIC API
@@ -1518,12 +1101,10 @@
 
   var save = {
     // constants
-    API_BASE:          API_BASE,
     TOKEN_KEY:         TOKEN_KEY,
     USERNAME_KEY:      USERNAME_KEY,
     LAST_SYNC_KEY:     LAST_SYNC_KEY,
     LAST_SYNC_HASH_KEY: LAST_SYNC_HASH_KEY,
-    computeSaveHash:    _computeSaveHash,
 
     // key categorisation
     SIENNA_KEY_CATEGORIES:  SIENNA_KEY_CATEGORIES,
@@ -1568,19 +1149,7 @@
     ENCRYPTED_MAGIC:     ENCRYPTED_MAGIC,
     encryptDownload: function () { downloadData({ encrypt: true }); },
 
-    // IndexedDB helpers (from siennadb.js)
-    dumpIndexedDB:            dumpIndexedDB,
-    gatherIndexedDBFallback:  gatherIndexedDBFallback,
-    restoreIndexedDB:         restoreIndexedDB,
-    populateIndexedDB:        populateIndexedDB,
-    gatherFullSaveData:       gatherFullSaveData,
-
-    // cloud API (from siennadb.js)
-    extractBackupPayload: extractBackupPayload,
-    handleAuthFailure:    handleAuthFailure,
-    sendCloudBackup:      sendCloudBackup,
-
-    // sync status (from siennadb.js)
+    // sync status (cloud backend removed — these are UI no-op stubs)
     formatSyncStatus:  formatSyncStatus,
     updateSyncStatus:  updateSyncStatus,
     markSynced:        markSynced,
@@ -1588,10 +1157,8 @@
     hasAutoRestored:   hasAutoRestored,
     markAutoRestored:  markAutoRestored,
 
-    // auto sync (from siennadb.js)
-    stopAutoSync:  stopAutoSync,
-
-    // cloud save/restore (from siennadb.js)
+    // auto sync / cloud save+restore (backend removed — no-op stubs)
+    stopAutoSync:      stopAutoSync,
     saveToCloud:       saveToCloud,
     restoreFromCloud:  restoreFromCloud,
     autoRestore:       autoRestore,

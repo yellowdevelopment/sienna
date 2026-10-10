@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#050505">
+  <title>Page not found · sienna.</title>
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!--
+    404.html — served by the host for any unknown path
+    (Vercel, Netlify, Cloudflare Pages and GitHub Pages all use a
+    root-level 404.html automatically; no config file needed).
+
+    It tags the visit with the requested path slug, then bounces to
+    the main page. location.replace() keeps this URL out of history so the
+    user's Back button doesn't bounce them around.
+
+    The tag is written to BOTH sessionStorage and the query string:
+    sessionStorage can be blocked (private mode), the query param is the
+    always-works fallback. js/404.js reads the slug and cleans both up again.
+  -->
+  <script>
+    // '/mages/hungryknight/index.html' → 'hungryknight'; '/mages/slope/' → 'slope';
+    // '/slope.html' → 'slope'; '/' → '' (no slug, so the popup stays generic).
+    function termFromPath(pathname) {
+      var parts = String(pathname || '').split('/').filter(Boolean);
+      if (parts.length && /^index\.[a-z0-9]+$/i.test(parts[parts.length - 1])) parts.pop();
+      var term = parts.length ? parts[parts.length - 1] : '';
+      try { term = decodeURIComponent(term); } catch (e) { /* keep it raw */ }
+      return term.replace(/\.[a-z0-9]+$/i, '').trim();
+    }
+
+    var term = termFromPath(location.pathname);
+    try { sessionStorage.setItem('sienna_not_found', term); } catch (e) { /* ignore */ }
+    location.replace('/index.html?notfound=' + encodeURIComponent(term));
+  </script>
+
+  <!-- No-JS fallback: bounce to the main page anyway. -->
+  <noscript><meta http-equiv="refresh" content="0; url=/index.html?notfound="></noscript>
+</head>
+<body>
+  <noscript>
+    <p>Uh oh, the page you were looking for has either been moved/deleted</p>
+    <p><a href="/index.html?notfound=">Go to the main page</a></p>
+  </noscript>
+</body>
+</html>

@@ -1953,6 +1953,80 @@ body.theme-sienna-blue .top-nav-settings-btn:hover {
   text-align: center;
 }
 
+/* ── 404 recovery: "Could you be looking for…" ──
+   Sits under the message in #notFoundOverlay and stays hidden until
+   js/404.js finds a night. game for the requested URL. */
+.notfound-suggest {
+  display: grid;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* `display: grid` above would beat the [hidden] attribute's UA style. */
+.notfound-suggest[hidden] {
+  display: none;
+}
+
+.notfound-suggest-title {
+  color: #f8f4ee;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.notfound-suggest-grid {
+  display: grid;
+  /* auto-fit + centering keeps a lone match centered under the heading. */
+  grid-template-columns: repeat(auto-fit, 104px);
+  justify-content: center;
+  gap: 12px;
+}
+
+.notfound-tile {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.notfound-tile-icon {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+  transition: transform 220ms var(--ease), border-color 180ms ease, background 180ms ease;
+}
+
+.notfound-tile:hover .notfound-tile-icon {
+  border-color: rgba(154, 230, 255, 0.28);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.notfound-tile:focus-visible .notfound-tile-icon {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.notfound-tile-name {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
 .login-modal-switch {
   display: flex;
   justify-content: center;

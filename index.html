@@ -347,6 +347,7 @@ made by yellowdevelopment
   <script src="js/night.js" defer></script>
 
   <script src="js/plugins.js" defer></script>
+  <script src="js/404.js" defer></script>
 
   <!-- ── Tutorial Overlay ── -->
   <div id="tutorialOverlay" class="tutorial-overlay" aria-hidden="true">
@@ -421,6 +422,26 @@ made by yellowdevelopment
       </div>
       <div class="login-modal-footer">
         <button class="login-modal-btn-primary" id="invalidImageOk" type="button">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Page Not Found Popup (opened by js/404.js after a 404 redirect) ── -->
+  <div id="notFoundOverlay" class="login-modal-overlay modal-overlay-stacked" aria-hidden="true">
+    <div class="login-modal compact-modal" role="dialog" aria-modal="true" aria-labelledby="notFoundTitle">
+      <div class="login-modal-header">
+        <span class="login-modal-title" id="notFoundTitle">Page not found</span>
+      </div>
+      <div class="login-modal-body compact-modal-body">
+        <p class="modal-message">Uh oh, the page you were looking for has either been moved/deleted</p>
+        <!-- Filled in by js/404.js, but only when the requested URL matches a night. game. -->
+        <div class="notfound-suggest" id="notFoundSuggest" hidden>
+          <div class="notfound-suggest-title">Could you be looking for…</div>
+          <div class="notfound-suggest-grid" id="notFoundSuggestGrid"></div>
+        </div>
+      </div>
+      <div class="login-modal-footer">
+        <button class="login-modal-btn-primary" id="notFoundOk" type="button">Got it</button>
       </div>
     </div>
   </div>

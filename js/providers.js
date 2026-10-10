@@ -634,6 +634,66 @@
     });
   }
 
+  // ── 404 recovery: match a requested path-slug against the night. catalog ──
+  // Google indexed /mages/<slug>/index.html while those games were served from
+  // our own root. Those URLs now 404, so 404.html forwards the requested slug
+  // here and js/404.js offers whatever night. actually has. Only night. is
+  // searched: it is the default provider and its catalog is already cached.
+
+  // Lowercase, alphanumerics only — 'Hungry Knight' and 'hungryknight' both
+  // fold to 'hungryknight', which is how the slug is spelled in the URL.
+  function fold(value) {
+    return String(value === null || value === undefined ? '' : value)
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '');
+  }
+
+  // '…/night@main/mages/hungryknight/index.html' → 'hungryknight'
+  function nightSlugOf(url) {
+    try {
+      const parts = new URL(String(url || '')).pathname.split('/').filter(Boolean);
+      const start = parts.findIndex((part) => part === 'mages' || part === 'apps');
+      const rest = start >= 0 ? parts.slice(start + 1) : parts.slice(-2);
+      if (!rest.length) return '';
+      const last = rest[rest.length - 1];
+      // '/mages/slope/index.html' → the folder; '/mages/slope.html' → the file.
+      if (rest.length > 1 && /^index\.[a-z0-9]+$/i.test(last)) return rest[rest.length - 2];
+      return last.replace(/\.[a-z0-9]+$/i, '');
+    } catch (error) {
+      return '';
+    }
+  }
+
+  // 3 = exact name/slug, 2 = prefix, 1 = contained, 0 = no match at all.
+  function scoreNightGame(game, query) {
+    const name = fold(game && game.name);
+    const slug = fold(nightSlugOf(game && game.url));
+    if (name === query || slug === query) return 3;
+    if (name.startsWith(query) || slug.startsWith(query)) return 2;
+    if (name.includes(query) || slug.includes(query)) return 1;
+    return 0;
+  }
+
+  // Best night. matches for a slug, highest score first. Games and Apps are both
+  // searched, because either could be what the old URL pointed at.
+  async function findNightGames(term, limit = 1) {
+    const query = fold(term);
+    // Too short to be a slug — '1' is the legacy ?notfound=1 flag — and short
+    // queries are all false positives ('1' would otherwise match '1v1.lol').
+    if (query.length < 3) return [];
+
+    const result = await loadNightGames(); // loadLibrary caches this after boot
+    const games = (result && Array.isArray(result.categories) ? result.categories : [])
+      .flatMap((category) => (Array.isArray(category.games) ? category.games : []));
+
+    return games
+      .map((game) => ({ game, score: scoreNightGame(game, query) }))
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit)
+      .map((entry) => entry.game);
+  }
+
   window.siennaProviders = {
     apply,
     // Provider key → display name, plus the lookup used to resolve either one.
@@ -646,5 +706,7 @@
     // Which games the titlebar's Download button applies to, and the HTML it saves.
     supportsDownload: (game) => Boolean(game?._provider && game._provider !== 'lumin') || typeof game?.html === 'string',
     downloadHtml,
+    // 404 recovery: fuzzy-match a requested path-slug against night.'s catalog.
+    findNightGames,
   };
 })();
